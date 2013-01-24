@@ -390,7 +390,6 @@ var fitness = fitness || {
 
     completeFitbitAuth : function() {
         var that = this;
-        
         this.getFitbitAccessToken(function(success) {
             if (success) {
                 if (that.user) {
