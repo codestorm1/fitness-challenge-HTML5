@@ -668,7 +668,7 @@ $(function() {
         appName: "fitnesschallenge",
         clientSubdomain: "twistedogregmailcom",
         publicKey: "ba025b72-92db-4681-9abb-231baca5a94d",
-        apiVersion: 0
+        apiVersion: 2
     });
 
     var username = localStorage.getItem('username');
