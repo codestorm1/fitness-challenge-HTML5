@@ -1,0 +1,122 @@
+{
+    "startedDateTime": "2012-11-26T02:25:07.759Z",
+    "time": 594,
+    "request": {
+    "method": "GET",
+        "url": "http://127.0.0.1:4567/hello_world",
+        "httpVersion": "HTTP/1.1",
+        "headers": [
+        {
+            "name": "X-StackMob-Proxy-Plain",
+            "value": "stackmob-api"
+        },
+        {
+            "name": "Accept-Encoding",
+            "value": "gzip,deflate,sdch"
+        },
+        {
+            "name": "Accept-Language",
+            "value": "en-US,en;q=0.8"
+        },
+        {
+            "name": "X-Requested-With",
+            "value": "XMLHttpRequest"
+        },
+        {
+            "name": "Connection",
+            "value": "keep-alive"
+        },
+        {
+            "name": "Accept-Charset",
+            "value": "ISO-8859-1,utf-8;q=0.7,*;q=0.3"
+        },
+        {
+            "name": "Host",
+            "value": "127.0.0.1:4567"
+        },
+        {
+            "name": "User-Agent",
+            "value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11"
+        },
+        {
+            "name": "X-StackMob-User-Agent",
+            "value": "StackMob (JS; 0.6.0)"
+        },
+        {
+            "name": "Accept",
+            "value": "application/vnd.stackmob+json; version=0"
+        },
+        {
+            "name": "Referer",
+            "value": "http://127.0.0.1:4567/more-examples/index.html"
+        },
+        {
+            "name": "X-StackMob-API-Key",
+            "value": "efe84550-16eb-4598-82f8-27fdae21df0c"
+        }
+    ],
+        "queryString": [],
+        "cookies": [],
+        "headersSize": 607,
+        "bodySize": 0
+},
+    "response": {
+    "status": 400,
+        "statusText": "Bad Request",
+        "httpVersion": "HTTP/1.1",
+        "headers": [
+        {
+            "name": "date",
+            "value": "Mon, 26 Nov 2012 02:22:47 GMT"
+        },
+        {
+            "name": "content-encoding",
+            "value": "gzip"
+        },
+        {
+            "name": "connection",
+            "value": "close"
+        },
+        {
+            "name": "content-length",
+            "value": "75"
+        },
+        {
+            "name": "pragma",
+            "value": "no-cache"
+        },
+        {
+            "name": "content-type",
+            "value": "application/vnd.stackmob+json; version=0"
+        },
+        {
+            "name": "cache-control",
+            "value": "no-cache, no-store"
+        },
+        {
+            "name": "expires",
+            "value": "0"
+        }
+    ],
+        "cookies": [],
+        "content": {
+        "size": 49,
+            "mimeType": "application/vnd.stackmob+json",
+            "compression": -26
+    },
+    "redirectURL": "",
+        "headersSize": 249,
+        "bodySize": 75
+},
+    "cache": {},
+    "timings": {
+    "blocked": 0,
+        "dns": 0,
+        "connect": 1,
+        "send": 0,
+        "wait": 591,
+        "receive": 1,
+        "ssl": -1
+},
+    "pageref": "page_24"
+}

@@ -1,0 +1,40 @@
+httpClient HTTP POST https://api.fitbit.com/oauth/request_token
+httpClient HTTP Post Params: oauth_callback=http%3A%2F%2Flocalhost%3A4567
+httpClient Request headers ========================================
+httpClient Cache-Control no-cache
+httpClient X-Fitbit-Client-URL http://wiki.fitbit.com/Fitbit-API-Java-Client
+httpClient User-Agent fitbitAPIClient http://wiki.fitbit.com/Fitbit-API-Java-Client /1
+httpClient Content-Length 44
+httpClient Accept-Encoding gzip
+httpClient X-Fitbit-Client-Version 1
+httpClient Authorization OAuth oauth_consumer_key="<my actual key>",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1354649048",oauth_nonce="1401549081",oauth_version="1.0",oauth_signature="UQvOeoNVk8V4PXK%2FsVf2YNx1UAw%3D"
+httpClient Content-Type application/x-www-form-urlencoded
+httpClient Host api.fitbit.com
+httpClient ------------------------------------------
+httpClient resp code: 200 body: oauth_token=7fabad4d4cbbcf7113d43e1298aa9dec&oauth_token_secret=3fb327720b162a022e5733fbaa1da155&oauth_callback_confirmed=true
+httpClient request token: 7fabad4d4cbbcf7113d43e1298aa9dec secret: 3fb327720b162a022e5733fbaa1da155
+
+
+request token calls was successful
+
+com.stackmob.example.FetchFitbitAccessToken Fetching access token
+com.stackmob.example.FetchFitbitAccessToken request_token: 7fabad4d4cbbcf7113d43e1298aa9dec
+com.stackmob.example.FetchFitbitAccessToken request_token_secret: 3fb327720b162a022e5733fbaa1da155
+com.stackmob.example.FetchFitbitAccessToken oauth_verifier: rsh7eu49kg610pksg39hve0asq/
+httpClient HTTP POST https://api.fitbit.com/oauth/access_token
+httpClient HTTP Post Params: oauth_verifier=rsh7eu49kg610pksg39hve0asq%2F
+httpClient Request headers ========================================
+httpClient Host api.fitbit.com
+httpClient Cache-Control no-cache
+httpClient X-Fitbit-Client-URL http://wiki.fitbit.com/Fitbit-API-Java-Client
+httpClient X-Fitbit-Client-Version 1
+httpClient User-Agent fitbitAPIClient http://wiki.fitbit.com/Fitbit-API-Java-Client /1
+httpClient Accept-Encoding gzip
+httpClient Content-Length 44
+httpClient Content-Type application/x-www-form-urlencoded
+httpClient Authorization OAuth oauth_consumer_key="<my actual key>",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1354649055",oauth_nonce="1699675629",oauth_version="1.0",oauth_token="7fabad4d4cbbcf7113d43e1298aa9dec",oauth_signature="uSQAM2NEgeEx5ijGymZqsNYrAUg%3D"
+httpClient ------------------------------------------
+httpClient resp code: 401 body: oauth_problem=permission_denied
+com.fitbit.api.client.http.HttpClient body: oauth_problem=permission_denied
+
+access token call fails with 401 oauth_problem=permission_denied
