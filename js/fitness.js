@@ -103,7 +103,6 @@ var fitness = fitness || {
         var that = this;
         var requestToken = localStorage.getItem("request_token");
         var requestTokenSecret = localStorage.getItem("request_token_secret");
-
         var oauthVerifier = this.getQueryVariable(window.location.href, 'oauth_verifier');
 
         var pos = oauthVerifier.length - 1;
@@ -372,7 +371,7 @@ var fitness = fitness || {
             "start_date" : this.formatDate(lastWeek),
             "end_date" : this.formatDate(today)
         };
-        StackMob.customcode('fetch_fitbit_activities', params, {
+        StackMob.customcode('update_fitbit_activities', params, {
             success: function(tokens) {
                 if (typeof callback === "function") {
                     callback(true, tokens)
