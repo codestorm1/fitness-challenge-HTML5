@@ -465,6 +465,7 @@ var fitness = fitness || {
             that.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
                     that.user = data;
+                    localStorage.setItem('username', this.user.username);
                     window.location.href = '/#home';
                 }
                 else {
