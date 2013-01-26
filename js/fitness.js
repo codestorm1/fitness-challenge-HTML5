@@ -320,36 +320,34 @@ var fitness = fitness || {
         friendsQuery.mustBeOneOf('fitbituserid', fitbitUserIDs);
         users.query(friendsQuery, {
             success: function(friends) {
+                var stackmobFriendIDs = [];
                 if (friends.models.length > 0 && friends.models[0].attributes) {
-                    var stackmobFriendIDs = [];
                     len = friends.models.length;
                     for (var i = 0; i < len; i++) {
                         var friend = friends.models[i].attributes;
                         stackmobFriendIDs.push(friend['username']);
                     }
-
-                    var user = new StackMob.User({ username : that.user.username });
-                    var params = {
-                        "friends" : stackmobFriendIDs,
-                        "friendcount" : stackmobFriendIDs.length,
-                        "fitbitfriendcount" : fitbitUserIDs.length
-                    };
-                    user.save(params, {
-                        success: function(model) {
-                            console.debug(model.toJSON());
-                            if (typeof callback === "function") {
-                                callback(true, model);
-                            }
-                        },
-                        error: function(model, response) {
-                            console.debug(response);
-                            if (typeof callback === "function") {
-                                callback(false, response);
-                            }
-                        }
-                    });
-
                 }
+                var user = new StackMob.User({ username : that.user.username });
+                var params = {
+                    "friends" : stackmobFriendIDs,
+                    "friendcount" : stackmobFriendIDs.length,
+                    "fitbitfriendcount" : fitbitUserIDs.length
+                };
+                user.save(params, {
+                    success: function(model) {
+                        console.debug(model.toJSON());
+                        if (typeof callback === "function") {
+                            callback(true, model);
+                        }
+                    },
+                    error: function(model, response) {
+                        console.debug(response);
+                        if (typeof callback === "function") {
+                            callback(false, response);
+                        }
+                    }
+                });
             },
             error: function(repsonse) {
 
