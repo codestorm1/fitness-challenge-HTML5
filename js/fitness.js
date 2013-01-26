@@ -577,16 +577,18 @@ var fitness = fitness || {
                     window.location.href = '/#auth';
                 }
 
-                that.getFitbitFriends(that.user.username, function(success, friends) {
-                    if (success) {
-                        that.saveFriendsToStackmob(friends);
-                    }
-                    else {
-                        that.showMessage("Failed to get fitbit friends");
-                    }
-                });
+                if (that.user.fitbituserid) {
+                    that.getFitbitFriends(that.user.username, function(success, friends) {
+                        if (success) {
+                            that.saveFriendsToStackmob(friends);
+                        }
+                        else {
+                            that.showMessage("Failed to get fitbit friends");
+                        }
+                    });
+                    that.updateActivities();
+                }
 
-                that.updateActivities();
 
                 var template = $('#home_template');
                 var dto = {
