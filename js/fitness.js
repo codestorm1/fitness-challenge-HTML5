@@ -47,7 +47,8 @@ var fitness = fitness || {
 
     getNextUserID : function(callback) {
         var UserIDCounter = StackMob.Model.extend({ schemaName: 'user_id_counter' });
-        var counter = new UserIDCounter({'user_id_counter_id' : '36eff9a9037b445185a05a1bc4ffc766'});
+        //var counter = new UserIDCounter({'user_id_counter_id' : '36eff9a9037b445185a05a1bc4ffc766'});
+        var counter = new UserIDCounter();
         counter.fetch({
             success: function(model) {
                 model.incrementOnSave('current_id', 1); // the field will be incremented by 1
