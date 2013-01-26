@@ -466,7 +466,7 @@ var fitness = fitness || {
             var password = $('#password').val();
             that.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
-                    this.user = data;
+                    that.user = data;
                     window.location.href = '/#home';
                 }
                 else {
