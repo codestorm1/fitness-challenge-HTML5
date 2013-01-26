@@ -569,10 +569,10 @@ var fitness = fitness || {
             },
 
             render: function() {
-//                if (window.location.href.indexOf('oauth_token') !== -1) {
-//                    that.completeFitbitAuth();
-//                    return;
-//                }
+                if (window.location.href.indexOf('oauth_token') !== -1) {
+                    that.completeFitbitAuth();
+                    return;
+                }
                 if (!fitness.user.fitbituserid) {
                     window.location.href = '/#auth';
                 }
@@ -633,11 +633,6 @@ var fitness = fitness || {
             },
 
             render: function() {
-                if (window.location.href.indexOf('oauth_token') !== -1) {
-                    that.completeFitbitAuth();
-                    return;
-                }
-
                 $('#authorize_link').live('click', function() {
                     that.getFitbitRequestToken(fitness.user.username, function(success, data) {
                             if (success) {
