@@ -15,6 +15,12 @@ var fitness = fitness || {
         return null;
     },
 
+    parseDate: function(dateStr) {
+        var parts = dateStr.match(/(\d+)/g);
+        // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+        return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+    },
+
     getTemplateTarget: function (templateElement) {
         if (templateElement[0]) {
             return templateElement.data("target-element");
@@ -189,7 +195,7 @@ var fitness = fitness || {
                 }
                 else {
                     if (typeof callback === 'function') {
-                        callback(false, model);
+                        callback(false, 'Could not find user with given email and password');
                     }
                 }
             },
@@ -302,6 +308,13 @@ var fitness = fitness || {
         $('#results').html(friendsHTML);
     },
 
+    getFriends : function(callback) {
+        if (this.user.friends) {
+
+        }
+
+    },
+
     saveFriendsToStackmob : function(friends) {
         var that = fitness;
         var fitbitUserIDs = [];
@@ -364,7 +377,7 @@ var fitness = fitness || {
 
     updateActivities : function(callback) {
         var today = new Date();
-        var lastWeek = new Date(today.getTime() - 7*24*60*60*1000);
+        var lastWeek = new Date(today.getTime() - 6*24*60*60*1000);
 
         var params = {
             "stackmob_user_id" : this.user.username,
@@ -436,6 +449,51 @@ var fitness = fitness || {
         }
     },
 
+    getChallengeInvites : function(callback) {
+
+        var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
+        var Invitations = StackMob.Collection.extend({ model: Invitation });
+        var invitations = new Invitations();
+        var q = new StackMob.Collection.Query();
+        q.equals('inviteduser', this.user.username);
+        q.equals('responded', false);
+        invitations.query(q, {
+            success: function(model) {
+                var len = model.models.length;
+                if (len === 0) {
+                    if (typeof callback === 'function') {
+                        callback(false, model);
+                    }
+                    return;
+                }
+                for (var i = 0; i < len; i++) {
+                    var invite = model.models[i].attributes;
+
+                    var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
+                    var challenge = new Challenge();
+                    challenge.fetch( {
+                        success: function(model) {
+                            var chal = model.attributes[0];
+                            alert('you have a challenge invitation from ' + chal.challengecreator + '!');
+                            console.debug(model.toJSON());
+                        },
+                        error: function(model, response) {
+                            console.debug(response);
+                        }
+                    });
+
+                }
+            },
+            error: function(response) {
+                that.showMessage('query failed trying to get user ' + response);
+                console.debug(response);
+                if (typeof callback === 'function') {
+                    callback(false, response);
+                }
+            }
+        });
+
+    },
 
     bindEvents : function() {
         var that = this;
@@ -468,7 +526,64 @@ var fitness = fitness || {
                     window.location.href = '/#home';
                 }
                 else {
-                    that.showMessage('login failed ' + data);
+                    that.showMessage('login failed\n ' + data);
+                }
+            });
+        });
+
+        $('#create_challenge_submit').live('click', function() {
+            var challengeType = $("#challenge_type").val();
+
+            var startDateStr = $('#start_date').val();
+            var endDateStr = $('#end_date').val();
+
+            var startDate = that.parseDate(startDateStr);
+            var endDate = that.parseDate(endDateStr);
+
+            var challengeID = that.user.username + '_' + challengeType + '_' + startDateStr + '_' + endDateStr;
+
+            var Challenge = StackMob.Model.extend({ schemaName: 'challenge'});
+            var challenge = new Challenge( {
+                                             "challenge_id" : challengeID,
+                                             "challengetype" : challengeType,
+                                             "startdate" : startDate.getTime(),
+                                             "enddate" : endDate.getTime(),
+                                             "challengecreator" : that.user.username,
+                                             "users" : [that.user.username]});
+            challenge.create({
+                success: function(model) {
+                    if (that.user.friends) {
+                        var friendIDs = that.user.friends;
+                        var challenge_id = model.attributes.challenge_id;
+                        var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
+                        var len = friendIDs.length;
+                        for (var i = 0; i < len; i++) {
+                            var friendID = friendIDs[i];
+                            var invitation = new Invitation({
+                                "challenge" : challengeID,
+                                "challengeinviter" : that.user.username,
+                                "inviteduser" : friendID,
+                                "responded" : false,
+                                "accepted" : false});
+                            invitation.create({
+                                success: function(model) {
+                                    that.showMessage("invitation to " + friendID + " saved");
+                                },
+                                error: function(model) {
+                                    that.showMessage("invitation to " + friendID + " failed");
+                                }
+                            });
+                        }
+                    }
+                },
+                error: function(model, response) {
+                    console.debug("Save challenge failed: " + response['error']);
+                    if (response.error.indexOf('Duplicate') !== -1) {
+                        that.showMessage("You've already created that challenge");
+                    }
+                    if (typeof callback === "function") {
+                        callback(false);
+                    }
                 }
             });
         });
@@ -496,21 +611,30 @@ var fitness = fitness || {
 
             routes:{
                 "" : "home",
+                "home" : "home",
                 "login" : "login",
                 "logout" : "logout",
-                "home" : "home",
                 "register" : "register",
-                "auth" : "auth"
+                "auth" : "auth",
+                "create" : "create"
 
             },
 
             changePage : function (page) {
-                return;
-                $(page.el).attr('data-role', 'page');
+                //return;
+                //$(page.el).attr('data-role', 'page');
                 page.render();
-                //$('#main').append($(page.el));
-                $.mobile.changePage($(page.el), {changeHash:true});
+                $('#main').append($(page.el));
+                $.mobile.changePage($(page.el), {changeHash:false});
             },
+
+
+//            changePage:function (page) {
+//                $(page.el).attr('data-role', 'page');
+//                page.render();
+//                $('body').append($(page.el));
+//                $.mobile.changePage($(page.el), {changeHash:false});
+//            }
 
             home : function () {
                 if (!that.user) {
@@ -537,119 +661,13 @@ var fitness = fitness || {
 
             auth: function() {
                 this.changePage(new that.AuthView());
-            }
-
-        });
-
-        var that = this;
-        this.LoginView = Backbone.View.extend({
-            el: '#main',
-
-            initialize: function() {
-                this.render();
             },
 
-            render: function() {
-                var template = $('#login_template');
-                this.$el.empty();
-                this.$el.append(template.html());
-                this.$el.trigger('create');
-                $('.logout-link').hide();
-                return this;
+            create: function() {
+                this.changePage(new that.CreateChallengeView());
             }
-        });
-
-        this.HomeView = Backbone.View.extend({
-            el: '#main',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                if (window.location.href.indexOf('oauth_token') !== -1) {
-                    that.completeFitbitAuth();
-                    return;
-                }
-                if (!fitness.user.fitbituserid) {
-                    window.location.href = '/#auth';
-                }
-
-                if (that.user.fitbituserid) {
-                    that.getFitbitFriends(that.user.username, function(success, friends) {
-                        if (success) {
-                            that.saveFriendsToStackmob(friends);
-                        }
-                        else {
-                            that.showMessage("Failed to get fitbit friends");
-                        }
-                    });
-                    that.updateActivities();
-                }
 
 
-                var template = $('#home_template');
-                var dto = {
-                    "username" : fitness.user.username,
-                    "displayName" : fitness.user.displayname,
-                    "friendCount" : fitness.user.friendcount,
-                    "fitbitFriendCount" : fitness.user.fitbitfriendcount
-                };
-                var html = Mustache.to_html(template.html(), dto);
-                this.$el.empty();
-                this.$el.append(html);
-
-                $('.logout-link').show();
-
-                this.$el.trigger('create');
-                return this;
-            }
-        });
-
-        this.RegisterView = Backbone.View.extend({
-            el: '#main',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                var template = $('#register_template');
-                this.$el.empty();
-                this.$el.append(template.html());
-                this.$el.trigger('create');
-                $('.logout-link').hide();
-                return this;
-            }
-        });
-
-        this.AuthView = Backbone.View.extend({
-            el: '#main',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                $('#authorize_link').live('click', function() {
-                    that.getFitbitRequestToken(fitness.user.username, function(success, data) {
-                            if (success) {
-                                window.location.href = 'http://www.fitbit.com/oauth/authorize?oauth_token=' + data.oauth_token;
-                            }
-                            else {
-                                that.showMessage('Sorry, could not authorize with fitbit.\n  Failed to get fitbit request token');
-                            }
-                        }
-                    );
-                });
-                var template = $('#auth_template');
-//                var html = Mustache.to_html(template.html(), dto);
-                this.$el.empty();
-                this.$el.append(template.html());
-                $('.logout-link').show();
-                this.$el.trigger('create');
-                return this;
-            }
         });
 
         var router = new this.AppRouter();

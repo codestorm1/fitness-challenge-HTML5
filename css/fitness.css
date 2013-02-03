@@ -1,8 +1,14 @@
-#main {
-    margin: 10px;
+div[data-role="page"] {
     font-family: arial, verdana;
     font-size: .9em;
+}
+
+div[data-role="content"] {
     min-height: 200px;
+}
+
+ul[data-role="listview"] {
+    margin: 20px 10px;
 }
 
 /*body, table, input, textarea, select, li, button{*/
@@ -39,14 +45,14 @@ label.long {
     max-width: 350px;
 }
 
-a[data-role="button"], a[type="button"] {
+a[data-role="button"], a[type="button"], .ui-select {
     max-width: 350px;
 }
 
 .ui-bar-j {
     border: 1px solid 		#0f3258;
     background: 			#0f3258;
-    color: 					#333;
+    color: 				white;
     text-shadow: 0 1px 0 	#fff;
     background-image: -moz-linear-gradient(top,
     #2c4b70,
