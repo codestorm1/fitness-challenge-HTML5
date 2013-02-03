@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView" , "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -22,8 +22,9 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
             this.homeView = new HomeView( { el: "#home", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
 
-            this.challengeView = new ChallengeView( { el: "#create_challenge", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
+            this.loginView = new LoginView( { el: "#login", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
+            this.challengeView = new ChallengeView( { el: "#create_challenge", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
 
@@ -35,6 +36,8 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
             // When there is no hash bang on the url, the home method is called
             "": "home",
             "home": "home",
+            "login" : "login",
+            "logout" : "login",
 
             // When #category? is on the url, the category method is called
             "category?:type": "category",
@@ -46,11 +49,11 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
         // Home method
         home: function() {
-
-            // Programatically changes to the categories page
-//            $.mobile.changePage( "#create_challenge" , { reverse: true, changeHash: false } );
             $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
+        },
 
+        login: function() {
+            $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
         },
 
         create: function() {

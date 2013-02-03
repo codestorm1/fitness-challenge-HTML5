@@ -22,6 +22,7 @@
         <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button">Home</a>
     </div>
 </script>
+
 <div id="home" data-role="page" data-title="Fitness Challenge">
 </div>
 
@@ -69,6 +70,29 @@
     </div><!-- /content -->
 </script>
 
+<div id="login" data-role="page" data-title="Fitness Challenge">
+</div>
+
+<script id="login_template" type="text/template">
+    <div data-role="content">
+        <h3>Welcome to fitness challenge!<br/>
+            Challenge your friends to see who can take the most fitbit steps.</h3>
+        <form action="/" data-ajax="false" id="loginformmain" method="post">
+            <fieldset>
+                <!--<legend>Login</legend>-->
+                <h3>Login:</h3>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocapitalize="off" autocorrect="off" data-val="true" data-val-required="Email required" data-val-length="The field Email must be a string with a maximum length of 256." data-val-length-max="256" data-val-regex="Invalid Email Address" data-val-regex-pattern="^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$"/>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="on" data-val="true" data-val-length="The field Password must be a string with a minimum length of 4 and a maximum length of 16." data-val-length-max="16" data-val-length-min="4" data-val-required="Password required"/>
+                <input id="remember_me" class="remember_me" name="remember_me" type="checkbox" checked="checked" data-val="true" data-val-required="The Remember me field is required."  />
+                <label class="long" for="remember_me">Remember me</label>
+                <a href="#" type="button" data-theme="b" id="login_submit">Log In</a>
+            </fieldset>
+            <a href="#register" id="register_link" data-role="button" data-theme="e" data-ajax="false">Not a Member? Register now</a>
+        </form>
+    </div>
+</script>
 
 <div id="create_challenge" data-role="page" data-title="Create Challenge">
 </div>
