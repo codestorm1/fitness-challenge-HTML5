@@ -1,8 +1,7 @@
-// Includes file dependencies
 define([ "jquery", "backbone"], function( $, Backbone) {
 
 
-    this.LoginView = Backbone.View.extend({
+    var LoginView = Backbone.View.extend({
 
         initialize: function() {
             this.render();

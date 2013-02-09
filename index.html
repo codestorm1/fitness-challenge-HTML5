@@ -17,13 +17,26 @@
 
 <script id="header_template" type="text/template">
     <div data-role="header" data-theme="j">
-        <a href='#' class='ui-btn-left' data-icon='arrow-l' data-theme="b">Back</a>
+        <a href='#' class='ui-btn-left' data-icon='arrow-l' data-theme="b" data-ajax="false">Back</a>
         <h1 class="ir logo">Fitness Challenge</h1>
-        <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button">Home</a>
+        <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button" data-ajax="false">Home</a>
     </div>
 </script>
 
+
 <div id="home" data-role="page" data-title="Fitness Challenge">
+</div>
+
+<div id="create_challenge" data-role="page" data-title="Create Challenge">
+</div>
+
+<div id="login" data-role="page" data-title="Fitness Challenge - Login">
+</div>
+
+<div id="auth" data-role="page" data-title="Authorize with Fitbit">
+</div>
+
+<div id="register" data-role="page" data-title="Fitness Challenge - Register">
 </div>
 
 <script id="home_template" type="text/template">
@@ -33,32 +46,27 @@
     </div>
     <div data-role="content">
         <ul data-role="listview" data-inset="true" class="home_links" data-checknew="true">
-            <li class="challenges">
+            <li class="challenges" data-ajax="false">
                 <a href="#challenges">Active Challenges</a>
             </li>
             <li class="invitations">
-                <a href="#invitations">
+                <a href="#invitations" data-ajax="false">
                     Invitations<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
             </li>
             <li class="create_challenge">
-                <a href="#create">
+                <a href="#create" data-ajax="false">
                     Create A New Challenge<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
             </li>
-            <li class="history">
+            <li class="history" data-ajax="false">
                 <a href="#challenge_history">Challenge History</a>
             </li>
             <li class="friends">
-                <a href="#friends">
+                <a href="#friends" data-ajax="false">
                     Friends<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
             </li>
-            <!--<li class="home">-->
-                <!--<a href="#home">-->
-                    <!--Home<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>-->
-                <!--</a>-->
-            <!--</li>-->
         </ul>
 
         <!--<h2>Select a Category Below:</h2>-->
@@ -70,8 +78,6 @@
     </div><!-- /content -->
 </script>
 
-<div id="login" data-role="page" data-title="Fitness Challenge">
-</div>
 
 <script id="login_template" type="text/template">
     <div data-role="content">
@@ -94,8 +100,37 @@
     </div>
 </script>
 
-<div id="create_challenge" data-role="page" data-title="Create Challenge">
-</div>
+
+<script id="register_template" type="text/template">
+    <div data-role="content">
+        <form action="/" data-ajax="false" id="register_form" method="post">
+            <fieldset>
+                <h3>Register</h3>
+                <label for="register_email">Email</label>
+                <input id="register_email" name="Email" type="email" autocapitalize="off" autocorrect="off" data-val="true" data-val-length="The field Email must be a string with a maximum length of 256." data-val-length-max="256" data-val-regex="Invalid Email Address" data-val-regex-pattern="^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$" data-val-required="Email required"/>
+
+                <label for="new_password">Password</label>
+                <input id="new_password" name="new_password" type="password" data-val="true" data-val-length="The field Password must be a string with a minimum length of 4 and a maximum length of 16." data-val-length-max="16" data-val-length-min="4" data-val-required="Password required" />
+                <label for="confirm_password">Confirm&nbsp;Password</label>
+                <input  id="confirm_password" name="confirm_password" type="password"data-val="true" data-val-length="The field Password must be a string with a minimum length of 4 and a maximum length of 16." data-val-length-max="16" data-val-length-min="4" data-val-required="Password required"/>
+                <h4>Hey, don't forget your password, there's no way to recover it yet :P</h4>
+                <a href="#" id="register_submit" type="button" data-theme="e">Register</a>
+            </fieldset>
+        </form>
+    </div>
+</script>
+
+<script id="auth_template" type="text/template">
+    <div data-role="content">
+        <h3>Thank you for registering!</h3>
+        <p>We're almost done!<br/>
+            You just need to git fitbit permission to allow us to read your activities<br/>
+            Click or tap the link below<br/>
+            Fitbit will ask you to log in and grant permission<br/>
+        </p>
+        <a href="#" id="authorize_link" data-role="button" data-theme="e" data-ajax="false">Authorize with Fitbit</a>
+    </div>
+</script>
 
 <script id="create_challenge_template" type="text/template">
     <div data-role="content">

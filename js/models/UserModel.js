@@ -1,10 +1,7 @@
-// Challenge Model
-// ==============
-
-// Includes file dependencies
+// file dependencies
 define([ "jquery", "underscore", "stackmob" ], function( $, _, StackMob ) {
 
-    // The ChallengeModel constructor
+    // The UserModel constructor
 
     StackMob.init({ // dev
         appName: "fitnesschallenge",
@@ -15,10 +12,11 @@ define([ "jquery", "underscore", "stackmob" ], function( $, _, StackMob ) {
 
 
     var UserModel = StackMob.Model.extend( // TODO wrong way to extend a user object
+        // new StackMob.User(regInfo);
         { schemaName: 'user'}
     );
 
     // Returns the ChallengeModel class
-    return ChallengeModel;
+    return UserModel;
 
 } );

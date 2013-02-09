@@ -1,4 +1,4 @@
-// Includes file dependencies
+// file dependencies
 define([ "jquery", "backbone", "mustache", "../models/ChallengeModel" ], function( $, Backbone, Mustache, ChallengeModel ) {
 
 

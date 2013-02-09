@@ -53,9 +53,6 @@ define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $,
 //            var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(template.html()).append(footer.html());
-
-            $('.logout-link').show();
-
             this.$el.trigger('create');
 
             return this;
