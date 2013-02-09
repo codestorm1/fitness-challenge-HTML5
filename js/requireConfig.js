@@ -40,7 +40,7 @@ require.config( {
 } );
 
 // Includes File Dependencies
-require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob" ], function( $, Backbone, Mobile, StackMob ) {
+require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob" ], function( $, Backbone, FitnessRouter, StackMob ) {
 
 	$( document ).on( "mobileinit",
 		// Set up the "mobileinit" handler before requiring jQuery Mobile's module
@@ -55,6 +55,6 @@ require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob" ], function(
 
     require( [ "jquerymobile" ], function() {
 		// Instantiates a new Backbone.js Mobile Router
-		this.router = new Mobile();
+		//this.router = new FitnessRouter();
 	});
 } );

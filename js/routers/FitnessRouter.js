@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -25,6 +25,9 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
             this.loginView = new LoginView( { el: "#login", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
             this.challengeView = new ChallengeView( { el: "#create_challenge", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
+
+            this.registerView = new RegisterView( { el: "#register", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
+
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
 
@@ -43,7 +46,8 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
             "category?:type": "category",
 
             "create" : "create",
-            "friends" : "friends"
+            "friends" : "friends",
+            "register" : "register"
 
         },
 
@@ -54,6 +58,10 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
         login: function() {
             $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+        },
+
+        register: function() {
+            $.mobile.changePage( "#register" , { reverse: false, changeHash: false } );
         },
 
         create: function() {
