@@ -26,7 +26,9 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
             customCode.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
                     fitness.user = data;
-                    localStorage.setItem('username', that.user.username);
+                    if (fitness.user.username) {
+                        localStorage.setItem('username', fitness.user.username);
+                    }
                     router.navigate('home');
 //                    window.location.href = '/#home';
                 }

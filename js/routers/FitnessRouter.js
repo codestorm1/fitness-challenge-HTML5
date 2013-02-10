@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, fitness, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -53,9 +53,45 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
         },
 
+        loginWithID : function(username, callback) {
+            if (!username || typeof callback !== "function") {
+                callback(false);
+            }
+            var user = new StackMob.User({ username: username });
+            user.fetch({
+                success: function(model) {
+                    fitness.user = model;
+                    callback(true, model);
+                },
+                error: function(data) {
+                    fitness.showMessage('Could not retrieve your user data');
+                    callback(false, data);
+                }
+            });
+        },
+
+        ensureLogin: function(callback) {
+            if (fitness.user) {
+                callback(true);
+            }
+            var username = localStorage.getItem('username');
+            if (!username) {
+                callback(false);
+            }
+            this.loginWithID(username, function(success) {
+                callback(success);
+            });
+        },
+
         // Home method
         home: function() {
-            $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
+            this.ensureLogin(function(success) {
+                if (!success) {
+                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    return;
+                }
+                $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
+            });
         },
 
         login: function() {
@@ -67,15 +103,33 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
         },
 
         auth: function() {
-            $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
+            this.ensureLogin(function(success) {
+                if (!success) {
+                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    return;
+                }
+                $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
+            });
         },
 
         create: function() {
-            $.mobile.changePage( "#create_challenge" , { reverse: true, changeHash: false } );
+            this.ensureLogin(function(success) {
+                if (!success) {
+                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    return;
+                }
+                $.mobile.changePage( "#create_challenge" , { reverse: true, changeHash: false } );
+            });
         },
 
         friends: function() {
-            $.mobile.changePage( "#home" , { reverse: true, changeHash: false } );
+            this.ensureLogin(function(success) {
+                if (!success) {
+                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    return;
+                }
+                $.mobile.changePage( "#home" , { reverse: true, changeHash: false } );
+            });
         },
         // Category method that passes in the type that is appended to the url hash
         category: function(type) {

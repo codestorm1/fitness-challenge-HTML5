@@ -19,7 +19,9 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
              customCode.createStackmobUser(email, newPassword, function(success, data) {
                  if (success) {
                      fitness.user = data;
-                     localStorage.setItem('username', fitness.user.username);
+                     if (fitness.user.username) {
+                         localStorage.setItem('username', fitness.user.username);
+                     }
                      router.navigate("auth", true);
 
                      //window.location.href = '/#auth'; // could send to '#' and let the router decide to go to #auth
