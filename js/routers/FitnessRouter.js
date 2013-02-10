@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -27,6 +27,7 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
             this.challengeView = new ChallengeView( { el: "#create_challenge", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
             this.registerView = new RegisterView( { el: "#register", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
+            this.authView = new AuthView( { el: "#auth", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
@@ -47,7 +48,8 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
             "create" : "create",
             "friends" : "friends",
-            "register" : "register"
+            "register" : "register",
+            "auth" : "auth"
 
         },
 
@@ -62,6 +64,10 @@ define([ "jquery","backbone", "../models/CategoryModel", "../models/ChallengeMod
 
         register: function() {
             $.mobile.changePage( "#register" , { reverse: false, changeHash: false } );
+        },
+
+        auth: function() {
+            $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
         },
 
         create: function() {

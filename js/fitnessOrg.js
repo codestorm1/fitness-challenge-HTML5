@@ -516,20 +516,20 @@ var fitness = fitness || {
             });
         });
 
-        $('#login_submit').live('click', function() {
-            var email = $("#email").val();
-            var password = $('#password').val();
-            that.lookupFitnessUser(email, password, function(success, data) {
-                if (success) { // logged in
-                    that.user = data;
-                    localStorage.setItem('username', that.user.username);
-                    window.location.href = '/#home';
-                }
-                else {
-                    that.showMessage('login failed\n ' + data);
-                }
-            });
-        });
+//        $('#login_submit').live('click', function() {
+//            var email = $("#email").val();
+//            var password = $('#password').val();
+//            that.lookupFitnessUser(email, password, function(success, data) {
+//                if (success) { // logged in
+//                    that.user = data;
+//                    localStorage.setItem('username', that.user.username);
+//                    window.location.href = '/#home';
+//                }
+//                else {
+//                    that.showMessage('login failed\n ' + data);
+//                }
+//            });
+//        });
 
         $('#create_challenge_submit').live('click', function() {
             var challengeType = $("#challenge_type").val();

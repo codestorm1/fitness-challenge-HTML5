@@ -23,15 +23,15 @@
     </div>
 </script>
 
-
 <div id="home" data-role="page" data-title="Fitness Challenge">
+</div>
+
+<div id="login" data-role="page" data-title="Fitness Challenge - Login">
 </div>
 
 <div id="create_challenge" data-role="page" data-title="Create Challenge">
 </div>
 
-<div id="login" data-role="page" data-title="Fitness Challenge - Login">
-</div>
 
 <div id="auth" data-role="page" data-title="Authorize with Fitbit">
 </div>
@@ -83,7 +83,7 @@
     <div data-role="content">
         <h3>Welcome to fitness challenge!<br/>
             Challenge your friends to see who can take the most fitbit steps.</h3>
-        <form action="/" data-ajax="false" id="loginformmain" method="post">
+        <!--<form action="/" data-ajax="false" id="loginformmain" method="post">-->
             <fieldset>
                 <!--<legend>Login</legend>-->
                 <h3>Login:</h3>
@@ -93,17 +93,17 @@
                 <input id="password" name="password" type="password" autocomplete="on" data-val="true" data-val-length="The field Password must be a string with a minimum length of 4 and a maximum length of 16." data-val-length-max="16" data-val-length-min="4" data-val-required="Password required"/>
                 <input id="remember_me" class="remember_me" name="remember_me" type="checkbox" checked="checked" data-val="true" data-val-required="The Remember me field is required."  />
                 <label class="long" for="remember_me">Remember me</label>
-                <a href="#" type="button" data-theme="b" id="login_submit">Log In</a>
+                <a type="button" data-theme="b" id="login_submit">Log In</a>
             </fieldset>
             <a href="#register" id="register_link" data-role="button" data-theme="e" data-ajax="false">Not a Member? Register now</a>
-        </form>
+        <!--</form>-->
     </div>
 </script>
 
 
 <script id="register_template" type="text/template">
     <div data-role="content">
-        <form action="/" data-ajax="false" id="register_form" method="post">
+        <!--<form action="/" data-ajax="false" id="register_form" method="post">-->
             <fieldset>
                 <h3>Register</h3>
                 <label for="register_email">Email</label>
@@ -114,9 +114,9 @@
                 <label for="confirm_password">Confirm&nbsp;Password</label>
                 <input  id="confirm_password" name="confirm_password" type="password"data-val="true" data-val-length="The field Password must be a string with a minimum length of 4 and a maximum length of 16." data-val-length-max="16" data-val-length-min="4" data-val-required="Password required"/>
                 <h4>Hey, don't forget your password, there's no way to recover it yet :P</h4>
-                <a href="#" id="register_submit" type="button" data-theme="e">Register</a>
+                <a id="register_submit" type="button" data-theme="e">Register</a>
             </fieldset>
-        </form>
+        <!--</form>-->
     </div>
 </script>
 
@@ -128,7 +128,7 @@
             Click or tap the link below<br/>
             Fitbit will ask you to log in and grant permission<br/>
         </p>
-        <a href="#" id="authorize_link" data-role="button" data-theme="e" data-ajax="false">Authorize with Fitbit</a>
+        <a id="authorize_link" data-role="button" data-theme="e" data-ajax="false">Authorize with Fitbit</a>
     </div>
 </script>
 
@@ -147,7 +147,7 @@
                 <label for="end_date">End date</label>
                 <input id="end_date" name="end_date" type="date" data-val="true" data-val-required="End date is required" />
 
-                <a href="#" id="create_challenge_submit" type="button" data-theme="e">Create</a>
+                <a  variety packid="create_challenge_submit" type="button" data-theme="e">Create</a>
             </fieldset>
         </form>
     </div>

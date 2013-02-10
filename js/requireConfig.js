@@ -55,6 +55,6 @@ require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob" ], function(
 
     require( [ "jquerymobile" ], function() {
 		// Instantiates a new Backbone.js Mobile Router
-		//this.router = new FitnessRouter();
-	});
+        window.router = new FitnessRouter(); // TODO: figure out how to put this in a namespace
+    });
 } );

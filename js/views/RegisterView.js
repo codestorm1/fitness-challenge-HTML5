@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
+define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
 
      var RegisterView = Backbone.View.extend({
 
@@ -20,7 +20,7 @@ define([ "jquery", "backbone", "fitness", "../customCodeClient"], function( $, B
                  if (success) {
                      fitness.user = data;
                      localStorage.setItem('username', fitness.user.username);
-                     fitness.router.navigate("auth", true);
+                     router.navigate("auth", true);
 
                      //window.location.href = '/#auth'; // could send to '#' and let the router decide to go to #auth
 
