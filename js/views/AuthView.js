@@ -19,9 +19,13 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
         },
 
         authorize: function () {
-            customCode.getFitbitRequestToken(fitness.user.username, function(success, data) {
+            localStorage.removeItem('request_token');
+            localStorage.removeItem('request_token_secret');
+            customCode.getFitbitRequestToken(fitness.user.username, function(success, tokens) {
                     if (success) {
-                        window.location.href = 'http://www.fitbit.com/oauth/authorize?oauth_token=' + data.oauth_token;
+                        localStorage.setItem('request_token', tokens.oauth_token);
+                        localStorage.setItem('request_token_secret', tokens.oauth_token_secret);
+                        window.location.href = 'http://www.fitbit.com/oauth/authorize?oauth_token=' + tokens.oauth_token;
                     }
                     else {
                         fitness.showMessage('Sorry, could not authorize with fitbit.\n  Failed to get fitbit request token');

@@ -5,19 +5,6 @@ define(["jquery"], function($) {
     // private methods
     var that = this;
 
-    var getQueryVariable = function (url, key) {
-        var query = url.split("?");
-        if (query.length > 1) {
-            var vars = query[1].split("&");
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                if (pair[0] == key) {
-                    return pair[1];
-                }
-            }
-        }
-        return null;
-    };
 
     var parseDate = function(dateStr) {
         var parts = dateStr.match(/(\d+)/g);
@@ -35,6 +22,19 @@ define(["jquery"], function($) {
 
 
     return {
+        getQueryVariable : function (url, key) {
+            var query = url.split("?");
+            if (query.length > 1) {
+                var vars = query[1].split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == key) {
+                        return pair[1];
+                    }
+                }
+            }
+            return null;
+        },
 
         showMessage : function(message) {
             alert(message);
@@ -49,8 +49,9 @@ define(["jquery"], function($) {
                     model.save({}, {
                         success: function(model) {
                             if (typeof callback === "function") {
-                                if (model.attributes && model.attributes.current_id) {
-                                    callback(true, model.attributes.current_id);
+                                var currentId = model.get('current_id');
+                                if (currentId) {
+                                    callback(true, currentId);
                                 }
                                 else {
                                     callback(false);
@@ -77,32 +78,24 @@ define(["jquery"], function($) {
         },
 
         getFitbitRequestToken : function(userID, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
             StackMob.customcode('fetch_fitbit_request_token', {'stackmob_user_id' : userID}, {
                 success: function(tokens) {
-                    //jsonResult is the JSON object: { "msg": "Hello, world!" }
-                    localStorage.setItem('request_token', tokens.oauth_token);
-                    localStorage.setItem('request_token_secret', tokens.oauth_token_secret);
-                    if (typeof callback === "function") {
-                        callback(true, tokens)
-                    }
+                    callback(true, tokens)
                 },
                 error: function(data) {
-                    if (typeof callback === "function") {
-                        callback(false, data)
-                    }
+                    callback(false, data)
                 }
             });
         },
 
-        getFitbitAccessToken : function(callback, state) {
-            var requestToken = localStorage.getItem("request_token");
-            var requestTokenSecret = localStorage.getItem("request_token_secret");
-            var oauthVerifier = this.getQueryVariable(window.location.href, 'oauth_verifier');
-
-            var pos = oauthVerifier.length - 1;
-            if (oauthVerifier[pos] === '/') { // stackmob mistakenly adds a slash to the URL, so remove it
-                oauthVerifier = oauthVerifier.substring(0, pos).replace('#',''); // also kill a # if there is one
+        getFitbitAccessToken : function(requestToken, requestTokenSecret, oauthVerifier, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
             }
+
             var params = {
                 "request_token" : requestToken,
                 "request_token_secret" : requestTokenSecret,
@@ -111,53 +104,43 @@ define(["jquery"], function($) {
 
             StackMob.customcode('fetch_fitbit_access_token', params, 'GET', {
                 success: function(accessTokenData) {
-
-    //                localStorage.setItem('access_token', accessTokenData.oauth_token);
-    //                localStorage.setItem('accesstokensecret', accessTokenData.oauth_token_secret);
-    //                localStorage.setItem('fitbit_user_id', accessTokenData.fitbit_user_id);
-                    that.user.accesstoken =  accessTokenData.oauth_token;
-                    that.user.accesstokensecret = accessTokenData.oauth_token_secret;
-                    that.user.fitbituserid = accessTokenData.fitbit_user_id;
-                    localStorage.removeItem('request_token');
-                    localStorage.removeItem('request_token_secret');
-                    if (typeof callback === "function") {
-                        callback(true, state, accessTokenData);
-                    }
+                    callback(true, accessTokenData);
                 },
 
                 error: function(jsonResult) {
-                    if (typeof callback === "function") {
-                        callback(false, state, jsonResult);
-                    }
+                    callback(false, jsonResult);
                 }
             });
         },
 
-        getFitbitUser : function(callback) {
+        getFitbitUser : function(accessToken, accessTokenSecret, fitbitUserID, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
 
             var params = {
-                "access_token" : this.user.accesstoken,
-                "access_token_secret" : this.user.accesstokensecret,
-                "fitbit_user_id" : this.user.fitbituserid
+                "access_token" : accessToken,
+                "access_token_secret" : accessTokenSecret,
+                "fitbit_user_id" : fitbitUserID
             };
             StackMob.customcode('fetch_fitbit_user', params, 'GET', {
                 success: function(jsonResult) {
                     var userInfoResponse = jsonResult['userInfoJson'];
                     var user = JSON.parse(userInfoResponse)['user'];
-                    if (typeof callback === "function") {
-                        callback(true, user);
-                    }
+                    callback(true, user);
                 },
 
                 error: function(errorData) {
-                    if (typeof callback === "function") {
-                        callback(false, errorData);
-                    }
+                    callback(false, errorData);
                 }
             });
         },
 
         lookupFitnessUser : function(email, password, callback) {
+            if (typeof callback !== 'function') {
+                throw 'callback is required';
+            }
+
             var that = this;
             if (!email) {
                 if (typeof callback === 'function') {
@@ -175,23 +158,17 @@ define(["jquery"], function($) {
             }
             users.query(q, {
                 success: function(model) {
-                    if (model.models.length > 0 && model.models[0].attributes) {
-                        if (typeof callback === 'function') {
-                            callback(true, model.models[0].attributes);
-                        }
+                    if (model.length == 1) {
+                        callback(true, model.models[0]);
                     }
                     else {
-                        if (typeof callback === 'function') {
-                            callback(false, 'Could not find user with given email and password');
-                        }
+                        callback(false, 'Could not find user with given email and password');
                     }
                 },
                 error: function(response) {
                     that.showMessage('query failed trying to get user ' + response);
                     console.debug(response);
-                    if (typeof callback === 'function') {
-                        callback(false, response);
-                    }
+                    callback(false, response);
                 }
             });
         },
@@ -234,24 +211,27 @@ define(["jquery"], function($) {
             });
         },
 
-        updateWithFitbitUser : function(fitbitUser, callback) {
+        updateUserWithParams : function(stackMobUser, params, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
 
-            delete fitbitUser.encodedid;
-            $.extend(this.user, fitbitUser);
+            delete params.encodedid;
+            for (var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    stackMobUser.set(prop, params[prop]);
+                }
+            }
 
-            var user = new StackMob.User({ username : this.user.username });
-            user.save(this.user, {
+            var user = new StackMob.User({ username : stackMobUser.get('username') });
+            user.save(stackMobUser, {
                 success: function(model) {
                     console.debug(model.toJSON());
-                    if (typeof callback === "function") {
-                        callback(true, model);
-                    }
+                    callback(true, model);
                 },
                 error: function(model, response) {
                     console.debug(response);
-                    if (typeof callback === "function") {
-                        callback(false, response);
-                    }
+                    callback(false, response);
                 }
             });
         },
@@ -294,7 +274,7 @@ define(["jquery"], function($) {
         },
 
         getFriends : function(callback) {
-            if (this.user.friends) {
+            if (this.user.get('friends')) {
 
             }
 
@@ -318,14 +298,14 @@ define(["jquery"], function($) {
             users.query(friendsQuery, {
                 success: function(friends) {
                     var stackmobFriendIDs = [];
-                    if (friends.models.length > 0 && friends.models[0].attributes) {
+                    if (friends.models.length > 0) {
                         len = friends.models.length;
                         for (var i = 0; i < len; i++) {
-                            var friend = friends.models[i].attributes;
+                            var friend = friends.models[i];
                             stackmobFriendIDs.push(friend['username']);
                         }
                     }
-                    var user = new StackMob.User({ username : that.user.username });
+                    var user = new StackMob.User({ username : that.user.get('username') });
                     var params = {
                         "friends" : stackmobFriendIDs,
                         "friendcount" : stackmobFriendIDs.length,
@@ -357,7 +337,7 @@ define(["jquery"], function($) {
             var lastWeek = new Date(today.getTime() - 6*24*60*60*1000);
 
             var params = {
-                "stackmob_user_id" : this.user.username,
+                "stackmob_user_id" : this.user.username, // TODO: fix
                 "start_date" : this.formatDate(lastWeek),
                 "end_date" : this.formatDate(today)
             };
@@ -375,52 +355,52 @@ define(["jquery"], function($) {
             });
         },
 
-        completeFitbitAuth : function() {
+        completeFitbitAuth : function(stackMobUser, requestToken, requestTokenSecret, oauthVerifier, callback) {
             var that = this;
-            this.getFitbitAccessToken(function(success) {
+            this.getFitbitAccessToken(requestToken, requestTokenSecret, oauthVerifier, function(success, tokenData) {
                 if (success) {
-                    if (that.user) {
-                        that.getFitbitUser(function(success, data) {
+//                    if (that.user) {
+                        that.getFitbitUser(tokenData.oauth_token, tokenData.oauth_token_secret, tokenData.fitbit_user_id, function(success, fitbitUserData) {
                             if (success) {
-                                that.user.fitbituserid = data.encodedId;
-                                that.updateWithFitbitUser(data, function(success, data) {
+                                delete fitbitUserData.encodedID;
+                                var params = fitbitUserData;
+                                params.accesstoken =  tokenData.oauth_token;
+                                params.accesstokensecret = tokenData.oauth_token_secret;
+                                params.fitbituserid = tokenData.fitbit_user_id;
+
+                                that.updateUserWithParams(stackMobUser, params, function(success, stackMobUserData) {
                                     if (success) {
-//                                        window.location.href = '/#home';
+                                        callback(true, stackMobUserData);
                                     }
                                     else {
-
-                                        that.showMessage('failed to update with fitbit info\n ' + data.error);
+                                        callback(false, 'failed to update with fitbit info\n ' + stackMobUserData.error);
                                     }
                                 });
                             }
                             else {
-                                that.showMessage("failed to get Fitbit User: " + data);
+                                callback(false, 'failed to get Fitbit User: ' + fitbitUserData);
                             }
                         });
-                    }
+//                    }
                 }
                 else {
-                    that.showMessage("failed to get Fitbit access token");
+                    callback(false, 'failed to get Fitbit access token');
                 }
             });
         },
 
         loginWithID : function(username, callback) {
-            var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
             if (username) {
                 var user = new StackMob.User({ username: username });
                 user.fetch({
                     success: function(model) {
-                        that.user = model.attributes;
-                        if (typeof callback === "function") {
-                            callback(true, model);
-                        }
+                        callback(true, model);
                     },
                     error: function(data) {
-                        that.showMessage('Could not retrieve your user data');
-                        if (typeof callback === "function") {
-                            callback(false, data);
-                        }
+                        callback(false, 'could not retrieve your data' + data);
                     }
                 });
             }
@@ -432,7 +412,7 @@ define(["jquery"], function($) {
             var Invitations = StackMob.Collection.extend({ model: Invitation });
             var invitations = new Invitations();
             var q = new StackMob.Collection.Query();
-            q.equals('inviteduser', this.user.username);
+            q.equals('inviteduser', this.user.get('username'));
             q.equals('responded', false);
             invitations.query(q, {
                 success: function(model) {
@@ -444,14 +424,13 @@ define(["jquery"], function($) {
                         return;
                     }
                     for (var i = 0; i < len; i++) {
-                        var invite = model.models[i].attributes;
+                        var invite = model.models[i];
 
                         var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
                         var challenge = new Challenge();
                         challenge.fetch( {
                             success: function(model) {
-                                var chal = model.attributes[0];
-                                alert('you have a challenge invitation from ' + chal.challengecreator + '!');
+                                alert('you have a challenge invitation from ' + model.get('challengecreator') + '!');
                                 console.debug(model.toJSON());
                             },
                             error: function(model, response) {

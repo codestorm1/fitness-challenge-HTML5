@@ -50,6 +50,11 @@ define(["jquery"], function($) {
                 alert(message);
             },
 
+            log : function(message) {
+                if (console && typeof console.log === 'function') {
+                    console.log(message);
+                }
+            },
 //            router : new FitnessRouter(),
 
             init : function() {

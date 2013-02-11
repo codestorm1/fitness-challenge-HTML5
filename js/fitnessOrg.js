@@ -249,7 +249,7 @@ var fitness = fitness || {
         });
     },
 
-    updateWithFitbitUser : function(fitbitUser, callback) {
+    updateUserWithParams : function(fitbitUser, callback) {
 
         delete fitbitUser.encodedid;
         $.extend(this.user, fitbitUser);
@@ -406,7 +406,7 @@ var fitness = fitness || {
                     that.getFitbitUser(function(success, data) {
                         if (success) {
                             that.user.fitbituserid = data.encodedId;
-                            that.updateWithFitbitUser(data, function(success, data) {
+                            that.updateUserWithParams(data, function(success, data) {
                                 if (success) {
                                     window.location.href = '/#home';
                                 }

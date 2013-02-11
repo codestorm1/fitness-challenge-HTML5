@@ -1,3 +1,4 @@
+"use strict";
 define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
 
     var LoginView = Backbone.View.extend({
@@ -10,6 +11,8 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
 
         render: function() {
 
+            //delete fitness.user;
+            //localStorage.removeItem("username");
             var header = $('#header_template');
             var footer = $('#footer_template');
             var template = $('#login_template');
@@ -26,11 +29,12 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
             customCode.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
                     fitness.user = data;
-                    if (fitness.user.username) {
-                        localStorage.setItem('username', fitness.user.username);
+                    var username = fitness.user.get('username');
+                    if (username) {
+                        fitness.log("logged in as " + username + " (" + fitness.user.get('email') + ")");
+                        localStorage.setItem('username', username);
                     }
-                    router.navigate('home');
-//                    window.location.href = '/#home';
+                    router.navigate('home', true);
                 }
                 else {
                     fitness.showMessage('login failed\n ' + data);

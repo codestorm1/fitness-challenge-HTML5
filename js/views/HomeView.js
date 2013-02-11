@@ -1,4 +1,3 @@
-// Includes file dependencies
 define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $, Backbone, Mustache, HomeModel ) {
 
 

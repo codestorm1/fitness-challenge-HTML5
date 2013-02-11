@@ -2,7 +2,8 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ], function( $, Backbone, fitness, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ],
+    function( $, Backbone, fitness, customCode, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -54,8 +55,12 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
         },
 
         loginWithID : function(username, callback) {
-            if (!username || typeof callback !== "function") {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            if (!username) {
                 callback(false);
+                return;
             }
             var user = new StackMob.User({ username: username });
             user.fetch({
@@ -73,24 +78,71 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
         ensureLogin: function(callback) {
             if (fitness.user) {
                 callback(true);
+                return;
             }
             var username = localStorage.getItem('username');
             if (!username) {
                 callback(false);
+                return;
             }
             this.loginWithID(username, function(success) {
                 callback(success);
+                return;
             });
+        },
+
+        sendToLogin: function() {
+            $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
         },
 
         // Home method
         home: function() {
+            var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    that.sendToLogin();
                     return;
                 }
-                $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
+                if (fitness.user && fitness.user.get('accesstoken')) {
+                    $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
+                }
+                else { // need to auth with Fitbit
+                    if (window.location.href.indexOf('oauth_token') !== -1) { // user authorized on Fitbit and was redirected here
+                        var requestToken = localStorage.getItem("request_token");
+                        if (!requestToken) {
+                            fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
+                            $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                            return;
+                        }
+                        var requestTokenSecret = localStorage.getItem("request_token_secret");
+                        var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier'); // TODO move getQueryVariable to another js lib
+
+                        var pos = oauthVerifier.length - 1;
+                        if (oauthVerifier[pos] === '/') { // stackmob mistakenly adds a slash to the URL, so remove it
+                            oauthVerifier = oauthVerifier.substring(0, pos).replace('#',''); // also kill a # if there is one
+                        }
+                        customCode.completeFitbitAuth(fitness.user, requestToken, requestTokenSecret, oauthVerifier, function(success, data) {
+                            if (success) {
+                                var accessTokenData = data;
+                                fitness.user.set('accesstoken', accessTokenData.oauth_token);
+                                fitness.user.set('accesstokensecret', accessTokenData.oauth_token_secret);
+                                fitness.user.set('fitbituserid', accessTokenData.fitbit_user_id);
+                                localStorage.removeItem('request_token');
+                                localStorage.removeItem('request_token_secret');
+
+                                $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
+                            }
+                            else {
+                                localStorage.removeItem('request_token');
+                                localStorage.removeItem('request_token_secret');
+                                fitness.showMessage(data);
+                            }
+                        })
+                    }
+                    else {
+                        $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                    }
+                }
             });
         },
 
@@ -103,9 +155,10 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
         },
 
         auth: function() {
+            var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    that.sendToLogin();
                     return;
                 }
                 $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
@@ -113,9 +166,10 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
         },
 
         create: function() {
+            var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    that.sendToLogin();
                     return;
                 }
                 $.mobile.changePage( "#create_challenge" , { reverse: true, changeHash: false } );
@@ -123,9 +177,10 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
         },
 
         friends: function() {
+            var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
+                    that.sendToLogin();
                     return;
                 }
                 $.mobile.changePage( "#home" , { reverse: true, changeHash: false } );
@@ -138,7 +193,7 @@ define([ "jquery","backbone", "../fitness", "../models/CategoryModel", "../model
             var currentView = this[ type + "View" ];
 
             // If there are no collections in the current Category View
-            if(!currentView.collection.length) {
+            if (!currentView.collection.length) {
 
                 // Show's the jQuery Mobile loading icon
                 $.mobile.loading( "show" );

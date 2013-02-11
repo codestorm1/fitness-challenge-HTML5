@@ -19,8 +19,8 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
              customCode.createStackmobUser(email, newPassword, function(success, data) {
                  if (success) {
                      fitness.user = data;
-                     if (fitness.user.username) {
-                         localStorage.setItem('username', fitness.user.username);
+                     if (fitness.user.get('username')) {
+                         localStorage.setItem('username', fitness.user.get('username'));
                      }
                      router.navigate("auth", true);
 
