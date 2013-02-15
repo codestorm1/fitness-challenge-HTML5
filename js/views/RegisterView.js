@@ -16,8 +16,10 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
                  fitness.showMessage("Passwords do not match");
                  return;
              }
+             $.mobile.loading("show");
              customCode.createStackmobUser(email, newPassword, function(success, data) {
                  if (success) {
+                     $.mobile.loading("hide");
                      fitness.user = data;
                      if (fitness.user.get('username')) {
                          localStorage.setItem('username', fitness.user.get('username'));
@@ -28,6 +30,7 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
 
                  }
                  else {
+                     $.mobile.loading("hide");
                      fitness.showMessage('Failed to save user:\n' + data);
                  }
              });
@@ -36,11 +39,9 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
         render: function() {
             var template = $('#register_template');
             var header = $('#header_template');
-            var footer = $('#footer_template');
             this.$el.empty();
-            this.$el.append(header.html()).append(template.html()).append(footer.html());
+            this.$el.append(header.html()).append(template.html());
             this.$el.trigger('create');
-            $('#register .logout-link').hide();
             return this;
         }
     });

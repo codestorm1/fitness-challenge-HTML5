@@ -1,5 +1,5 @@
 "use strict";
-define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
+define([ "jquery", "backbone", "../fitness", "../customCodeClient", "../views/FooterView"], function( $, Backbone, fitness, customCode, FooterView) {
 
     var LoginView = Backbone.View.extend({
 
@@ -11,32 +11,34 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
 
         render: function() {
 
-            //delete fitness.user;
-            //localStorage.removeItem("username");
+            //var footerView = new FooterView( { el: "#login .footer" } );
+
             var header = $('#header_template');
-            var footer = $('#footer_template');
             var template = $('#login_template');
             this.$el.empty();
-            this.$el.append(header.html()).append(template.html()).append(footer.html());
+            this.$el.append(header.html()).append(template.html());
             this.$el.trigger('create');
-            $('#login .logout-link').hide();
             return this;
         },
 
         loginSubmit : function() {
             var email = $("#email").val();
             var password = $('#password').val();
+            $.mobile.loading("show");
             customCode.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
+                    $.mobile.loading("hide");
                     fitness.user = data;
                     var username = fitness.user.get('username');
                     if (username) {
                         fitness.log("logged in as " + username + " (" + fitness.user.get('email') + ")");
                         localStorage.setItem('username', username);
                     }
-                    router.navigate('home', true);
+                    $.mobile.loading("show");
+                    router.navigate('#home', true);
                 }
                 else {
+                    $.mobile.loading("hide");
                     fitness.showMessage('login failed\n ' + data);
                 }
             });

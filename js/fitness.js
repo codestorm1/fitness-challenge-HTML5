@@ -39,12 +39,13 @@ define(["jquery"], function($) {
 //        this.router = new FitnessRouter();
 //    });
 
-        var user; // current user
-        var friends;
 
         return {
-            user : user,
-            friends: friends,
+            parseDate : function(dateStr) {
+                var parts = dateStr.match(/(\d+)/g);
+                // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+                return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+            },
 
             showMessage : function(message) {
                 alert(message);
@@ -54,6 +55,15 @@ define(["jquery"], function($) {
                 if (console && typeof console.log === 'function') {
                     console.log(message);
                 }
+            },
+
+            isLoggedIn: function() {
+                return !!this.user;
+            },
+
+            logout : function() {
+                localStorage.removeItem('username');
+                delete this.user;
             },
 //            router : new FitnessRouter(),
 

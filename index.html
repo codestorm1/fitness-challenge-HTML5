@@ -29,7 +29,7 @@
 <div id="login" data-role="page" data-title="Fitness Challenge - Login">
 </div>
 
-<div id="create_challenge" data-role="page" data-title="Create Challenge">
+<div id="create" data-role="page" data-title="Create Challenge">
 </div>
 
 
@@ -54,7 +54,7 @@
                     Invitations<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
             </li>
-            <li class="create_challenge">
+            <li class="create">
                 <a href="#create">
                     Create A New Challenge<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
@@ -76,6 +76,7 @@
             <!--<li><a href="#category?vehicles" class="vehicles">Vehicles</a></li>-->
         <!--</ul>-->
     </div><!-- /content -->
+    <div class="footer"></div>
 </script>
 
 
@@ -98,6 +99,7 @@
             <a href="#register" id="register_link" data-role="button" data-theme="e" data-ajax="false">Not a Member? Register now</a>
         <!--</form>-->
     </div>
+    <div class="footer"></div>
 </script>
 
 
@@ -118,6 +120,7 @@
             </fieldset>
         <!--</form>-->
     </div>
+    <div class="footer"></div>
 </script>
 
 <script id="auth_template" type="text/template">
@@ -130,6 +133,7 @@
         </p>
         <a id="authorize_link" data-role="button" data-theme="e" data-ajax="false">Authorize with Fitbit</a>
     </div>
+    <div class="footer"></div>
 </script>
 
 <script id="create_challenge_template" type="text/template">
@@ -147,17 +151,18 @@
                 <label for="end_date">End date</label>
                 <input id="end_date" name="end_date" type="date" data-val="true" data-val-required="End date is required" />
 
-                <a  variety packid="create_challenge_submit" type="button" data-theme="e">Create</a>
+                <a id="create_challenge_submit" type="button" data-theme="e">Create</a>
             </fieldset>
         </form>
     </div>
+    <div class="footer"></div>
 </script>
 
 <script id="footer_template" type="text/template">
     <footer data-role="footer" class="main-footer" data-theme="c">
         <div data-role="navbar">
             <ul>
-                <li><a class="logout-link" data-ajax="false" href="#logout">Log Out</a></li>
+                <li><a class="logout_link">Log Out</a></li>
             </ul>
         </div>
 

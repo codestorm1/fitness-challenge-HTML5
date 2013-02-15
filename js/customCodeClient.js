@@ -6,11 +6,6 @@ define(["jquery"], function($) {
     var that = this;
 
 
-    var parseDate = function(dateStr) {
-        var parts = dateStr.match(/(\d+)/g);
-        // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-        return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
-    };
 
     var formatDate = function(date) {
         var day = date.getDate();

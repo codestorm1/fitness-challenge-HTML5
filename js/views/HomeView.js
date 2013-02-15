@@ -48,10 +48,9 @@ define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $,
 //                "friendCount" : fitness.user.friendcount,
 //                "fitbitFriendCount" : fitness.user.fitbitfriendcount
 //            };
-            var footer = $('#footer_template');
 //            var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
-            this.$el.append(template.html()).append(footer.html());
+            this.$el.append(template.html());
             this.$el.trigger('create');
 
             return this;

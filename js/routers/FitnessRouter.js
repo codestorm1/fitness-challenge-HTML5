@@ -2,8 +2,8 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ],
-    function( $, Backbone, fitness, customCode, CategoryModel, ChallengeModel, CategoriesCollection, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
+define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/CategoryModel", "../models/ChallengeModel", "../collections/CategoriesCollection", "../views/FooterView", "../views/HomeView", "../views/LoginView", "../views/RegisterView", "../views/AuthView", "../views/CategoryView", "../views/ChallengeView" ],
+    function( $, Backbone, fitness, customCode, CategoryModel, ChallengeModel, CategoriesCollection, FooterView, HomeView, LoginView, RegisterView, AuthView, CategoryView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
@@ -25,7 +25,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
 
             this.loginView = new LoginView( { el: "#login", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
-            this.challengeView = new ChallengeView( { el: "#create_challenge", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
+            this.challengeView = new ChallengeView( { el: "#create", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
 
             this.registerView = new RegisterView( { el: "#register", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
             this.authView = new AuthView( { el: "#auth", collection: new CategoriesCollection( [] , { type: "challenges" } ) } );
@@ -76,7 +76,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
         },
 
         ensureLogin: function(callback) {
-            if (fitness.user) {
+            if (fitness.isLoggedIn()) {
                 callback(true);
                 return;
             }
@@ -92,6 +92,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
         },
 
         sendToLogin: function() {
+            $.mobile.loading("show");
+            var footerView = new FooterView( { el: "#login .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
             $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
         },
 
@@ -104,6 +106,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     return;
                 }
                 if (fitness.user && fitness.user.get('accesstoken')) {
+                    //$.mobile.loading("show");
+                    var footerView = new FooterView( { el: "#home .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
                     $.mobile.changePage( "#home" , { reverse: false, changeHash: false } );
                 }
                 else { // need to auth with Fitbit
@@ -111,6 +115,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                         var requestToken = localStorage.getItem("request_token");
                         if (!requestToken) {
                             fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
+                            var footerView = new FooterView( { el: "#auth .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
+                            $.mobile.loading("show");
                             $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
                             return;
                         }
@@ -130,6 +136,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
 
+                                var footerView = new FooterView( { el: "#home .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
                                 $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
                             }
                             else {
@@ -140,6 +147,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                         })
                     }
                     else {
+                        var footerView = new FooterView( { el: "#auth .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
+                        $.mobile.loading("show");
                         $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
                     }
                 }
@@ -147,10 +156,12 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
         },
 
         login: function() {
+            var footerView = new FooterView( { el: "#login .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
             $.mobile.changePage( "#login" , { reverse: false, changeHash: false } );
         },
 
         register: function() {
+            var footerView = new FooterView( { el: "#register .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
             $.mobile.changePage( "#register" , { reverse: false, changeHash: false } );
         },
 
@@ -161,6 +172,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     that.sendToLogin();
                     return;
                 }
+                var footerView = new FooterView( { el: "#auth .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
                 $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
             });
         },
@@ -172,7 +184,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     that.sendToLogin();
                     return;
                 }
-                $.mobile.changePage( "#create_challenge" , { reverse: true, changeHash: false } );
+                var footerView = new FooterView( { el: "#create .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
+                $.mobile.changePage( "#create" , { reverse: true, changeHash: true } );
             });
         },
 
@@ -183,6 +196,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     that.sendToLogin();
                     return;
                 }
+                var footerView = new FooterView( { el: "#home .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
                 $.mobile.changePage( "#home" , { reverse: true, changeHash: false } );
             });
         },
@@ -195,8 +209,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
             // If there are no collections in the current Category View
             if (!currentView.collection.length) {
 
-                // Show's the jQuery Mobile loading icon
-                $.mobile.loading( "show" );
+                // Shows the jQuery Mobile loading icon
+                $.mobile.loading("show");
 
                 // Fetches the Collection of Category Models for the current Category View
                 currentView.collection.fetch().done( function() {
