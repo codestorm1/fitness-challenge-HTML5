@@ -26,12 +26,18 @@
 <div id="home" data-role="page" data-title="Fitness Challenge">
 </div>
 
+<div id="profile" data-role="page" data-title="Your Profile
+">
+</div>
+
 <div id="login" data-role="page" data-title="Fitness Challenge - Login">
 </div>
 
 <div id="create" data-role="page" data-title="Create Challenge">
 </div>
 
+<div id="friends" data-role="page" data-title="Your Friends">
+</div>
 
 <div id="auth" data-role="page" data-title="Authorize with Fitbit">
 </div>
@@ -46,6 +52,9 @@
     </div>
     <div data-role="content">
         <ul data-role="listview" data-inset="true" class="home_links" data-checknew="true">
+            <li class="profile">
+                <a href="#profile">My Profile</a>
+            </li>
             <li class="challenges">
                 <a href="#challenges">Active Challenges</a>
             </li>
@@ -79,12 +88,50 @@
     <div class="footer"></div>
 </script>
 
+<script id="friends_template" type="text/template">
+    <div data-role="content">
+        <h2>Under Construction</h2>
+        <h3>Your Friends will be listed here</h3>
+    </div>
+    <div class="footer"></div>
+</script>
+
+<script id="profile_template" type="text/template">
+    <div data-role="content">
+        <fieldset>
+            <h2>Profile</h2>
+            {{#user}}
+                <h3><img id="avatar" src="{{avatar}}"> Logged in as {{ display_name }}</h3>
+                <h3>Your fitness challenge ID is {{ username }}, Your Fitbit ID is  {{ fitbitID }}</h3>
+                <h3>Email: {{ email }}, Password: {{ password }}</h3>
+            <!--{{#friends}}-->
+            <!--<h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>-->
+            <!--{{/friends}}-->
+            {{#accessToken}}
+                <h3>You are currently authenticated with Fitbit</h3>
+                <h3>Fitbit Access Token: {{ accessToken }}</h3>
+                <a id="deauthorize" type="button" data-theme="e">Clear Fitbit authorization</a>
+            {{/accessToken}}
+            {{^accessToken}}
+                <h3>You are not authenticated with Fitbit</h3>
+                <a href="#auth" type="button" data-theme="e">Go to auth page</a>
+            {{/accessToken}}
+                <a id="delete_user" type="button" data-theme="e">Delete My Account</a>
+            {{/user}}
+            {{^user}}
+                <h3>You are not logged in</h3>
+                <a id="go_to_login" href="#login" type="button" data-theme="e">Go to Login</a>
+            {{/user}}
+        </fieldset>
+    </div>
+    <div class="footer"></div>
+</script>
+
 
 <script id="login_template" type="text/template">
     <div data-role="content">
         <h3>Welcome to fitness challenge!<br/>
             Challenge your friends to see who can take the most fitbit steps.</h3>
-        <!--<form action="/" data-ajax="false" id="loginformmain" method="post">-->
             <fieldset>
                 <!--<legend>Login</legend>-->
                 <h3>Login:</h3>
@@ -105,7 +152,6 @@
 
 <script id="register_template" type="text/template">
     <div data-role="content">
-        <!--<form action="/" data-ajax="false" id="register_form" method="post">-->
             <fieldset>
                 <h3>Register</h3>
                 <label for="register_email">Email</label>

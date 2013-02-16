@@ -1,0 +1,72 @@
+define([ "jquery", "backbone", "mustache", "../fitness", "../customCodeClient"], function( $, Backbone, Mustache, fitness, customCode) {
+
+    var ProfileView = Backbone.View.extend({
+
+        initialize: function() {
+            this.render();
+        },
+
+        events: {
+            "click #deauthorize" : "deauthorizeFitbit",
+            "click #delete_user" : "deleteAccount"
+        },
+
+        render: function() {
+            var template = $('#profile_template');
+            var dto;
+            if (fitness.isLoggedIn()) {
+                dto = {
+                    user : fitness.user,
+                    display_name : fitness.user.get('displayname'),
+                    avatar : fitness.user.get('avatar'),
+                    username : fitness.user.get('username'),
+                    fitbitID : fitness.user.get('fitbituserid'),
+                    email : fitness.user.get('email'),
+                    password: fitness.user.get('fc_password'),
+                    accessToken : fitness.user.get('accesstoken'),
+                    friends : fitness.user.get('friends')
+                };
+            }
+            else {
+                dto = {};
+            }
+            var html = Mustache.to_html(template.html(), dto);
+
+            var header = $('#header_template');
+            this.$el.empty();
+            this.$el.append(header.html()).append(html);
+            //this.$el.append(header.html());
+            this.$el.trigger('create');
+            return this;
+        },
+
+        deauthorizeFitbit : function() {
+            $.mobile.loading("show");
+            customCode.updateUserWithParams(fitness.user, {accesstoken : null}, function(success, data) {
+                $.mobile.loading("hide");
+                if (success) {
+                    router.navigate("auth", true);
+                }
+                else {
+                    fitness.showMessage('Failed to update user:\n' + data);
+                }
+            });
+        },
+
+        deleteAccount : function() {
+            $.mobile.loading("show");
+            fitness.deleteUser(function(success, data) {
+                $.mobile.loading("hide");
+                if (success) {
+                    console.debug('User object is destroyed, username: ' + model.get('username'));
+                }
+                else {
+                    console.debug(data);
+                }
+            });
+        }
+
+    });
+    return ProfileView;
+});
+

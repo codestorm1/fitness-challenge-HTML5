@@ -70,7 +70,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
                         }
                     }
                 },
-                error: function(model, response) {1
+                error: function(model, response) {
                     $.mobile.loading("hide");
                     console.debug("Save challenge failed: " + response['error']);
                     if (response.error.indexOf('Duplicate') !== -1) {

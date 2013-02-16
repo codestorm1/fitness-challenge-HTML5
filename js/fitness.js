@@ -1,44 +1,7 @@
-//"use strict";
+"use strict";
 
 // Includes File Dependencies
-//require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob", "jquerymobile"], function( $, Backbone, FitnessRouter, StackMob ) {
-//require([ "jquery", "backbone", "stackmob", "jquerymobile"], function( $, Backbone, StackMob ) {
 define(["jquery"], function($) {
-//    $(function() {
-//        if (window.location.href.indexOf('stackmobapp.com') !== -1) {
-//            StackMob.init({ // production
-//                appName: "fitnesschallenge",
-//                clientSubdomain: "twistedogregmailcom",
-//                publicKey: "eb6421b3-9737-4f0b-97ce-8aebc448739b",
-//                apiVersion: 2
-//            });
-//        }
-//        else {
-//            StackMob.init({ // dev
-//                appName: "fitnesschallenge",
-//                clientSubdomain: "twistedogregmailcom",
-//                publicKey: "ba025b72-92db-4681-9abb-231baca5a94d",
-//                apiVersion: 0
-//            });
-//        }
-//        var username = localStorage.getItem('username');
-//        if (username) {
-//            fitness.loginWithID(username, function() {
-//                fitness.init();
-//                return;
-//            });
-//        }
-//        else {
-//            fitness.init();
-//        }
-
-//    });
-
-//    require( [ "jquerymobile" ], function() {
-//        // Instantiates a new Backbone.js Router
-//        this.router = new FitnessRouter();
-//    });
-
 
         return {
             parseDate : function(dateStr) {
@@ -65,6 +28,43 @@ define(["jquery"], function($) {
                 localStorage.removeItem('username');
                 delete this.user;
             },
+
+            deleteUser : function(callback) {
+                var that = this;
+                this.user.destroy({
+                    success: function(data) {
+                        that.logout();
+                        callback(true, data);
+                    },
+                    error: function(data) {
+                        callback(false, data);
+                    }
+                });
+            },
+
+
+            loginWithID : function(username, callback) {
+                var that = this;
+                if (typeof callback !== "function") {
+                    throw 'callback is required';
+                }
+                if (!username) {
+                    callback(false);
+                    return;
+                }
+                var sm_user = new StackMob.User({ username: username });
+                sm_user.fetch({
+                    success: function(model) {
+                        that.user = model;
+                        callback(true, model);
+                    },
+                    error: function(data) {
+                        that.showMessage('Could not retrieve your user data');
+                        callback(false, data);
+                    }
+                });
+            },
+
 //            router : new FitnessRouter(),
 
             init : function() {
