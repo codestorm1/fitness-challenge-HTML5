@@ -3,6 +3,7 @@ define([ "jquery", "underscore", "stackmob" ], function( $, _, StackMob ) {
 
     // The UserModel constructor
 
+    // grrr, upload this, stackmob
     // TODO: move this to a proper place
     if (window.location.href.indexOf('stackmobapp.com') !== -1) {
         StackMob.init({ // production
