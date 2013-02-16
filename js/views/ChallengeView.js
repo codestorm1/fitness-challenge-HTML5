@@ -32,7 +32,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
             var startDate = fitness.parseDate(startDateStr);
             var endDate = fitness.parseDate(endDateStr);
 
-            var challengeID = fitness.user.username + '_' + challengeType + '_' + startDateStr + '_' + endDateStr;
+            var challengeID = fitness.user.get('username') + '_' + challengeType + '_' + startDateStr + '_' + endDateStr;
 
             var Challenge = StackMob.Model.extend({ schemaName: 'challenge'});
             var challenge = new Challenge( {

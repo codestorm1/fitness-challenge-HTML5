@@ -332,7 +332,7 @@ define(["jquery"], function($) {
             var lastWeek = new Date(today.getTime() - 6*24*60*60*1000);
 
             var params = {
-                "stackmob_user_id" : this.user.username, // TODO: fix
+                "stackmob_user_id" : this.user.get('username'), // TODO: fix
                 "start_date" : this.formatDate(lastWeek),
                 "end_date" : this.formatDate(today)
             };
