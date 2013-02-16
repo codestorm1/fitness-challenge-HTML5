@@ -29,7 +29,7 @@ define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $,
 //
 //            that.getChallengeInvites();
 //            if (that.user.fitbituserid) {
-//                that.getFitbitFriends(that.user.username, function(success, friends) {
+//                that.getFitbitFriends(that.user.get('username'), function(success, friends) {
 //                    if (success) {
 //                        that.saveFriendsToStackmob(friends);
 //                        that.friends = friends;
@@ -43,7 +43,7 @@ define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $,
 //
             var template = $('#home_template');
 //            var dto = {
-//                "username" : fitness.user.username,
+//                "username" : fitness.user.get('username'),
 //                "displayName" : fitness.user.displayname,
 //                "friendCount" : fitness.user.friendcount,
 //                "fitbitFriendCount" : fitness.user.fitbitfriendcount

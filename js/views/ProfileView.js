@@ -55,13 +55,14 @@ define([ "jquery", "backbone", "mustache", "../fitness", "../customCodeClient"],
 
         deleteAccount : function() {
             $.mobile.loading("show");
-            fitness.deleteUser(function(success, data) {
+            fitness.deleteUser(function(success, data, response) {
                 $.mobile.loading("hide");
                 if (success) {
-                    console.debug('User object is destroyed, username: ' + model.get('username'));
+                    fitness.showMessage('Account deleted');
                 }
                 else {
-                    console.debug(data);
+                    var message = 'Failed to delete account ' + response || '';
+                    fitness.showMessage(message);
                 }
             });
         }

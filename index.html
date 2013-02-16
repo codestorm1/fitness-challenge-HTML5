@@ -104,9 +104,9 @@
                 <h3><img id="avatar" src="{{avatar}}"> Logged in as {{ display_name }}</h3>
                 <h3>Your fitness challenge ID is {{ username }}, Your Fitbit ID is  {{ fitbitID }}</h3>
                 <h3>Email: {{ email }}, Password: {{ password }}</h3>
-            <!--{{#friends}}-->
-            <!--<h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>-->
-            <!--{{/friends}}-->
+            {{#friends}}
+            <h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>
+            {{/friends}}
             {{#accessToken}}
                 <h3>You are currently authenticated with Fitbit</h3>
                 <h3>Fitbit Access Token: {{ accessToken }}</h3>

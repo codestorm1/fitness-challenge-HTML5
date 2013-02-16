@@ -21,7 +21,7 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
             localStorage.removeItem('request_token');
             localStorage.removeItem('request_token_secret');
             $.mobile.loading("show");
-            customCode.getFitbitRequestToken(fitness.user.username, function(success, tokens) {
+            customCode.getFitbitRequestToken(fitness.user.get('username'), function(success, tokens) {
                     if (success) {
                         localStorage.setItem('request_token', tokens.oauth_token);
                         localStorage.setItem('request_token_secret', tokens.oauth_token_secret);

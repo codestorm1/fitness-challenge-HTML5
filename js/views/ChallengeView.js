@@ -24,7 +24,9 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
 
 
         createChallengeSubmit : function() {
+            var friendsInvited = 0;
             var challengeType = $("#challenge_type").val();
+
 
             var startDateStr = $('#start_date').val();
             var endDateStr = $('#end_date').val();
@@ -40,14 +42,14 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
                 "challengetype" : challengeType,
                 "startdate" : startDate.getTime(),
                 "enddate" : endDate.getTime(),
-                "challengecreator" : fitness.user.username,
-                "users" : [fitness.user.username]});
+                "challengecreator" : fitness.user.get('username'),
+                "users" : [fitness.user.get('username')]});
             $.mobile.loading("show");
             challenge.create({
                 success: function(model) {
                     $.mobile.loading("hide");
-                    if (fitness.user.friends) {
-                        var friendIDs = fitness.user.friends;
+                    var friendIDs = fitness.user.get('friends');
+                    if (friendIDs && friendIDs.length > 0) {
                         var challenge_id = model.attributes.challenge_id;
                         var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
                         var len = friendIDs.length;
@@ -55,7 +57,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
                             var friendID = friendIDs[i];
                             var invitation = new Invitation({
                                 "challenge" : challengeID,
-                                "challengeinviter" : fitness.user.username,
+                                "challengeinviter" : fitness.user.get('username'),
                                 "inviteduser" : friendID,
                                 "responded" : false,
                                 "accepted" : false});
@@ -69,6 +71,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
                             });
                         }
                     }
+                    fitness.showMessage('Challenege created!');
                 },
                 error: function(model, response) {
                     $.mobile.loading("hide");
