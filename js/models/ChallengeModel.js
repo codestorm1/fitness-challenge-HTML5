@@ -6,6 +6,7 @@ define([ "jquery", "underscore", "stackmob" ], function( $, _, StackMob ) {
 
     // The ChallengeModel constructor
 
+    // no upload, stackmob?
     // TODO: move this to a proper place
     if (window.location.href.indexOf('stackmobapp.com') !== -1) {
         StackMob.init({ // production
