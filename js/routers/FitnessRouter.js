@@ -89,7 +89,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
 
-                                this.home();
+                                that.home();
 
                                 var footerView = new FooterView( { el: "#home .footer"} );
                                 $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
@@ -102,7 +102,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                         })
                     }
                     else {
-                        this.auth();
+                        that.auth();
                     }
                 }
             });
@@ -119,11 +119,11 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                 if (fitness.user && fitness.user.get('accesstoken')) {
                     //$.mobile.loading("show");
                     var footerView = new FooterView( { el: "#home .footer"} );
-                    this.homeView = new HomeView( { el: "#home"} );
+                    that.homeView = new HomeView( { el: "#home"} );
                     $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
                 }
                 else {
-                    this.auth();
+                    that.auth();
                 }
             });
         },
