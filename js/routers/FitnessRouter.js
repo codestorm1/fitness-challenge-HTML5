@@ -68,7 +68,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                         var requestToken = localStorage.getItem("request_token");
                         if (!requestToken) {
                             fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
-                            var footerView = new FooterView( { el: "#auth .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
+                            var footerView = new FooterView( { el: "#auth .footer"} );
                             $.mobile.loading("show");
                             $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
                             return;
@@ -91,7 +91,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
 
                                 this.home();
 
-                                var footerView = new FooterView( { el: "#home .footer", collection: new CategoriesCollection( [] , { type: "challenges" } ) } ); // TODO: collection needed?
+                                var footerView = new FooterView( { el: "#home .footer"} );
                                 $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
                             }
                             else {
