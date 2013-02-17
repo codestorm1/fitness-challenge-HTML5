@@ -672,6 +672,7 @@ var fitness = fitness || {
 
         var router = new this.AppRouter();
         Backbone.history.start();
+        router.navigate();
 //        if (this.user.username && this.displayName) {
 //            this.homeView = new this.HomeView();
 //        }

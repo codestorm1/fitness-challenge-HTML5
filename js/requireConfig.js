@@ -62,5 +62,6 @@ return;
     require( [ "jquerymobile" ], function() {
 		// Instantiates a new Backbone.js Mobile Router
         window.router = new FitnessRouter(); // TODO: figure out how to put this in a namespace
+        router.navigate();
     });
 } );
