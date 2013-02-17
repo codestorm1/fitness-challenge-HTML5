@@ -25,7 +25,7 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
                     if (success) {
                         localStorage.setItem('request_token', tokens.oauth_token);
                         localStorage.setItem('request_token_secret', tokens.oauth_token_secret);
-                        window.location.href = 'http://www.fitbit.com/oauth/authorize?oauth_token=' + tokens.oauth_token;
+                        window.location.href = 'http://www.fitbit.com/oauth/authorize?oauth_token=' + tokens.oauth_token + "&display=touch";
                     }
                     else {
                         fitness.showMessage('Sorry, could not authorize with fitbit.\n  Failed to get fitbit request token');
