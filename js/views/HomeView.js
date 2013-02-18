@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "mustache", "../models/HomeModel" ], function( $, Backbone, Mustache, HomeModel ) {
+define([ "jquery", "backbone", "mustache"], function( $, Backbone, Mustache) {
 
 
     this.HomeView = Backbone.View.extend({

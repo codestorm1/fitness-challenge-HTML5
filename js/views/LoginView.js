@@ -1,5 +1,5 @@
 "use strict";
-define([ "jquery", "backbone", "../fitness", "../customCodeClient", "../views/FooterView"], function( $, Backbone, fitness, customCode, FooterView) {
+define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
 
     var LoginView = Backbone.View.extend({
 

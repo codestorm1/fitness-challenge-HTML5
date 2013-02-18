@@ -77,9 +77,9 @@
     user.destroy(StackMobExamples.debugCallback('Delete User: Bruce Wayne'));
   };
 
-  StackMobExamples['login'] = function() {
+  StackMobExamples['showLogin'] = function() {
     var user = new StackMob.User({ username: 'Bruce Wayne', password: 'imbatman' });
-    user.login(false, StackMobExamples.debugCallback('Logging in.'), function(model) {
+    user.showLogin(false, StackMobExamples.debugCallback('Logging in.'), function(model) {
       console.debug(model.toJSON());
     }, function(model, response) {
       console.debug(response);
@@ -158,7 +158,7 @@
   (function() {
     $(document).ready(function() {
       $('#login').click(function() {
-        StackMobExamples.login();
+        StackMobExamples.showLogin();
       });
     });
 
@@ -435,7 +435,7 @@
   (function() {
     $(document).ready(function() {
       var fblogin = function (runAfterLogin) {
-        FB.login(function(response) {
+        FB.showLogin(function(response) {
           if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me', function(response) {

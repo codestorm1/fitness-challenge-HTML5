@@ -5,17 +5,14 @@ require.config( {
       paths: {
 
             // Core Libraries
-          "backbone": "libs/backbone",
+          "underscore": "libs/underscore-1.4.1-min",
+          "backbone": "libs/backbone-0.9.2-min",
+          "jquery": "libs/jquery-1.8.2.min",
           "mustache": "libs/mustache",
-          "jquery": "libs/jquery",
-            "jquerymobile": "libs/jquerymobile",
-            "underscore": "libs/lodash",
-            "json2": "libs/json2-min",
-            "stackmob" : "libs/stackmob-js-0.6.0-min"
-
-//"underscore" : "http://static.stackmob.com/js/underscore-1.4.1-min.js"
-//    <script type="text/javascript" src="http://static.stackmob.com/js/backbone-0.9.2-min.js"></script>
-
+          "jquerymobile": "libs/jquery.mobile-1.2.0.min",
+            //"underscore": "libs/lodash",
+          "json2": "libs/json2-min",
+          "stackmob" : "libs/stackmob-js-0.8.0-min"
 
 },
 
@@ -40,22 +37,16 @@ require.config( {
 } );
 
 // Includes File Dependencies
-require([ "jquery", "backbone", "routers/FitnessRouter", "stackmob" ], function( $, Backbone, FitnessRouter, StackMob ) {
+require([ "jquery", "routers/FitnessRouter", "stackmob" ], function( $, FitnessRouter, StackMob ) {
 
 	$( document ).on( "mobileinit",
 		// Set up the "mobileinit" handler before requiring jQuery Mobile's module
 		function() {
-            $.mobile.ajaxEnabled = false;
+            $.mobile.ajaxEnabled = false; // ???
             $.mobile.linkBindingEnabled = false;
             $.mobile.hashListeningEnabled = false;
             $.mobile.pushStateEnabled = false;
-return;
-
-            // Prevents all anchor click handling including the addition of active button state and alternate link bluring.
-			$.mobile.linkBindingEnabled = false;
-
-			// Disabling this will prevent jQuery Mobile from handling hash changes
-			$.mobile.hashListeningEnabled = false;
+            return;
 		}
 	)
 

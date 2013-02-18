@@ -14,10 +14,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
 //            $('#header').html(new HeaderView().render().el);
 
             this.loginView = new LoginView( { el: "#login" } );
-            this.challengeView = new ChallengeView( { el: "#create" } );
             this.registerView = new RegisterView( { el: "#register"} );
-            this.authView = new AuthView( { el: "#auth" } );
-            this.friendsView = new FriendsView( { el: "#friends" } );
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
@@ -27,13 +24,13 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
         // Backbone.js Routes
         routes: {
             "": "whereTo",
-            "home": "home",
-            "login" : "login",
-            "create" : "create",
-            "profile" : "profile",
-            "friends" : "friends",
-            "register" : "register",
-            "auth" : "auth"
+            "home": "showHome",
+            "login" : "showLogin",
+            "create" : "showCreate",
+            "profile" : "showProfile",
+            "friends" : "showFriends",
+            "register" : "showRegister",
+            "auth" : "showAuth"
         },
 
         ensureLogin: function(callback) {
@@ -57,11 +54,11 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
             var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    that.login();
+                    that.showLogin();
                     return;
                 }
                 if (fitness.user && fitness.user.get('accesstoken')) {
-                    that.home();
+                    that.showHome();
                 }
                 else { // need to auth with Fitbit
                     if (window.location.href.indexOf('oauth_token') !== -1) { // user authorized on Fitbit and was redirected here
@@ -70,7 +67,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                             fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
                             var footerView = new FooterView( { el: "#auth .footer"} );
                             $.mobile.loading("show");
-                            $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                            this.showAuth();
                             return;
                         }
                         var requestTokenSecret = localStorage.getItem("request_token_secret");
@@ -89,7 +86,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
 
-                                that.home();
+                                that.showHome();
 
                                 var footerView = new FooterView( { el: "#home .footer"} );
                                 $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
@@ -102,87 +99,95 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                         })
                     }
                     else {
-                        that.auth();
+                        that.showAuth();
                     }
                 }
             });
         },
 
         // Home method
-        home: function() {
+        showHome: function() {
             var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    that.login();
+                    that.showLogin();
                     return;
                 }
                 if (fitness.user && fitness.user.get('accesstoken')) {
-                    //$.mobile.loading("show");
-                    var footerView = new FooterView( { el: "#home .footer"} );
                     that.homeView = new HomeView( { el: "#home"} );
+                    var footerView = new FooterView( { el: "#home .footer"} );
                     $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
                 }
                 else {
-                    that.auth();
+                    that.showAuth();
                 }
             });
         },
 
-        activeChallenges: function() {
+        showActiveChallenges: function() {
             var footerView = new FooterView( { el: "#profile .footer"} );
             $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
         },
 
-        profile: function() {
-            //this.ensureLogin(function(success) {
-                var footerView = new FooterView( { el: "#profile .footer"});
-                this.profileView = new ProfileView( { el: "#profile" } );
+        showProfile: function() {
+            this.ensureLogin(function(success) {
+                if (!this.profileView) {
+                    this.profileView = new ProfileView( { el: "#profile" } );
+                    var footerView = new FooterView( { el: "#profile .footer"});
+                }
                 $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-            //});
+            });
         },
 
-        login: function() {
+        showLogin: function() {
             var footerView = new FooterView( { el: "#login .footer"} );
             $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
         },
 
-        register: function() {
+        showRegister: function() {
             var footerView = new FooterView( { el: "#register .footer" } );
             $.mobile.changePage( "#register" , { reverse: false, changeHash: true } );
         },
 
-        auth: function() {
+        showAuth: function() {
             var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    that.login();
+                    that.showLogin();
                     return;
                 }
                 var footerView = new FooterView( { el: "#auth .footer" } );
+                that.authView = new AuthView( { el: "#auth" } );
                 $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
             });
         },
 
-        create: function() {
+        showCreate: function() {
             var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    that.login();
+                    that.showLogin();
                     return;
                 }
-                var footerView = new FooterView( { el: "#create .footer" } );
+                if (that.challengeView) {
+                    var footerView = new FooterView( { el: "#create .footer" } );
+                    that.challengeView = new ChallengeView( { el: "#create" } );
+                }
                 $.mobile.changePage( "#create" , { reverse: true, changeHash: true } );
             });
         },
 
-        friends: function() {
+        showFriends: function() {
             var that = this;
             this.ensureLogin(function(success) {
                 if (!success) {
-                    that.login();
+                    that.showLogin();
                     return;
                 }
-                var footerView = new FooterView( { el: "#friends .footer" } );
+                if (!that.friendsView) {
+                    var footerView = new FooterView( { el: "#friends .footer" } );
+                    that.friendsView = new FriendsView( { el: "#friends" } );
+                }
                 $.mobile.changePage( "#friends" , { reverse: true, changeHash: false } );
             });
         }

@@ -9,8 +9,17 @@ define([ "jquery", "backbone", "mustache", "fitness" ], function( $, Backbone, M
         render: function() {
             var header = $('#header_template');
             var template = $('#friends_template');
+
+            var dto;
+            if (fitness.isLoggedIn() && fitness.user.get('friends')) {
+                dto = fitness.user.toJSON().friends;
+            }
+            else {
+                dto = {};
+            }
+            var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
-            this.$el.append(header.html()).append(template.html());
+            this.$el.append(header.html()).append(html);
             this.$el.trigger('create');
             return this;
         }

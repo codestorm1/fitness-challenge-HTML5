@@ -15,17 +15,7 @@ define([ "jquery", "backbone", "mustache", "../fitness", "../customCodeClient"],
             var template = $('#profile_template');
             var dto;
             if (fitness.isLoggedIn()) {
-                dto = {
-                    user : fitness.user,
-                    display_name : fitness.user.get('displayname'),
-                    avatar : fitness.user.get('avatar'),
-                    username : fitness.user.get('username'),
-                    fitbitID : fitness.user.get('fitbituserid'),
-                    email : fitness.user.get('email'),
-                    password: fitness.user.get('fc_password'),
-                    accessToken : fitness.user.get('accesstoken'),
-                    friends : fitness.user.get('friends')
-                };
+                dto = fitness.user.toJSON();
             }
             else {
                 dto = {};

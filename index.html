@@ -90,8 +90,13 @@
 
 <script id="friends_template" type="text/template">
     <div data-role="content">
-        <h2>Under Construction</h2>
-        <h3>Your Friends will be listed here</h3>
+        <h2>Your Friends</h2>
+        {{#friends}}
+        <h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>
+        {{/friends}}
+        {{^friends}}
+        <h3>You have no friend who have registered with Fitness Challenge</h3>
+        {{/friends}}
     </div>
     <div class="footer"></div>
 </script>
@@ -101,12 +106,9 @@
         <fieldset>
             <h2>Profile</h2>
             {{#user}}
-                <h3><img id="avatar" src="{{avatar}}"> Logged in as {{ display_name }}</h3>
-                <h3>Your fitness challenge ID is {{ username }}, Your Fitbit ID is  {{ fitbitID }}</h3>
-                <h3>Email: {{ email }}, Password: {{ password }}</h3>
-            {{#friends}}
-            <h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>
-            {{/friends}}
+                <h3><img id="avatar" src="{{avatar}}"> Logged in as {{ displayname }}</h3>
+                <h3>Your fitness challenge ID is {{ username }}, Your Fitbit ID is  {{ fitbitUserID }}</h3>
+                <h3>Email: {{ email }}, Password: {{ fc_password }}</h3>
             {{#accessToken}}
                 <h3>You are currently authenticated with Fitbit</h3>
                 <h3>Fitbit Access Token: {{ accessToken }}</h3>
@@ -220,72 +222,6 @@
         <p>Copyright &copy; 2013 Bryan Green. <span class="no-br">All rights reserved.</span></p>
     </footer>
 </script>
-
-    <div id="animals" data-role="page" data-title="Animals">
-
-    <div data-role="header">
-        <h1>Animals</h1>
-    </div><!-- /header -->
-
-    <div data-role="content">
-        <ul data-role="listview" data-inset="true">
-        </ul>
-    </div><!-- /content -->
-</div>
-
-<div id="colors" data-role="page" data-title="Colors">
-
-    <div data-role="header">
-        <h1>Colors</h1>
-    </div><!-- /header -->
-
-    <div data-role="content">
-        <ul data-role="listview" data-inset="true">
-        </ul>
-    </div><!-- /content -->
-
-</div>
-
-<div id="vehicles" data-role="page" data-title="Vehicles">
-
-    <div data-role="header">
-        <h1>Vehicles</h1>
-    </div><!-- /header -->
-
-    <div data-role="content">
-        <ul data-role="listview" data-inset="true">
-        </ul>
-    </div><!-- /content -->
-
-</div>
-
-<!--<div data-role="footer" data-id="foo-footer" data-position="fixed">-->
-    <!--<div data-role="navbar">-->
-        <!--<ul>-->
-            <!--<li><a href="a.html">Friends</a></li>-->
-            <!--<li><a href="b.html">Albums</a></li>-->
-            <!--<li><a href="c.html">Emails</a></li>-->
-            <!--<li><a href="d.html" >Info</a></li>-->
-        <!--</ul>-->
-    <!--</div>&lt;!&ndash; /navbar &ndash;&gt;-->
-<!--</div>&lt;!&ndash; /footer &ndash;&gt;-->
-
-
-
-<!-- Underscore Template that is used to display all of the Category Models -->
-<script id="categoryItems" type="text/template">
-
-    <% _.each( collection.toJSON(), function( category, id ) { %>
-
-    <li class="ui-li ui-li-static ui-btn-up-c ui-corner-top">
-        <%= category.type %>
-    </li>
-
-    <% }); %>
-
-</script>
-
-
 
 </body>
 </html>

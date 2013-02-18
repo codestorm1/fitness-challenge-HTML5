@@ -612,7 +612,7 @@ var fitness = fitness || {
             routes:{
                 "" : "home",
                 "home" : "home",
-                "login" : "login",
+                "login" : "showLogin",
                 "logout" : "logout",
                 "register" : "register",
                 "auth" : "auth",
@@ -645,7 +645,7 @@ var fitness = fitness || {
                 this.changePage(new that.HomeView());
             },
 
-            login : function() {
+            showLogin : function() {
                 this.changePage(new that.LoginView());
             },
 
