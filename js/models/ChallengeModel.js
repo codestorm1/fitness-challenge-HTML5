@@ -2,11 +2,9 @@
 // ==============
 
 // Includes file dependencies
-define([ "jquery", "underscore", "stackmob", "../stackmobInit" ], function( $, _, StackMob, stackmobInit ) {
+define("models/ChallengeModel", [ "stackmob", "stackmobinit"], function(StackMob, stackmobinit ) {
 
     // The ChallengeModel constructor
-
-
 
     var ChallengeModel = StackMob.Model.extend(
         { schemaName: 'challenge'}

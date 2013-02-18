@@ -1,4 +1,4 @@
-"use strict";
+//"use strict";
 var fitness = fitness || {
 
     getQueryVariable: function (url, key) {

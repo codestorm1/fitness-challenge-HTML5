@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
+define("views/RegisterView", [ "jquery", "backbone", "fitness", "customCodeClient"], function( $, Backbone, fitness, customCode) {
 
      var RegisterView = Backbone.View.extend({
 

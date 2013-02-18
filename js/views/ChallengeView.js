@@ -1,5 +1,5 @@
 // file dependencies
-define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel" ], function( $, Backbone, Mustache, fitness, ChallengeModel ) {
+define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness", "models/ChallengeModel" ], function( $, Backbone, Mustache, fitness, ChallengeModel ) {
 
 
     var ChallengeView = Backbone.View.extend({
@@ -32,7 +32,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
             var endDateStr = $('#end_date').val();
 
             if (!startDateStr || !endDateStr) {
-                fitness.showMessage('Please enter a start and end date');
+                fitness.showMessage('Please enter a start and end date')
             }
 
             var startDate = fitness.parseDate(startDateStr);

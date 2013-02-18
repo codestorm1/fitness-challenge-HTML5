@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "mustache"], function( $, Backbone, Mustache) {
+define("views/HomeView", [ "jquery", "backbone", "mustache"], function( $, Backbone, Mustache) {
 
 
     this.HomeView = Backbone.View.extend({
@@ -9,24 +9,6 @@ define([ "jquery", "backbone", "mustache"], function( $, Backbone, Mustache) {
 
         render: function() {
 
-//            var template = $('#create_challenge_template');
-//            var header = $('#header_template');
-//            var footer = $('#footer_template');
-//            var dto = {};
-//            var html = Mustache.to_html(template.html(), dto);
-//            this.$el.empty();
-//            this.$el.append(header.html()).append(html).append(footer.html());
-//            this.$el.trigger('create');
-//            return this;
-
-//            if (window.location.href.indexOf('oauth_token') !== -1) {
-//                that.completeFitbitAuth();
-//                return;
-//            }
-//            if (!fitness.user.fitbituserid) {
-//                window.location.href = '/#auth';
-//            }
-//
 //            that.getChallengeInvites();
 //            if (that.user.fitbituserid) {
 //                that.getFitbitFriends(that.user.get('username'), function(success, friends) {

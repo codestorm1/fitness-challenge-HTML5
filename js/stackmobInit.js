@@ -1,4 +1,4 @@
-define(["stackmob"], function(StackMob ) {
+define("stackmobinit", ["stackmob"], function(StackMob ) {
 
     if (window.location.href.indexOf('stackmobapp.com') !== -1) {
         StackMob.init({ // production

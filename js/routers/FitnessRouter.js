@@ -1,20 +1,21 @@
-// Mobile Router
-// =============
+define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel", "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView", "views/ChallengeView", "jquerymobile" ],
+    function( $, Backbone, fitness, customCode, ChallengeModel, FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView,$__jqm ) {
 
-// Includes file dependencies
-define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/ChallengeModel", "../views/FooterView", "../views/HomeView", "../views/FriendsView", "../views/LoginView", "../views/RegisterView", "../views/ProfileView", "../views/AuthView", "../views/ChallengeView" ],
-    function( $, Backbone, fitness, customCode, ChallengeModel, FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView ) {
+//define([ "jquery", "backbone", "../fitness", "../views/FooterView", "../views/HomeView", "jquerymobile" ],
+//    function( $, Backbone, fitness, FooterView, HomeView) {
 
+        "use strict";
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
+
 
         // The Router constructor
         initialize: function() {
 
 //            $('#header').html(new HeaderView().render().el);
 
-            this.loginView = new LoginView( { el: "#login" } );
-            this.registerView = new RegisterView( { el: "#register"} );
+            //this.loginView = new LoginView( { el: "#login" } );
+            //this.registerView = new RegisterView( { el: "#register"} );
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
@@ -130,9 +131,10 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ch
         },
 
         showProfile: function() {
+            var that = this;
             this.ensureLogin(function(success) {
-                if (!this.profileView) {
-                    this.profileView = new ProfileView( { el: "#profile" } );
+                if (!that.profileView) {
+                    that.profileView = new ProfileView( { el: "#profile" } );
                     var footerView = new FooterView( { el: "#profile .footer"});
                 }
                 $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
@@ -160,7 +162,7 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ch
                     var footerView = new FooterView( { el: "#auth .footer" } );
                     that.authView = new AuthView( { el: "#auth" } );
                 }
-                $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
+                $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
             });
         },
 
@@ -190,13 +192,15 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ch
                     that.friendsView = new FriendsView( { el: "#friends" } );
                     var footerView = new FooterView( { el: "#friends .footer" } );
                 }
-                $.mobile.changePage( "#friends" , { reverse: true, changeHash: false } );
+                $.mobile.changePage( "#friends" , { reverse: true, changeHash: true } );
             });
         }
 
     });
 
-    // Returns the Router class
+
+
+        // Returns the Router class
     return FitnessRouter;
 
 } );

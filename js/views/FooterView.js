@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "../fitness"], function( $, Backbone, fitness) {
+define("views/FooterView", [ "jquery", "backbone", "fitness"], function( $, Backbone, fitness) {
 
     var FooterView = Backbone.View.extend({
         initialize: function() {

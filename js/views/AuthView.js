@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $, Backbone, fitness, customCode) {
+define("views/AuthView", ["jquery", "backbone", "fitness", "customCodeClient"], function( $, Backbone, fitness, customCode) {
 
     var AuthView = Backbone.View.extend({
         initialize: function() {

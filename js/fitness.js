@@ -1,9 +1,6 @@
-"use strict";
-
-// Includes File Dependencies
-define(["jquery"], function($) {
-
-        return {
+define("fitness", ["jquery", "stackmobinit"], function($, __SI) {
+    //"use strict";
+    return {
             parseDate : function(dateStr) {
                 var parts = dateStr.match(/(\d+)/g);
                 // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])

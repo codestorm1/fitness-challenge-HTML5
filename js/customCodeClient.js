@@ -1,7 +1,4 @@
-"use strict";
-
-// file dependencies
-define(["jquery"], function($) {
+define("customCodeClient", ["jquery"], function($) {
     // private methods
     var that = this;
 
