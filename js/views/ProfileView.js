@@ -13,12 +13,9 @@ define([ "jquery", "backbone", "mustache", "../fitness", "../customCodeClient"],
 
         render: function() {
             var template = $('#profile_template');
-            var dto;
+            var dto = {};
             if (fitness.isLoggedIn()) {
                 dto = fitness.user.toJSON();
-            }
-            else {
-                dto = {};
             }
             var html = Mustache.to_html(template.html(), dto);
 

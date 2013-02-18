@@ -31,6 +31,10 @@ define([ "jquery", "backbone", "mustache", "fitness", "../models/ChallengeModel"
             var startDateStr = $('#start_date').val();
             var endDateStr = $('#end_date').val();
 
+            if (!startDateStr || !endDateStr) {
+                fitness.showMessage('Please enter a start and end date');
+            }
+
             var startDate = fitness.parseDate(startDateStr);
             var endDate = fitness.parseDate(endDateStr);
 

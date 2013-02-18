@@ -156,8 +156,10 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     that.showLogin();
                     return;
                 }
-                var footerView = new FooterView( { el: "#auth .footer" } );
-                that.authView = new AuthView( { el: "#auth" } );
+                if (!that.authView) {
+                    var footerView = new FooterView( { el: "#auth .footer" } );
+                    that.authView = new AuthView( { el: "#auth" } );
+                }
                 $.mobile.changePage( "#auth" , { reverse: false, changeHash: false } );
             });
         },
@@ -169,9 +171,9 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     that.showLogin();
                     return;
                 }
-                if (that.challengeView) {
-                    var footerView = new FooterView( { el: "#create .footer" } );
+                if (!that.challengeView) {
                     that.challengeView = new ChallengeView( { el: "#create" } );
+                    var footerView = new FooterView( { el: "#create .footer" } );
                 }
                 $.mobile.changePage( "#create" , { reverse: true, changeHash: true } );
             });
@@ -185,8 +187,8 @@ define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/Ca
                     return;
                 }
                 if (!that.friendsView) {
-                    var footerView = new FooterView( { el: "#friends .footer" } );
                     that.friendsView = new FriendsView( { el: "#friends" } );
+                    var footerView = new FooterView( { el: "#friends .footer" } );
                 }
                 $.mobile.changePage( "#friends" , { reverse: true, changeHash: false } );
             });
