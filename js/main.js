@@ -21,36 +21,36 @@ define("underscore", (function (global) {
 // http://backbonejs.org
 (function(){var l=this,y=l.Backbone,z=Array.prototype.slice,A=Array.prototype.splice,g;g="undefined"!==typeof exports?exports:l.Backbone={};g.VERSION="0.9.2";var f=l._;!f&&"undefined"!==typeof require&&(f=require("underscore"));var i=l.jQuery||l.Zepto||l.ender;g.setDomLibrary=function(a){i=a};g.noConflict=function(){l.Backbone=y;return this};g.emulateHTTP=!1;g.emulateJSON=!1;var p=/\s+/,k=g.Events={on:function(a,b,c){var d,e,f,g,j;if(!b)return this;a=a.split(p);for(d=this._callbacks||(this._callbacks=
 {});e=a.shift();)f=(j=d[e])?j.tail:{},f.next=g={},f.context=c,f.callback=b,d[e]={tail:g,next:j?j.next:f};return this},off:function(a,b,c){var d,e,h,g,j,q;if(e=this._callbacks){if(!a&&!b&&!c)return delete this._callbacks,this;for(a=a?a.split(p):f.keys(e);d=a.shift();)if(h=e[d],delete e[d],h&&(b||c))for(g=h.tail;(h=h.next)!==g;)if(j=h.callback,q=h.context,b&&j!==b||c&&q!==c)this.on(d,j,q);return this}},trigger:function(a){var b,c,d,e,f,g;if(!(d=this._callbacks))return this;f=d.all;a=a.split(p);for(g=
-z.call(arguments,1);b=a.shift();){if(c=d[b])for(e=c.tail;(c=c.next)!==e;)c.callback.apply(c.context||this,g);if(c=f){e=c.tail;for(b=[b].concat(g);(c=c.next)!==e;)c.callback.apply(c.context||this,b)}}return this}};k.bind=k.on;k.unbind=k.off;var o=g.Model=function(a,b){var c;a||(a={});b&&b.parse&&(a=this.parse(a));if(c=n(this,"defaults"))a=f.extend({},c,a);b&&b.collection&&(this.collection=b.collection);this.attributes={};this._escapedAttributes={};this.cid=f.uniqueId("c");this.changed={};this._silent=
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         z.call(arguments,1);b=a.shift();){if(c=d[b])for(e=c.tail;(c=c.next)!==e;)c.callback.apply(c.context||this,g);if(c=f){e=c.tail;for(b=[b].concat(g);(c=c.next)!==e;)c.callback.apply(c.context||this,b)}}return this}};k.bind=k.on;k.unbind=k.off;var o=g.Model=function(a,b){var c;a||(a={});b&&b.parse&&(a=this.parse(a));if(c=n(this,"defaults"))a=f.extend({},c,a);b&&b.collection&&(this.collection=b.collection);this.attributes={};this._escapedAttributes={};this.cid=f.uniqueId("c");this.changed={};this._silent=
 {};this._pending={};this.set(a,{silent:!0});this.changed={};this._silent={};this._pending={};this._previousAttributes=f.clone(this.attributes);this.initialize.apply(this,arguments)};f.extend(o.prototype,k,{changed:null,_silent:null,_pending:null,idAttribute:"id",initialize:function(){},toJSON:function(){return f.clone(this.attributes)},get:function(a){return this.attributes[a]},escape:function(a){var b;if(b=this._escapedAttributes[a])return b;b=this.get(a);return this._escapedAttributes[a]=f.escape(null==
-b?"":""+b)},has:function(a){return null!=this.get(a)},set:function(a,b,c){var d,e;f.isObject(a)||null==a?(d=a,c=b):(d={},d[a]=b);c||(c={});if(!d)return this;d instanceof o&&(d=d.attributes);if(c.unset)for(e in d)d[e]=void 0;if(!this._validate(d,c))return!1;this.idAttribute in d&&(this.id=d[this.idAttribute]);var b=c.changes={},h=this.attributes,g=this._escapedAttributes,j=this._previousAttributes||{};for(e in d){a=d[e];if(!f.isEqual(h[e],a)||c.unset&&f.has(h,e))delete g[e],(c.silent?this._silent:
-b)[e]=!0;c.unset?delete h[e]:h[e]=a;!f.isEqual(j[e],a)||f.has(h,e)!=f.has(j,e)?(this.changed[e]=a,c.silent||(this._pending[e]=!0)):(delete this.changed[e],delete this._pending[e])}c.silent||this.change(c);return this},unset:function(a,b){(b||(b={})).unset=!0;return this.set(a,null,b)},clear:function(a){(a||(a={})).unset=!0;return this.set(f.clone(this.attributes),a)},fetch:function(a){var a=a?f.clone(a):{},b=this,c=a.success;a.success=function(d,e,f){if(!b.set(b.parse(d,f),a))return!1;c&&c(b,d)};
-a.error=g.wrapError(a.error,b,a);return(this.sync||g.sync).call(this,"read",this,a)},save:function(a,b,c){var d,e;f.isObject(a)||null==a?(d=a,c=b):(d={},d[a]=b);c=c?f.clone(c):{};if(c.wait){if(!this._validate(d,c))return!1;e=f.clone(this.attributes)}a=f.extend({},c,{silent:!0});if(d&&!this.set(d,c.wait?a:c))return!1;var h=this,i=c.success;c.success=function(a,b,e){b=h.parse(a,e);if(c.wait){delete c.wait;b=f.extend(d||{},b)}if(!h.set(b,c))return false;i?i(h,a):h.trigger("sync",h,a,c)};c.error=g.wrapError(c.error,
-h,c);b=this.isNew()?"create":"update";b=(this.sync||g.sync).call(this,b,this,c);c.wait&&this.set(e,a);return b},destroy:function(a){var a=a?f.clone(a):{},b=this,c=a.success,d=function(){b.trigger("destroy",b,b.collection,a)};if(this.isNew())return d(),!1;a.success=function(e){a.wait&&d();c?c(b,e):b.trigger("sync",b,e,a)};a.error=g.wrapError(a.error,b,a);var e=(this.sync||g.sync).call(this,"delete",this,a);a.wait||d();return e},url:function(){var a=n(this,"urlRoot")||n(this.collection,"url")||t();
-return this.isNew()?a:a+("/"==a.charAt(a.length-1)?"":"/")+encodeURIComponent(this.id)},parse:function(a){return a},clone:function(){return new this.constructor(this.attributes)},isNew:function(){return null==this.id},change:function(a){a||(a={});var b=this._changing;this._changing=!0;for(var c in this._silent)this._pending[c]=!0;var d=f.extend({},a.changes,this._silent);this._silent={};for(c in d)this.trigger("change:"+c,this,this.get(c),a);if(b)return this;for(;!f.isEmpty(this._pending);){this._pending=
+    b?"":""+b)},has:function(a){return null!=this.get(a)},set:function(a,b,c){var d,e;f.isObject(a)||null==a?(d=a,c=b):(d={},d[a]=b);c||(c={});if(!d)return this;d instanceof o&&(d=d.attributes);if(c.unset)for(e in d)d[e]=void 0;if(!this._validate(d,c))return!1;this.idAttribute in d&&(this.id=d[this.idAttribute]);var b=c.changes={},h=this.attributes,g=this._escapedAttributes,j=this._previousAttributes||{};for(e in d){a=d[e];if(!f.isEqual(h[e],a)||c.unset&&f.has(h,e))delete g[e],(c.silent?this._silent:
+    b)[e]=!0;c.unset?delete h[e]:h[e]=a;!f.isEqual(j[e],a)||f.has(h,e)!=f.has(j,e)?(this.changed[e]=a,c.silent||(this._pending[e]=!0)):(delete this.changed[e],delete this._pending[e])}c.silent||this.change(c);return this},unset:function(a,b){(b||(b={})).unset=!0;return this.set(a,null,b)},clear:function(a){(a||(a={})).unset=!0;return this.set(f.clone(this.attributes),a)},fetch:function(a){var a=a?f.clone(a):{},b=this,c=a.success;a.success=function(d,e,f){if(!b.set(b.parse(d,f),a))return!1;c&&c(b,d)};
+    a.error=g.wrapError(a.error,b,a);return(this.sync||g.sync).call(this,"read",this,a)},save:function(a,b,c){var d,e;f.isObject(a)||null==a?(d=a,c=b):(d={},d[a]=b);c=c?f.clone(c):{};if(c.wait){if(!this._validate(d,c))return!1;e=f.clone(this.attributes)}a=f.extend({},c,{silent:!0});if(d&&!this.set(d,c.wait?a:c))return!1;var h=this,i=c.success;c.success=function(a,b,e){b=h.parse(a,e);if(c.wait){delete c.wait;b=f.extend(d||{},b)}if(!h.set(b,c))return false;i?i(h,a):h.trigger("sync",h,a,c)};c.error=g.wrapError(c.error,
+    h,c);b=this.isNew()?"create":"update";b=(this.sync||g.sync).call(this,b,this,c);c.wait&&this.set(e,a);return b},destroy:function(a){var a=a?f.clone(a):{},b=this,c=a.success,d=function(){b.trigger("destroy",b,b.collection,a)};if(this.isNew())return d(),!1;a.success=function(e){a.wait&&d();c?c(b,e):b.trigger("sync",b,e,a)};a.error=g.wrapError(a.error,b,a);var e=(this.sync||g.sync).call(this,"delete",this,a);a.wait||d();return e},url:function(){var a=n(this,"urlRoot")||n(this.collection,"url")||t();
+    return this.isNew()?a:a+("/"==a.charAt(a.length-1)?"":"/")+encodeURIComponent(this.id)},parse:function(a){return a},clone:function(){return new this.constructor(this.attributes)},isNew:function(){return null==this.id},change:function(a){a||(a={});var b=this._changing;this._changing=!0;for(var c in this._silent)this._pending[c]=!0;var d=f.extend({},a.changes,this._silent);this._silent={};for(c in d)this.trigger("change:"+c,this,this.get(c),a);if(b)return this;for(;!f.isEmpty(this._pending);){this._pending=
 {};this.trigger("change",this,a);for(c in this.changed)!this._pending[c]&&!this._silent[c]&&delete this.changed[c];this._previousAttributes=f.clone(this.attributes)}this._changing=!1;return this},hasChanged:function(a){return!arguments.length?!f.isEmpty(this.changed):f.has(this.changed,a)},changedAttributes:function(a){if(!a)return this.hasChanged()?f.clone(this.changed):!1;var b,c=!1,d=this._previousAttributes,e;for(e in a)if(!f.isEqual(d[e],b=a[e]))(c||(c={}))[e]=b;return c},previous:function(a){return!arguments.length||
-!this._previousAttributes?null:this._previousAttributes[a]},previousAttributes:function(){return f.clone(this._previousAttributes)},isValid:function(){return!this.validate(this.attributes)},_validate:function(a,b){if(b.silent||!this.validate)return!0;var a=f.extend({},this.attributes,a),c=this.validate(a,b);if(!c)return!0;b&&b.error?b.error(this,c,b):this.trigger("error",this,c,b);return!1}});var r=g.Collection=function(a,b){b||(b={});b.model&&(this.model=b.model);b.comparator&&(this.comparator=b.comparator);
-this._reset();this.initialize.apply(this,arguments);a&&this.reset(a,{silent:!0,parse:b.parse})};f.extend(r.prototype,k,{model:o,initialize:function(){},toJSON:function(a){return this.map(function(b){return b.toJSON(a)})},add:function(a,b){var c,d,e,g,i,j={},k={},l=[];b||(b={});a=f.isArray(a)?a.slice():[a];c=0;for(d=a.length;c<d;c++){if(!(e=a[c]=this._prepareModel(a[c],b)))throw Error("Can't add an invalid model to a collection");g=e.cid;i=e.id;j[g]||this._byCid[g]||null!=i&&(k[i]||this._byId[i])?
-l.push(c):j[g]=k[i]=e}for(c=l.length;c--;)a.splice(l[c],1);c=0;for(d=a.length;c<d;c++)(e=a[c]).on("all",this._onModelEvent,this),this._byCid[e.cid]=e,null!=e.id&&(this._byId[e.id]=e);this.length+=d;A.apply(this.models,[null!=b.at?b.at:this.models.length,0].concat(a));this.comparator&&this.sort({silent:!0});if(b.silent)return this;c=0;for(d=this.models.length;c<d;c++)if(j[(e=this.models[c]).cid])b.index=c,e.trigger("add",e,this,b);return this},remove:function(a,b){var c,d,e,g;b||(b={});a=f.isArray(a)?
-a.slice():[a];c=0;for(d=a.length;c<d;c++)if(g=this.getByCid(a[c])||this.get(a[c]))delete this._byId[g.id],delete this._byCid[g.cid],e=this.indexOf(g),this.models.splice(e,1),this.length--,b.silent||(b.index=e,g.trigger("remove",g,this,b)),this._removeReference(g);return this},push:function(a,b){a=this._prepareModel(a,b);this.add(a,b);return a},pop:function(a){var b=this.at(this.length-1);this.remove(b,a);return b},unshift:function(a,b){a=this._prepareModel(a,b);this.add(a,f.extend({at:0},b));return a},
-shift:function(a){var b=this.at(0);this.remove(b,a);return b},get:function(a){return null==a?void 0:this._byId[null!=a.id?a.id:a]},getByCid:function(a){return a&&this._byCid[a.cid||a]},at:function(a){return this.models[a]},where:function(a){return f.isEmpty(a)?[]:this.filter(function(b){for(var c in a)if(a[c]!==b.get(c))return!1;return!0})},sort:function(a){a||(a={});if(!this.comparator)throw Error("Cannot sort a set without a comparator");var b=f.bind(this.comparator,this);1==this.comparator.length?
-this.models=this.sortBy(b):this.models.sort(b);a.silent||this.trigger("reset",this,a);return this},pluck:function(a){return f.map(this.models,function(b){return b.get(a)})},reset:function(a,b){a||(a=[]);b||(b={});for(var c=0,d=this.models.length;c<d;c++)this._removeReference(this.models[c]);this._reset();this.add(a,f.extend({silent:!0},b));b.silent||this.trigger("reset",this,b);return this},fetch:function(a){a=a?f.clone(a):{};void 0===a.parse&&(a.parse=!0);var b=this,c=a.success;a.success=function(d,
-e,f){b[a.add?"add":"reset"](b.parse(d,f),a);c&&c(b,d)};a.error=g.wrapError(a.error,b,a);return(this.sync||g.sync).call(this,"read",this,a)},create:function(a,b){var c=this,b=b?f.clone(b):{},a=this._prepareModel(a,b);if(!a)return!1;b.wait||c.add(a,b);var d=b.success;b.success=function(e,f){b.wait&&c.add(e,b);d?d(e,f):e.trigger("sync",a,f,b)};a.save(null,b);return a},parse:function(a){return a},chain:function(){return f(this.models).chain()},_reset:function(){this.length=0;this.models=[];this._byId=
-{};this._byCid={}},_prepareModel:function(a,b){b||(b={});a instanceof o?a.collection||(a.collection=this):(b.collection=this,a=new this.model(a,b),a._validate(a.attributes,b)||(a=!1));return a},_removeReference:function(a){this==a.collection&&delete a.collection;a.off("all",this._onModelEvent,this)},_onModelEvent:function(a,b,c,d){("add"==a||"remove"==a)&&c!=this||("destroy"==a&&this.remove(b,d),b&&a==="change:"+b.idAttribute&&(delete this._byId[b.previous(b.idAttribute)],this._byId[b.id]=b),this.trigger.apply(this,
-arguments))}});f.each("forEach,each,map,reduce,reduceRight,find,detect,filter,select,reject,every,all,some,any,include,contains,invoke,max,min,sortBy,sortedIndex,toArray,size,first,initial,rest,last,without,indexOf,shuffle,lastIndexOf,isEmpty,groupBy".split(","),function(a){r.prototype[a]=function(){return f[a].apply(f,[this.models].concat(f.toArray(arguments)))}});var u=g.Router=function(a){a||(a={});a.routes&&(this.routes=a.routes);this._bindRoutes();this.initialize.apply(this,arguments)},B=/:\w+/g,
-C=/\*\w+/g,D=/[-[\]{}()+?.,\\^$|#\s]/g;f.extend(u.prototype,k,{initialize:function(){},route:function(a,b,c){g.history||(g.history=new m);f.isRegExp(a)||(a=this._routeToRegExp(a));c||(c=this[b]);g.history.route(a,f.bind(function(d){d=this._extractParameters(a,d);c&&c.apply(this,d);this.trigger.apply(this,["route:"+b].concat(d));g.history.trigger("route",this,b,d)},this));return this},navigate:function(a,b){g.history.navigate(a,b)},_bindRoutes:function(){if(this.routes){var a=[],b;for(b in this.routes)a.unshift([b,
-this.routes[b]]);b=0;for(var c=a.length;b<c;b++)this.route(a[b][0],a[b][1],this[a[b][1]])}},_routeToRegExp:function(a){a=a.replace(D,"\\$&").replace(B,"([^/]+)").replace(C,"(.*?)");return RegExp("^"+a+"$")},_extractParameters:function(a,b){return a.exec(b).slice(1)}});var m=g.History=function(){this.handlers=[];f.bindAll(this,"checkUrl")},s=/^[#\/]/,E=/msie [\w.]+/;m.started=!1;f.extend(m.prototype,k,{interval:50,getHash:function(a){return(a=(a?a.location:window.location).href.match(/#(.*)$/))?a[1]:
-""},getFragment:function(a,b){if(null==a)if(this._hasPushState||b){var a=window.location.pathname,c=window.location.search;c&&(a+=c)}else a=this.getHash();a.indexOf(this.options.root)||(a=a.substr(this.options.root.length));return a.replace(s,"")},start:function(a){if(m.started)throw Error("Backbone.history has already been started");m.started=!0;this.options=f.extend({},{root:"/"},this.options,a);this._wantsHashChange=!1!==this.options.hashChange;this._wantsPushState=!!this.options.pushState;this._hasPushState=
-!(!this.options.pushState||!window.history||!window.history.pushState);var a=this.getFragment(),b=document.documentMode;if(b=E.exec(navigator.userAgent.toLowerCase())&&(!b||7>=b))this.iframe=i('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo("body")[0].contentWindow,this.navigate(a);this._hasPushState?i(window).bind("popstate",this.checkUrl):this._wantsHashChange&&"onhashchange"in window&&!b?i(window).bind("hashchange",this.checkUrl):this._wantsHashChange&&(this._checkUrlInterval=setInterval(this.checkUrl,
-this.interval));this.fragment=a;a=window.location;b=a.pathname==this.options.root;if(this._wantsHashChange&&this._wantsPushState&&!this._hasPushState&&!b)return this.fragment=this.getFragment(null,!0),window.location.replace(this.options.root+"#"+this.fragment),!0;this._wantsPushState&&this._hasPushState&&b&&a.hash&&(this.fragment=this.getHash().replace(s,""),window.history.replaceState({},document.title,a.protocol+"//"+a.host+this.options.root+this.fragment));if(!this.options.silent)return this.loadUrl()},
-stop:function(){i(window).unbind("popstate",this.checkUrl).unbind("hashchange",this.checkUrl);clearInterval(this._checkUrlInterval);m.started=!1},route:function(a,b){this.handlers.unshift({route:a,callback:b})},checkUrl:function(){var a=this.getFragment();a==this.fragment&&this.iframe&&(a=this.getFragment(this.getHash(this.iframe)));if(a==this.fragment)return!1;this.iframe&&this.navigate(a);this.loadUrl()||this.loadUrl(this.getHash())},loadUrl:function(a){var b=this.fragment=this.getFragment(a);return f.any(this.handlers,
-function(a){if(a.route.test(b))return a.callback(b),!0})},navigate:function(a,b){if(!m.started)return!1;if(!b||!0===b)b={trigger:b};var c=(a||"").replace(s,"");this.fragment!=c&&(this._hasPushState?(0!=c.indexOf(this.options.root)&&(c=this.options.root+c),this.fragment=c,window.history[b.replace?"replaceState":"pushState"]({},document.title,c)):this._wantsHashChange?(this.fragment=c,this._updateHash(window.location,c,b.replace),this.iframe&&c!=this.getFragment(this.getHash(this.iframe))&&(b.replace||
-this.iframe.document.open().close(),this._updateHash(this.iframe.location,c,b.replace))):window.location.assign(this.options.root+a),b.trigger&&this.loadUrl(a))},_updateHash:function(a,b,c){c?a.replace(a.toString().replace(/(javascript:|#).*$/,"")+"#"+b):a.hash=b}});var v=g.View=function(a){this.cid=f.uniqueId("view");this._configure(a||{});this._ensureElement();this.initialize.apply(this,arguments);this.delegateEvents()},F=/^(\S+)\s*(.*)$/,w="model,collection,el,id,attributes,className,tagName".split(",");
-f.extend(v.prototype,k,{tagName:"div",$:function(a){return this.$el.find(a)},initialize:function(){},render:function(){return this},remove:function(){this.$el.remove();return this},make:function(a,b,c){a=document.createElement(a);b&&i(a).attr(b);c&&i(a).html(c);return a},setElement:function(a,b){this.$el&&this.undelegateEvents();this.$el=a instanceof i?a:i(a);this.el=this.$el[0];!1!==b&&this.delegateEvents();return this},delegateEvents:function(a){if(a||(a=n(this,"events"))){this.undelegateEvents();
-for(var b in a){var c=a[b];f.isFunction(c)||(c=this[a[b]]);if(!c)throw Error('Method "'+a[b]+'" does not exist');var d=b.match(F),e=d[1],d=d[2],c=f.bind(c,this),e=e+(".delegateEvents"+this.cid);""===d?this.$el.bind(e,c):this.$el.delegate(d,e,c)}}},undelegateEvents:function(){this.$el.unbind(".delegateEvents"+this.cid)},_configure:function(a){this.options&&(a=f.extend({},this.options,a));for(var b=0,c=w.length;b<c;b++){var d=w[b];a[d]&&(this[d]=a[d])}this.options=a},_ensureElement:function(){if(this.el)this.setElement(this.el,
-!1);else{var a=n(this,"attributes")||{};this.id&&(a.id=this.id);this.className&&(a["class"]=this.className);this.setElement(this.make(this.tagName,a),!1)}}});o.extend=r.extend=u.extend=v.extend=function(a,b){var c=G(this,a,b);c.extend=this.extend;return c};var H={create:"POST",update:"PUT","delete":"DELETE",read:"GET"};g.sync=function(a,b,c){var d=H[a];c||(c={});var e={type:d,dataType:"json"};c.url||(e.url=n(b,"url")||t());if(!c.data&&b&&("create"==a||"update"==a))e.contentType="application/json",
-e.data=JSON.stringify(b.toJSON());g.emulateJSON&&(e.contentType="application/x-www-form-urlencoded",e.data=e.data?{model:e.data}:{});if(g.emulateHTTP&&("PUT"===d||"DELETE"===d))g.emulateJSON&&(e.data._method=d),e.type="POST",e.beforeSend=function(a){a.setRequestHeader("X-HTTP-Method-Override",d)};"GET"!==e.type&&!g.emulateJSON&&(e.processData=!1);return i.ajax(f.extend(e,c))};g.wrapError=function(a,b,c){return function(d,e){e=d===b?e:d;a?a(b,e,c):b.trigger("error",b,e,c)}};var x=function(){},G=function(a,
-b,c){var d;d=b&&b.hasOwnProperty("constructor")?b.constructor:function(){a.apply(this,arguments)};f.extend(d,a);x.prototype=a.prototype;d.prototype=new x;b&&f.extend(d.prototype,b);c&&f.extend(d,c);d.prototype.constructor=d;d.__super__=a.prototype;return d},n=function(a,b){return!a||!a[b]?null:f.isFunction(a[b])?a[b]():a[b]},t=function(){throw Error('A "url" property or function must be specified');}}).call(this);
+    !this._previousAttributes?null:this._previousAttributes[a]},previousAttributes:function(){return f.clone(this._previousAttributes)},isValid:function(){return!this.validate(this.attributes)},_validate:function(a,b){if(b.silent||!this.validate)return!0;var a=f.extend({},this.attributes,a),c=this.validate(a,b);if(!c)return!0;b&&b.error?b.error(this,c,b):this.trigger("error",this,c,b);return!1}});var r=g.Collection=function(a,b){b||(b={});b.model&&(this.model=b.model);b.comparator&&(this.comparator=b.comparator);
+    this._reset();this.initialize.apply(this,arguments);a&&this.reset(a,{silent:!0,parse:b.parse})};f.extend(r.prototype,k,{model:o,initialize:function(){},toJSON:function(a){return this.map(function(b){return b.toJSON(a)})},add:function(a,b){var c,d,e,g,i,j={},k={},l=[];b||(b={});a=f.isArray(a)?a.slice():[a];c=0;for(d=a.length;c<d;c++){if(!(e=a[c]=this._prepareModel(a[c],b)))throw Error("Can't add an invalid model to a collection");g=e.cid;i=e.id;j[g]||this._byCid[g]||null!=i&&(k[i]||this._byId[i])?
+    l.push(c):j[g]=k[i]=e}for(c=l.length;c--;)a.splice(l[c],1);c=0;for(d=a.length;c<d;c++)(e=a[c]).on("all",this._onModelEvent,this),this._byCid[e.cid]=e,null!=e.id&&(this._byId[e.id]=e);this.length+=d;A.apply(this.models,[null!=b.at?b.at:this.models.length,0].concat(a));this.comparator&&this.sort({silent:!0});if(b.silent)return this;c=0;for(d=this.models.length;c<d;c++)if(j[(e=this.models[c]).cid])b.index=c,e.trigger("add",e,this,b);return this},remove:function(a,b){var c,d,e,g;b||(b={});a=f.isArray(a)?
+    a.slice():[a];c=0;for(d=a.length;c<d;c++)if(g=this.getByCid(a[c])||this.get(a[c]))delete this._byId[g.id],delete this._byCid[g.cid],e=this.indexOf(g),this.models.splice(e,1),this.length--,b.silent||(b.index=e,g.trigger("remove",g,this,b)),this._removeReference(g);return this},push:function(a,b){a=this._prepareModel(a,b);this.add(a,b);return a},pop:function(a){var b=this.at(this.length-1);this.remove(b,a);return b},unshift:function(a,b){a=this._prepareModel(a,b);this.add(a,f.extend({at:0},b));return a},
+    shift:function(a){var b=this.at(0);this.remove(b,a);return b},get:function(a){return null==a?void 0:this._byId[null!=a.id?a.id:a]},getByCid:function(a){return a&&this._byCid[a.cid||a]},at:function(a){return this.models[a]},where:function(a){return f.isEmpty(a)?[]:this.filter(function(b){for(var c in a)if(a[c]!==b.get(c))return!1;return!0})},sort:function(a){a||(a={});if(!this.comparator)throw Error("Cannot sort a set without a comparator");var b=f.bind(this.comparator,this);1==this.comparator.length?
+        this.models=this.sortBy(b):this.models.sort(b);a.silent||this.trigger("reset",this,a);return this},pluck:function(a){return f.map(this.models,function(b){return b.get(a)})},reset:function(a,b){a||(a=[]);b||(b={});for(var c=0,d=this.models.length;c<d;c++)this._removeReference(this.models[c]);this._reset();this.add(a,f.extend({silent:!0},b));b.silent||this.trigger("reset",this,b);return this},fetch:function(a){a=a?f.clone(a):{};void 0===a.parse&&(a.parse=!0);var b=this,c=a.success;a.success=function(d,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               e,f){b[a.add?"add":"reset"](b.parse(d,f),a);c&&c(b,d)};a.error=g.wrapError(a.error,b,a);return(this.sync||g.sync).call(this,"read",this,a)},create:function(a,b){var c=this,b=b?f.clone(b):{},a=this._prepareModel(a,b);if(!a)return!1;b.wait||c.add(a,b);var d=b.success;b.success=function(e,f){b.wait&&c.add(e,b);d?d(e,f):e.trigger("sync",a,f,b)};a.save(null,b);return a},parse:function(a){return a},chain:function(){return f(this.models).chain()},_reset:function(){this.length=0;this.models=[];this._byId=
+    {};this._byCid={}},_prepareModel:function(a,b){b||(b={});a instanceof o?a.collection||(a.collection=this):(b.collection=this,a=new this.model(a,b),a._validate(a.attributes,b)||(a=!1));return a},_removeReference:function(a){this==a.collection&&delete a.collection;a.off("all",this._onModelEvent,this)},_onModelEvent:function(a,b,c,d){("add"==a||"remove"==a)&&c!=this||("destroy"==a&&this.remove(b,d),b&&a==="change:"+b.idAttribute&&(delete this._byId[b.previous(b.idAttribute)],this._byId[b.id]=b),this.trigger.apply(this,
+        arguments))}});f.each("forEach,each,map,reduce,reduceRight,find,detect,filter,select,reject,every,all,some,any,include,contains,invoke,max,min,sortBy,sortedIndex,toArray,size,first,initial,rest,last,without,indexOf,shuffle,lastIndexOf,isEmpty,groupBy".split(","),function(a){r.prototype[a]=function(){return f[a].apply(f,[this.models].concat(f.toArray(arguments)))}});var u=g.Router=function(a){a||(a={});a.routes&&(this.routes=a.routes);this._bindRoutes();this.initialize.apply(this,arguments)},B=/:\w+/g,
+    C=/\*\w+/g,D=/[-[\]{}()+?.,\\^$|#\s]/g;f.extend(u.prototype,k,{initialize:function(){},route:function(a,b,c){g.history||(g.history=new m);f.isRegExp(a)||(a=this._routeToRegExp(a));c||(c=this[b]);g.history.route(a,f.bind(function(d){d=this._extractParameters(a,d);c&&c.apply(this,d);this.trigger.apply(this,["route:"+b].concat(d));g.history.trigger("route",this,b,d)},this));return this},navigate:function(a,b){g.history.navigate(a,b)},_bindRoutes:function(){if(this.routes){var a=[],b;for(b in this.routes)a.unshift([b,
+    this.routes[b]]);b=0;for(var c=a.length;b<c;b++)this.route(a[b][0],a[b][1],this[a[b][1]])}},_routeToRegExp:function(a){a=a.replace(D,"\\$&").replace(B,"([^/]+)").replace(C,"(.*?)");return RegExp("^"+a+"$")},_extractParameters:function(a,b){return a.exec(b).slice(1)}});var m=g.History=function(){this.handlers=[];f.bindAll(this,"checkUrl")},s=/^[#\/]/,E=/msie [\w.]+/;m.started=!1;f.extend(m.prototype,k,{interval:50,getHash:function(a){return(a=(a?a.location:window.location).href.match(/#(.*)$/))?a[1]:
+    ""},getFragment:function(a,b){if(null==a)if(this._hasPushState||b){var a=window.location.pathname,c=window.location.search;c&&(a+=c)}else a=this.getHash();a.indexOf(this.options.root)||(a=a.substr(this.options.root.length));return a.replace(s,"")},start:function(a){if(m.started)throw Error("Backbone.history has already been started");m.started=!0;this.options=f.extend({},{root:"/"},this.options,a);this._wantsHashChange=!1!==this.options.hashChange;this._wantsPushState=!!this.options.pushState;this._hasPushState=
+    !(!this.options.pushState||!window.history||!window.history.pushState);var a=this.getFragment(),b=document.documentMode;if(b=E.exec(navigator.userAgent.toLowerCase())&&(!b||7>=b))this.iframe=i('<iframe src="javascript:0" tabindex="-1" />').hide().appendTo("body")[0].contentWindow,this.navigate(a);this._hasPushState?i(window).bind("popstate",this.checkUrl):this._wantsHashChange&&"onhashchange"in window&&!b?i(window).bind("hashchange",this.checkUrl):this._wantsHashChange&&(this._checkUrlInterval=setInterval(this.checkUrl,
+    this.interval));this.fragment=a;a=window.location;b=a.pathname==this.options.root;if(this._wantsHashChange&&this._wantsPushState&&!this._hasPushState&&!b)return this.fragment=this.getFragment(null,!0),window.location.replace(this.options.root+"#"+this.fragment),!0;this._wantsPushState&&this._hasPushState&&b&&a.hash&&(this.fragment=this.getHash().replace(s,""),window.history.replaceState({},document.title,a.protocol+"//"+a.host+this.options.root+this.fragment));if(!this.options.silent)return this.loadUrl()},
+    stop:function(){i(window).unbind("popstate",this.checkUrl).unbind("hashchange",this.checkUrl);clearInterval(this._checkUrlInterval);m.started=!1},route:function(a,b){this.handlers.unshift({route:a,callback:b})},checkUrl:function(){var a=this.getFragment();a==this.fragment&&this.iframe&&(a=this.getFragment(this.getHash(this.iframe)));if(a==this.fragment)return!1;this.iframe&&this.navigate(a);this.loadUrl()||this.loadUrl(this.getHash())},loadUrl:function(a){var b=this.fragment=this.getFragment(a);return f.any(this.handlers,
+        function(a){if(a.route.test(b))return a.callback(b),!0})},navigate:function(a,b){if(!m.started)return!1;if(!b||!0===b)b={trigger:b};var c=(a||"").replace(s,"");this.fragment!=c&&(this._hasPushState?(0!=c.indexOf(this.options.root)&&(c=this.options.root+c),this.fragment=c,window.history[b.replace?"replaceState":"pushState"]({},document.title,c)):this._wantsHashChange?(this.fragment=c,this._updateHash(window.location,c,b.replace),this.iframe&&c!=this.getFragment(this.getHash(this.iframe))&&(b.replace||
+        this.iframe.document.open().close(),this._updateHash(this.iframe.location,c,b.replace))):window.location.assign(this.options.root+a),b.trigger&&this.loadUrl(a))},_updateHash:function(a,b,c){c?a.replace(a.toString().replace(/(javascript:|#).*$/,"")+"#"+b):a.hash=b}});var v=g.View=function(a){this.cid=f.uniqueId("view");this._configure(a||{});this._ensureElement();this.initialize.apply(this,arguments);this.delegateEvents()},F=/^(\S+)\s*(.*)$/,w="model,collection,el,id,attributes,className,tagName".split(",");
+    f.extend(v.prototype,k,{tagName:"div",$:function(a){return this.$el.find(a)},initialize:function(){},render:function(){return this},remove:function(){this.$el.remove();return this},make:function(a,b,c){a=document.createElement(a);b&&i(a).attr(b);c&&i(a).html(c);return a},setElement:function(a,b){this.$el&&this.undelegateEvents();this.$el=a instanceof i?a:i(a);this.el=this.$el[0];!1!==b&&this.delegateEvents();return this},delegateEvents:function(a){if(a||(a=n(this,"events"))){this.undelegateEvents();
+        for(var b in a){var c=a[b];f.isFunction(c)||(c=this[a[b]]);if(!c)throw Error('Method "'+a[b]+'" does not exist');var d=b.match(F),e=d[1],d=d[2],c=f.bind(c,this),e=e+(".delegateEvents"+this.cid);""===d?this.$el.bind(e,c):this.$el.delegate(d,e,c)}}},undelegateEvents:function(){this.$el.unbind(".delegateEvents"+this.cid)},_configure:function(a){this.options&&(a=f.extend({},this.options,a));for(var b=0,c=w.length;b<c;b++){var d=w[b];a[d]&&(this[d]=a[d])}this.options=a},_ensureElement:function(){if(this.el)this.setElement(this.el,
+        !1);else{var a=n(this,"attributes")||{};this.id&&(a.id=this.id);this.className&&(a["class"]=this.className);this.setElement(this.make(this.tagName,a),!1)}}});o.extend=r.extend=u.extend=v.extend=function(a,b){var c=G(this,a,b);c.extend=this.extend;return c};var H={create:"POST",update:"PUT","delete":"DELETE",read:"GET"};g.sync=function(a,b,c){var d=H[a];c||(c={});var e={type:d,dataType:"json"};c.url||(e.url=n(b,"url")||t());if(!c.data&&b&&("create"==a||"update"==a))e.contentType="application/json",
+        e.data=JSON.stringify(b.toJSON());g.emulateJSON&&(e.contentType="application/x-www-form-urlencoded",e.data=e.data?{model:e.data}:{});if(g.emulateHTTP&&("PUT"===d||"DELETE"===d))g.emulateJSON&&(e.data._method=d),e.type="POST",e.beforeSend=function(a){a.setRequestHeader("X-HTTP-Method-Override",d)};"GET"!==e.type&&!g.emulateJSON&&(e.processData=!1);return i.ajax(f.extend(e,c))};g.wrapError=function(a,b,c){return function(d,e){e=d===b?e:d;a?a(b,e,c):b.trigger("error",b,e,c)}};var x=function(){},G=function(a,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    b,c){var d;d=b&&b.hasOwnProperty("constructor")?b.constructor:function(){a.apply(this,arguments)};f.extend(d,a);x.prototype=a.prototype;d.prototype=new x;b&&f.extend(d.prototype,b);c&&f.extend(d,c);d.prototype.constructor=d;d.__super__=a.prototype;return d},n=function(a,b){return!a||!a[b]?null:f.isFunction(a[b])?a[b]():a[b]},t=function(){throw Error('A "url" property or function must be specified');}}).call(this);
 define("backbone", ["underscore","jquery"], (function (global) {
     return function () {
         var ret, fn;
@@ -76,63 +76,63 @@ define("backbone", ["underscore","jquery"], (function (global) {
  */
 
 (function(){window.StackMob=this.StackMob={DEFAULT_API_VERSION:0,DEFAULT_LOGIN_SCHEMA:"user",DEFAULT_LOGIN_FIELD:"username",DEFAULT_PASSWORD_FIELD:"password",EARTH_RADIANS_MI:3956.6,EARTH_RADIANS_KM:6367.5,FORCE_CREATE_REQUEST:"stackmob_force_create_request",ARRAY_FIELDNAME:"stackmob_array_fieldname",ARRAY_VALUES:"stackmob_array_values",CASCADE_DELETE:"stackmob_cascade_delete",HARD_DELETE:!0,SOFT_DELETE:!1,API_SERVER:"api.stackmob.com",RETRY_WAIT:1E4,RETRY_ATTEMPTS:3,REFRESH_TOKEN_KEY:"oauth2.refreshToken",
-POST:"POST",PUT:"PUT",DELETE:"DELETE",CONTENT_TYPE_JSON:"application/json",apiVersion:0,sdkVersion:"0.8.0",publicKey:null,Storage:{STORAGE_PREFIX:"stackmob.",persist:function(c,f){localStorage&&localStorage.setItem(this.STORAGE_PREFIX+c,f)},retrieve:function(c){return localStorage?localStorage.getItem(this.STORAGE_PREFIX+c):null},remove:function(c){localStorage&&localStorage.removeItem(this.STORAGE_PREFIX+c)}},_generateCallbacks:function(c,f){c.success=function(a){f.isValidResult(a)?"function"===
-typeof f.yes&&f.yes(a):"function"===typeof f.no&&f.no(a)};!c.error&&"function"===typeof f.error&&(c.error=f.error);return c},_containsCallbacks:function(c,f){return"object"===typeof c&&_.some(f,function(a){return"function"===typeof c[a]})},getLoggedInUser:function(c){var f=!this.isOAuth2Mode()&&this.Storage.retrieve(this.loggedInUserKey)||this.Storage.retrieve("oauth2.user");if(c&&c.success)this.hasValidOAuth(c);else return this.isLoggedIn(c)&&f?f:null},isLoggedIn:function(c){if(this._containsCallbacks(c,
-["yes","no"]))c=this._generateCallbacks(c,{isValidResult:function(c){return"undefined"!==typeof c},yes:c.yes,no:c.no,error:c.no}),this.hasValidOAuth(c);else return!this.isLoggedOut()||this.hasValidOAuth(c)},isUserLoggedIn:function(c,f){if(this._containsCallbacks(f,["yes","no"]))f=this._generateCallbacks(f,{isValidResult:function(a){return a==c},yes:f.yes,no:f.no,error:f.no}),this.hasValidOAuth(f);else return c==this.getLoggedInUser(f)},isLoggedOut:function(c){if(this._containsCallbacks(c,["yes","no"]))c=
-this._generateCallbacks(c,{isValidResult:function(c){return"undefined"==typeof c},yes:c.yes,no:c.no,error:c.yes}),this.hasValidOAuth(c);else return!this.hasValidOAuth(c)},getScheme:function(){return!0===this.secure?"https":"http"},getBaseURL:function(){return StackMob.useRelativePathForAjax?StackMob.apiURL||window.location.protocol+"//"+window.location.hostname+(window.location.port?":"+window.location.port:"")+"/":StackMob.apiURL||this.getScheme()+"://"+StackMob.API_SERVER+"/"},throwError:function(c){throw Error(c);
-},urlError:function(){this.throwError('A "url" property or function must be specified')},requirePublicKey:function(){StackMob.publicKey||this.throwError("Error: This requires that you initialize StackMob with a public key.")},isOAuth2Mode:function(){return!isNaN(StackMob.publicKey&&!StackMob.privateKey)},prepareCredsForSaving:function(c,f,a,b,d){b=(new Date).getTime()+1E3*b;c={"oauth2.accessToken":c,"oauth2.macKey":a,"oauth2.expires":b,"oauth2.user":d};c[StackMob.REFRESH_TOKEN_KEY]=f;return c},saveOAuthCredentials:function(c){var f=
-c["oauth2.accessToken"],a=c[StackMob.REFRESH_TOKEN_KEY];this.Storage.retrieve("oauth2.accessToken")!=f&&this.Storage.persist("oauth2.expires",c["oauth2.expires"]);this.Storage.persist("oauth2.accessToken",f);this.Storage.persist(StackMob.REFRESH_TOKEN_KEY,a);this.Storage.persist("oauth2.macKey",c["oauth2.macKey"]);this.Storage.persist("oauth2.user",c["oauth2.user"])},hasValidOAuth:function(c){if(!this.isOAuth2Mode())return c&&c.error&&c.error(),!1;var f=this.getOAuthCredentials();if(!_.all([f["oauth2.accessToken"],
-f["oauth2.macKey"],f["oauth2.expires"]||0],_.identity))return c&&c.success&&c.success(void 0),!1;if(StackMob.hasExpiredOAuth())if(c&&c.success){var a=c.success;c.success=function(b){a(b[StackMob.loginField])};StackMob.refreshSession.call(StackMob,c)}else return!1;else return c&&c.success&&c.success(this.Storage.retrieve("oauth2.user")),this.Storage.retrieve("oauth2.user")},shouldSendRefreshToken:function(){return this.hasExpiredOAuth()&&this.hasRefreshToken()&&this.shouldKeepLoggedIn()},keepLoggedIn:function(c){StackMob.Storage.persist("oauth2.shouldKeepLoggedIn",
-!0===c)},shouldKeepLoggedIn:function(){return"true"===StackMob.Storage.retrieve("oauth2.shouldKeepLoggedIn")},hasRefreshToken:function(){var c=this.getOAuthCredentials();return c&&"undefined"!==typeof c[StackMob.REFRESH_TOKEN_KEY]&&null!=c[StackMob.REFRESH_TOKEN_KEY]},getRefreshToken:function(){return this.getOAuthCredentials()[StackMob.REFRESH_TOKEN_KEY]},hasExpiredOAuth:function(){return this.isOAuth2Mode()&&null==this.getOAuthExpireTime()||this.getOAuthExpireTime()<=(new Date).getTime()},getOAuthCredentials:function(){var c=
-StackMob.Storage.retrieve("oauth2.accessToken"),f=StackMob.Storage.retrieve("oauth2.macKey"),a=StackMob.Storage.retrieve("oauth2.expires"),b=StackMob.Storage.retrieve(StackMob.REFRESH_TOKEN_KEY),c={"oauth2.accessToken":c,"oauth2.macKey":f,"oauth2.expires":a};c[StackMob.REFRESH_TOKEN_KEY]=b;return c},getOAuthExpireTime:function(){var c=this.Storage.retrieve("oauth2.expires");return c?parseInt(c):null},METHOD_MAP:{create:"POST",read:"GET",update:"PUT","delete":"DELETE",post:"POST",get:"GET",put:"PUT",
-addRelationship:"POST",appendAndSave:"PUT",deleteAndSave:"DELETE",login:"GET",accessToken:"POST",refreshToken:"POST",logout:"GET",forgotPassword:"POST",loginWithTempAndSetNewPassword:"GET",resetPassword:"POST",facebookAccessToken:"POST",createUserWithFacebook:"POST",linkUserWithFacebook:"POST"},getProperty:function(c,f){return!c||!c[f]?null:_.isFunction(c[f])?c[f]():c[f]},init:function(c){c=c||{};this.initStart(c);this.userSchema=c.userSchema||this.DEFAULT_LOGIN_SCHEMA;this.loginField=c.loginField||
-this.DEFAULT_LOGIN_FIELD;this.passwordField=c.passwordField||this.DEFAULT_PASSWORD_FIELD;this.newPasswordField=c.newPasswordField||"new_password";this.apiVersion=c.apiVersion||this.DEFAULT_API_VERSION;this.appName=this.getProperty(c,"appName")||this.throwError("An appName must be specified");this.clientSubdomain=this.getProperty(c,"clientSubdomain");this.publicKey=c.publicKey;this.apiURL=c.apiURL;var f=0<window.location.hostname.indexOf(".stackmobapp.com");this.useRelativePathForAjax=c.useRelativePathForAjax||
-f;this.oauth2targetdomain=c.oauth2targetdomain||this.oauth2targetdomain||"www.stackmob.com";this.secure=!0===c.secure;this.fullURL=!0===c.fullURL||"undefined"!==typeof PhoneGap||this.fullURL;this.ajax=c.ajax||this.ajax;this.urlRoot=c.urlRoot||this.getBaseURL();this.initEnd(c);return this},initStart:function(){},initEnd:function(){}}}).call(this);
+    POST:"POST",PUT:"PUT",DELETE:"DELETE",CONTENT_TYPE_JSON:"application/json",apiVersion:0,sdkVersion:"0.8.0",publicKey:null,Storage:{STORAGE_PREFIX:"stackmob.",persist:function(c,f){localStorage&&localStorage.setItem(this.STORAGE_PREFIX+c,f)},retrieve:function(c){return localStorage?localStorage.getItem(this.STORAGE_PREFIX+c):null},remove:function(c){localStorage&&localStorage.removeItem(this.STORAGE_PREFIX+c)}},_generateCallbacks:function(c,f){c.success=function(a){f.isValidResult(a)?"function"===
+        typeof f.yes&&f.yes(a):"function"===typeof f.no&&f.no(a)};!c.error&&"function"===typeof f.error&&(c.error=f.error);return c},_containsCallbacks:function(c,f){return"object"===typeof c&&_.some(f,function(a){return"function"===typeof c[a]})},getLoggedInUser:function(c){var f=!this.isOAuth2Mode()&&this.Storage.retrieve(this.loggedInUserKey)||this.Storage.retrieve("oauth2.user");if(c&&c.success)this.hasValidOAuth(c);else return this.isLoggedIn(c)&&f?f:null},isLoggedIn:function(c){if(this._containsCallbacks(c,
+        ["yes","no"]))c=this._generateCallbacks(c,{isValidResult:function(c){return"undefined"!==typeof c},yes:c.yes,no:c.no,error:c.no}),this.hasValidOAuth(c);else return!this.isLoggedOut()||this.hasValidOAuth(c)},isUserLoggedIn:function(c,f){if(this._containsCallbacks(f,["yes","no"]))f=this._generateCallbacks(f,{isValidResult:function(a){return a==c},yes:f.yes,no:f.no,error:f.no}),this.hasValidOAuth(f);else return c==this.getLoggedInUser(f)},isLoggedOut:function(c){if(this._containsCallbacks(c,["yes","no"]))c=
+        this._generateCallbacks(c,{isValidResult:function(c){return"undefined"==typeof c},yes:c.yes,no:c.no,error:c.yes}),this.hasValidOAuth(c);else return!this.hasValidOAuth(c)},getScheme:function(){return!0===this.secure?"https":"http"},getBaseURL:function(){return StackMob.useRelativePathForAjax?StackMob.apiURL||window.location.protocol+"//"+window.location.hostname+(window.location.port?":"+window.location.port:"")+"/":StackMob.apiURL||this.getScheme()+"://"+StackMob.API_SERVER+"/"},throwError:function(c){throw Error(c);
+    },urlError:function(){this.throwError('A "url" property or function must be specified')},requirePublicKey:function(){StackMob.publicKey||this.throwError("Error: This requires that you initialize StackMob with a public key.")},isOAuth2Mode:function(){return!isNaN(StackMob.publicKey&&!StackMob.privateKey)},prepareCredsForSaving:function(c,f,a,b,d){b=(new Date).getTime()+1E3*b;c={"oauth2.accessToken":c,"oauth2.macKey":a,"oauth2.expires":b,"oauth2.user":d};c[StackMob.REFRESH_TOKEN_KEY]=f;return c},saveOAuthCredentials:function(c){var f=
+        c["oauth2.accessToken"],a=c[StackMob.REFRESH_TOKEN_KEY];this.Storage.retrieve("oauth2.accessToken")!=f&&this.Storage.persist("oauth2.expires",c["oauth2.expires"]);this.Storage.persist("oauth2.accessToken",f);this.Storage.persist(StackMob.REFRESH_TOKEN_KEY,a);this.Storage.persist("oauth2.macKey",c["oauth2.macKey"]);this.Storage.persist("oauth2.user",c["oauth2.user"])},hasValidOAuth:function(c){if(!this.isOAuth2Mode())return c&&c.error&&c.error(),!1;var f=this.getOAuthCredentials();if(!_.all([f["oauth2.accessToken"],
+        f["oauth2.macKey"],f["oauth2.expires"]||0],_.identity))return c&&c.success&&c.success(void 0),!1;if(StackMob.hasExpiredOAuth())if(c&&c.success){var a=c.success;c.success=function(b){a(b[StackMob.loginField])};StackMob.refreshSession.call(StackMob,c)}else return!1;else return c&&c.success&&c.success(this.Storage.retrieve("oauth2.user")),this.Storage.retrieve("oauth2.user")},shouldSendRefreshToken:function(){return this.hasExpiredOAuth()&&this.hasRefreshToken()&&this.shouldKeepLoggedIn()},keepLoggedIn:function(c){StackMob.Storage.persist("oauth2.shouldKeepLoggedIn",
+        !0===c)},shouldKeepLoggedIn:function(){return"true"===StackMob.Storage.retrieve("oauth2.shouldKeepLoggedIn")},hasRefreshToken:function(){var c=this.getOAuthCredentials();return c&&"undefined"!==typeof c[StackMob.REFRESH_TOKEN_KEY]&&null!=c[StackMob.REFRESH_TOKEN_KEY]},getRefreshToken:function(){return this.getOAuthCredentials()[StackMob.REFRESH_TOKEN_KEY]},hasExpiredOAuth:function(){return this.isOAuth2Mode()&&null==this.getOAuthExpireTime()||this.getOAuthExpireTime()<=(new Date).getTime()},getOAuthCredentials:function(){var c=
+        StackMob.Storage.retrieve("oauth2.accessToken"),f=StackMob.Storage.retrieve("oauth2.macKey"),a=StackMob.Storage.retrieve("oauth2.expires"),b=StackMob.Storage.retrieve(StackMob.REFRESH_TOKEN_KEY),c={"oauth2.accessToken":c,"oauth2.macKey":f,"oauth2.expires":a};c[StackMob.REFRESH_TOKEN_KEY]=b;return c},getOAuthExpireTime:function(){var c=this.Storage.retrieve("oauth2.expires");return c?parseInt(c):null},METHOD_MAP:{create:"POST",read:"GET",update:"PUT","delete":"DELETE",post:"POST",get:"GET",put:"PUT",
+        addRelationship:"POST",appendAndSave:"PUT",deleteAndSave:"DELETE",login:"GET",accessToken:"POST",refreshToken:"POST",logout:"GET",forgotPassword:"POST",loginWithTempAndSetNewPassword:"GET",resetPassword:"POST",facebookAccessToken:"POST",createUserWithFacebook:"POST",linkUserWithFacebook:"POST"},getProperty:function(c,f){return!c||!c[f]?null:_.isFunction(c[f])?c[f]():c[f]},init:function(c){c=c||{};this.initStart(c);this.userSchema=c.userSchema||this.DEFAULT_LOGIN_SCHEMA;this.loginField=c.loginField||
+        this.DEFAULT_LOGIN_FIELD;this.passwordField=c.passwordField||this.DEFAULT_PASSWORD_FIELD;this.newPasswordField=c.newPasswordField||"new_password";this.apiVersion=c.apiVersion||this.DEFAULT_API_VERSION;this.appName=this.getProperty(c,"appName")||this.throwError("An appName must be specified");this.clientSubdomain=this.getProperty(c,"clientSubdomain");this.publicKey=c.publicKey;this.apiURL=c.apiURL;var f=0<window.location.hostname.indexOf(".stackmobapp.com");this.useRelativePathForAjax=c.useRelativePathForAjax||
+        f;this.oauth2targetdomain=c.oauth2targetdomain||this.oauth2targetdomain||"www.stackmob.com";this.secure=!0===c.secure;this.fullURL=!0===c.fullURL||"undefined"!==typeof PhoneGap||this.fullURL;this.ajax=c.ajax||this.ajax;this.urlRoot=c.urlRoot||this.getBaseURL();this.initEnd(c);return this},initStart:function(){},initEnd:function(){}}}).call(this);
 (function(){function c(a,b){var d=StackMob.getBaseURL(),c=b.url.replace(RegExp(d,"g"),"/"),g=d.replace(RegExp("^http://|^https://","g"),"").replace(/\//,""),i=StackMob.Storage.retrieve("oauth2.accessToken"),f=StackMob.Storage.retrieve("oauth2.macKey");StackMob.Storage.retrieve("oauth2.expires");if(StackMob.isOAuth2Mode()&&i&&f){var e=b.type,h=g.split(":"),g=1<h.length?h[0]:g,k=1<h.length?h[1]:"https"==d.substring(0,5)?443:80,d=Math.round((new Date).getTime()/1E3),h="n"+Math.round(1E4*Math.random()),
-c=CryptoJS.HmacSHA1(d+"\n"+h+"\n"+e+"\n"+c+"\n"+g+"\n"+k+"\n\n",f).toString(CryptoJS.enc.Base64);return'MAC id="'+i+'",ts="'+d+'",nonce="'+h+'",mac="'+c+'"'}}var f=this;_.extend(StackMob,{isSencha:function(){return f.Ext},isZepto:function(){return f.Zepto},initEnd:function(){StackMob.Model=Backbone.Model.extend({urlRoot:StackMob.urlRoot,url:function(){var a=StackMob.urlRoot||StackMob.urlError();return a+=this.schemaName},getPrimaryKeyField:function(){return this.schemaName+"_id"},constructor:function(){this.setIDAttribute();
-Backbone.Model.prototype.constructor.apply(this,arguments)},initialize:function(){StackMob.getProperty(this,"schemaName")||StackMob.throwError("A schemaName must be defined");this.setIDAttribute()},setIDAttribute:function(){this.idAttribute=this.getPrimaryKeyField()},parse:function(a){return!a||a&&(!a.text||""==a.text)?a:JSON.parse(a.text)},sync:function(a,b,d){StackMob.sync.call(this,a,this,d)},create:function(a){var b={};b[StackMob.FORCE_CREATE_REQUEST]=!0;_.extend(b,a);this.save(null,b)},query:function(a,
-b){b=b||{};_.extend(b,{query:a});this.fetch(b)},save:function(a,b){var d=a?a.success:{},c=a?a.error:{};"undefined"===typeof b&&(_.isFunction(d)||_.isFunction(c))?Backbone.Model.prototype.save.call(this,null,a):Backbone.Model.prototype.save.call(this,a,b)},fetchExpanded:function(a,b){(0>a||3<a)&&StackMob.throwError("Depth must be between 0 and 3 inclusive.");var d={};_.extend(d,b);d.data=d.data||{};d.data._expand=a;this.fetch(d)},getAsModel:function(a,b){var d=this.get(a);return d?_.isArray(d)?_.map(d,
-function(a){return new b(a)}):new b(d):{}},appendAndCreate:function(a,b,d){this.addRelationship(a,b,d)},addRelationship:function(a,b,d){d=d||{};d[StackMob.ARRAY_FIELDNAME]=a;d[StackMob.ARRAY_VALUES]=b;StackMob.sync.call(this,"addRelationship",this,d)},appendAndSave:function(a,b,d){d=d||{};d[StackMob.ARRAY_FIELDNAME]=a;d[StackMob.ARRAY_VALUES]=b;StackMob.sync.call(this,"appendAndSave",this,d)},deleteAndSave:function(a,b,d,c){c=c||{};c[StackMob.ARRAY_FIELDNAME]=a;c[StackMob.ARRAY_VALUES]=b;c[StackMob.CASCADE_DELETE]=
-d;var g=this;c.stackmob_ondeleteAndSave=function(){var d=g.get(a);g.set(a,_.difference(d,b))};StackMob.sync.call(this,"deleteAndSave",this,c)},setBinaryFile:function(a,b,d,c){this.set(a,"Content-Type: "+d+"\nContent-Disposition: attachment; filename="+b+"\nContent-Transfer-Encoding: base64\n\n"+c)},incrementOnSave:function(a,b){this.attributes[this.idAttribute]?(this.attributes[a]&&delete this.attributes[a],this.set(a+"[inc]",b)):StackMob.throwError("Please specify an id for the row you wish to update. When creating a new instance of your object, you need to pass in JSON that includes the id field and value (e.g. var user = new StackMob.User({ username: 'chucknorris' });)  Or, for custom objects: var todoInstance = new Todo({todo_id : '1234'})")},
-decrementOnSave:function(a,b){this.incrementOnSave(a,-1*b)}});StackMob.Collection=Backbone.Collection.extend({initialize:function(){this.model||StackMob.throwError("Please specify a StackMob.Model for this collection. e.g., var Items = StackMob.Collection.extend({ model: Item });");this.schemaName=(new this.model).schemaName},url:function(){var a=StackMob.urlRoot||StackMob.urlError();return a+=this.schemaName},parse:function(a){return!a||a&&(!a.text||""==a.text)?a:JSON.parse(a.text)},sync:function(a,
-b,d){StackMob.sync.call(this,a,this,d)},query:function(a,b){b=b||{};_.extend(b,{query:a});this.fetch(b)},create:function(a,b){var d={};d[StackMob.FORCE_CREATE_REQUEST]=!0;_.extend(d,b);Backbone.Collection.prototype.create.call(this,a,d)},count:function(a,b){a=a||new StackMob.Collection.Query;b=b||{};b.stackmob_count=!0;var d=b.success;b.success=function(a){if(a&&a.getAllResponseHeaders){var b=a.getResponseHeader("Content-Range"),c=0;b&&(c=b.substring(b.indexOf("/")+1,b.length));if(0===c)try{c=JSON.parse(a.responseText).length}catch(f){}d&&
+    c=CryptoJS.HmacSHA1(d+"\n"+h+"\n"+e+"\n"+c+"\n"+g+"\n"+k+"\n\n",f).toString(CryptoJS.enc.Base64);return'MAC id="'+i+'",ts="'+d+'",nonce="'+h+'",mac="'+c+'"'}}var f=this;_.extend(StackMob,{isSencha:function(){return f.Ext},isZepto:function(){return f.Zepto},initEnd:function(){StackMob.Model=Backbone.Model.extend({urlRoot:StackMob.urlRoot,url:function(){var a=StackMob.urlRoot||StackMob.urlError();return a+=this.schemaName},getPrimaryKeyField:function(){return this.schemaName+"_id"},constructor:function(){this.setIDAttribute();
+    Backbone.Model.prototype.constructor.apply(this,arguments)},initialize:function(){StackMob.getProperty(this,"schemaName")||StackMob.throwError("A schemaName must be defined");this.setIDAttribute()},setIDAttribute:function(){this.idAttribute=this.getPrimaryKeyField()},parse:function(a){return!a||a&&(!a.text||""==a.text)?a:JSON.parse(a.text)},sync:function(a,b,d){StackMob.sync.call(this,a,this,d)},create:function(a){var b={};b[StackMob.FORCE_CREATE_REQUEST]=!0;_.extend(b,a);this.save(null,b)},query:function(a,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   b){b=b||{};_.extend(b,{query:a});this.fetch(b)},save:function(a,b){var d=a?a.success:{},c=a?a.error:{};"undefined"===typeof b&&(_.isFunction(d)||_.isFunction(c))?Backbone.Model.prototype.save.call(this,null,a):Backbone.Model.prototype.save.call(this,a,b)},fetchExpanded:function(a,b){(0>a||3<a)&&StackMob.throwError("Depth must be between 0 and 3 inclusive.");var d={};_.extend(d,b);d.data=d.data||{};d.data._expand=a;this.fetch(d)},getAsModel:function(a,b){var d=this.get(a);return d?_.isArray(d)?_.map(d,
+    function(a){return new b(a)}):new b(d):{}},appendAndCreate:function(a,b,d){this.addRelationship(a,b,d)},addRelationship:function(a,b,d){d=d||{};d[StackMob.ARRAY_FIELDNAME]=a;d[StackMob.ARRAY_VALUES]=b;StackMob.sync.call(this,"addRelationship",this,d)},appendAndSave:function(a,b,d){d=d||{};d[StackMob.ARRAY_FIELDNAME]=a;d[StackMob.ARRAY_VALUES]=b;StackMob.sync.call(this,"appendAndSave",this,d)},deleteAndSave:function(a,b,d,c){c=c||{};c[StackMob.ARRAY_FIELDNAME]=a;c[StackMob.ARRAY_VALUES]=b;c[StackMob.CASCADE_DELETE]=
+    d;var g=this;c.stackmob_ondeleteAndSave=function(){var d=g.get(a);g.set(a,_.difference(d,b))};StackMob.sync.call(this,"deleteAndSave",this,c)},setBinaryFile:function(a,b,d,c){this.set(a,"Content-Type: "+d+"\nContent-Disposition: attachment; filename="+b+"\nContent-Transfer-Encoding: base64\n\n"+c)},incrementOnSave:function(a,b){this.attributes[this.idAttribute]?(this.attributes[a]&&delete this.attributes[a],this.set(a+"[inc]",b)):StackMob.throwError("Please specify an id for the row you wish to update. When creating a new instance of your object, you need to pass in JSON that includes the id field and value (e.g. var user = new StackMob.User({ username: 'chucknorris' });)  Or, for custom objects: var todoInstance = new Todo({todo_id : '1234'})")},
+    decrementOnSave:function(a,b){this.incrementOnSave(a,-1*b)}});StackMob.Collection=Backbone.Collection.extend({initialize:function(){this.model||StackMob.throwError("Please specify a StackMob.Model for this collection. e.g., var Items = StackMob.Collection.extend({ model: Item });");this.schemaName=(new this.model).schemaName},url:function(){var a=StackMob.urlRoot||StackMob.urlError();return a+=this.schemaName},parse:function(a){return!a||a&&(!a.text||""==a.text)?a:JSON.parse(a.text)},sync:function(a,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           b,d){StackMob.sync.call(this,a,this,d)},query:function(a,b){b=b||{};_.extend(b,{query:a});this.fetch(b)},create:function(a,b){var d={};d[StackMob.FORCE_CREATE_REQUEST]=!0;_.extend(d,b);Backbone.Collection.prototype.create.call(this,a,d)},count:function(a,b){a=a||new StackMob.Collection.Query;b=b||{};b.stackmob_count=!0;var d=b.success;b.success=function(a){if(a&&a.getAllResponseHeaders){var b=a.getResponseHeader("Content-Range"),c=0;b&&(c=b.substring(b.indexOf("/")+1,b.length));if(0===c)try{c=JSON.parse(a.responseText).length}catch(f){}d&&
 d(c)}else d(a)};a.setRange&&(b.query=a.setRange(0,0));return(this.sync||Backbone.sync).call(this,"query",this,b)}});StackMob.User=StackMob.Model.extend({idAttribute:StackMob.loginField,schemaName:StackMob.userSchema,getPrimaryKeyField:function(){return StackMob.loginField},isLoggedIn:function(a){if(StackMob._containsCallbacks(a,["yes","no"]))a=StackMob._generateCallbacks(a,{isValidResult:function(a){return"undefined"!==typeof a},yes:a.yes,no:a.no,error:a.no}),StackMob.hasValidOAuth(a);else return StackMob.isUserLoggedIn(this.get(StackMob.loginField),
-a)},login:function(a,b){b=b||{};StackMob.keepLoggedIn("undefined"===typeof a?!1:a);b.data=b.data||{};b.data[StackMob.loginField]=this.get(StackMob.loginField);b.data[StackMob.passwordField]=this.get(StackMob.passwordField);StackMob.isOAuth2Mode()&&(b.data.token_type="mac");b.stackmob_onaccessToken=StackMob.processLogin;(this.sync||Backbone.sync).call(this,StackMob.isOAuth2Mode()?"accessToken":"login",this,b)},logout:function(a){a=a||{};a.data=a.data||{};a.stackmob_onlogout=function(){StackMob.Storage.remove(StackMob.loggedInUserKey);
-StackMob.Storage.remove("oauth2.accessToken");StackMob.Storage.remove(StackMob.REFRESH_TOKEN_KEY);StackMob.Storage.remove("oauth2.macKey");StackMob.Storage.remove("oauth2.expires");StackMob.Storage.remove("oauth2.user")};(this.sync||Backbone.sync).call(this,"logout",this,a)},loginWithFacebookToken:function(a,b,d){d=d||{};d.data=d.data||{};_.extend(d.data,{fb_at:a,token_type:"mac"});d.stackmob_onfacebookAccessToken=StackMob.processLogin;(this.sync||Backbone.sync).call(this,"facebookAccessToken",this,
-d)},createUserWithFacebook:function(a,b){b=b||{};b.data=b.data||{};_.extend(b.data,{fb_at:a,token_type:"mac"});b.data[StackMob.loginField]=b[StackMob.loginField]||this.get(StackMob.loginField);(this.sync||Backbone.sync).call(this,"createUserWithFacebook",this,b)},linkUserWithFacebook:function(a,b){b=b||{};b.data=b.data||{};_.extend(b.data,{fb_at:a,token_type:"mac"});(this.sync||Backbone.sync).call(this,"linkUserWithFacebook",this,b)},loginWithTempAndSetNewPassword:function(a,b,d,c){c=c||{};c.data=
-c.data||{};var g={};g[StackMob.passwordField]=a;this.set(g);c.data[StackMob.newPasswordField]=b;this.login(d,c)},forgotPassword:function(a){a=a||{};a.data=a.data||{};a.data[StackMob.loginField]=this.get(StackMob.loginField);(this.sync||Backbone.sync).call(this,"forgotPassword",this,a)},resetPassword:function(a,b,d){d=d||{};d.data=d.data||{};d.data.old={password:a};d.data["new"]={password:b};(this.sync||Backbone.sync).call(this,"resetPassword",this,d)}});StackMob.Users=StackMob.Collection.extend({model:StackMob.User});
-StackMob.GeoPoint=function(a,b){_.isNumber(a)?((-90>a||90<a)&&StackMob.throwError("Latitude value must be between -90 and 90 inclusive."),(-180>b||180<b)&&StackMob.throwError("Longitude value must be between -180 and 180 inclusive."),this.lat=a,this.lon=b):((-90>a.lat||90<a.lat)&&StackMob.throwError("Latitude value must be between -90 and 90 inclusive."),(-180>a.lon||180<a.lon)&&StackMob.throwError("Longitude value must be between -180 and 180 inclusive."),this.lat=a.lat,this.lon=a.lon)};StackMob.GeoPoint.prototype.toJSON=
-function(){return{lat:this.lat,lon:this.lon}};StackMob.Model.Query=function(){this.selectFields=[];this.params={}};_.extend(StackMob.Model.Query.prototype,{select:function(a){this.selectFields.push(a);return this},setExpand:function(a){this.params._expand=a;return this}});StackMob.Collection.Query=function(){this.params={};this.selectFields=[];this.orderBy=[];this.range=null};StackMob.Collection.Query.prototype=new StackMob.Model.Query;StackMob.Collection.Query.prototype.constructor=StackMob.Collection.Query;
-_.extend(StackMob.Collection.Query.prototype,{addParam:function(a,b){this.params[a]=b;return this},equals:function(a,b){this.params[a]=b;return this},lt:function(a,b){this.params[a+"[lt]"]=b;return this},lte:function(a,b){this.params[a+"[lte]"]=b;return this},gt:function(a,b){this.params[a+"[gt]"]=b;return this},gte:function(a,b){this.params[a+"[gte]"]=b;return this},notEquals:function(a,b){this.params[a+"[ne]"]=b;return this},isNull:function(a){this.params[a+"[null]"]=!0;return this},isNotNull:function(a){this.params[a+
-"[null]"]=!1;return this},mustBeOneOf:function(a,b){var d="";if(_.isArray(b))for(var c=b.length,g=0;g<c;g++)d+=b[g],g+1<c&&(d+=",");else d=b;this.params[a+"[in]"]=d;return this},orderAsc:function(a){this.orderBy.push(a+":asc");return this},orderDesc:function(a){this.orderBy.push(a+":desc");return this},setRange:function(a,b){this.range={start:a,end:b};return this},mustBeNear:function(a,b,d){this.params[a+"[near]"]=b.lat+","+b.lon+","+d;return this},mustBeNearMi:function(a,b,d){this.mustBeNear(a,b,
-d/StackMob.EARTH_RADIANS_MI);return this},mustBeNearKm:function(a,b,d){this.mustBeNear(a,b,d/StackMob.EARTH_RADIANS_KM);return this},isWithin:function(a,b,d){this.params[a+"[within]"]=b.lat+","+b.lon+","+d;return this},isWithinMi:function(a,b,d){this.isWithin(a,b,d/StackMob.EARTH_RADIANS_MI);return this},isWithinKm:function(a,b,d){this.isWithin(a,b,d/StackMob.EARTH_RADIANS_KM);return this},isWithinBox:function(a,b,d){this.params[a+"[within]"]=b.lat+","+b.lon+","+d.lat+","+d.lon;return this}})},cc:function(a,
-b,d,c){this.customcode(a,b,d,c)},customcode:function(a,b,d,c){_.isObject(d)?(c=d||{},d=(d=c.httpVerb)&&!_.isUndefined(StackMob.METHOD_MAP[d.toLowerCase()])?d:"GET",c.httpVerb=d):(c=c||{},_.isString(d)&&(d&&!_.isUndefined(StackMob.METHOD_MAP[d.toLowerCase()]))&&(c.httpVerb=d.toUpperCase()));c.data=c.data||{};"GET"!==d&&(c.contentType=c.contentType||StackMob.CONTENT_TYPE_JSON);_.extend(c.data,b);c.url=this.getBaseURL();this.sync.call(StackMob,a,null,c)},processLogin:function(a){if(StackMob.isOAuth2Mode()){var b=
-a.access_token,d=a.refresh_token,c=a.mac_key,g=a.expires_in,f=null;try{var f=a.stackmob.user[StackMob.loginField],j=StackMob.prepareCredsForSaving(b,d,c,g,f);StackMob.saveOAuthCredentials(j);StackMob.Storage.persist(StackMob.loggedInUserKey,f)}catch(e){console&&console.error("Problem saving OAuth 2.0 credentials and user")}}},getCallId:function(a,b){var c={method:a,model:b||{},time:(new Date).getTime()};return JSON.stringify(c)},sync:function(a,b,d){d=d||{};if(!StackMob.isAccessTokenMethod(a)&&StackMob.shouldSendRefreshToken()&&
-!0!==d.stackmob_attempted_refresh){var f=a,g=d;g.stackmob_attempted_refresh=!0;var i=this;StackMob.refreshSession.call(StackMob,{oncomplete:function(){StackMob.sync.call(i,f,b,g)}});return!1}var j=!0===d[StackMob.FORCE_CREATE_REQUEST];j&&(a="create");var e=_.extend({type:d.httpVerb||StackMob.METHOD_MAP[a]||"GET",dataType:"json"},d);e.data=e.data||{};!e.url&&b&&(e.url=StackMob.getProperty(b,"url"));var h="cc"!=a,k=b&&b.isNew&&!b.isNew(),j=!j,n="addRelationship"==a||"appendAndSave"==a||"deleteAndSave"==
-a;if(_.include("create update delete read query deleteAndSave appendAndSave addRelationship".split(" "),a)){if(n||h&&k&&j)e.url+=("/"==e.url.charAt(e.url.length-1)?"":"/")+encodeURIComponent(b.get(b.getPrimaryKeyField())),n&&(e.url+="/"+d[StackMob.ARRAY_FIELDNAME]),"deleteAndSave"==a&&(h="",h=_.isArray(d[StackMob.ARRAY_VALUES])?_.map(d[StackMob.ARRAY_VALUES],function(a){return encodeURIComponent(a)}).join(","):encodeURIComponent(d[StackMob.ARRAY_VALUES]),e.url+="/"+h)}else e.url+=("/"==e.url.charAt(e.url.length-
-1)?"":"/")+a;h=d;e.headers=e.headers||{};e.headers=_.extend({Accept:"application/vnd.stackmob+json; version="+StackMob.apiVersion},e.headers);_.extend(e.headers,{"X-StackMob-User-Agent":"StackMob (JS; "+StackMob.sdkVersion+")"});StackMob.publicKey&&!StackMob.privateKey?(e.headers["X-StackMob-API-Key"]=StackMob.publicKey,e.headers["X-StackMob-Proxy-Plain"]="stackmob-api",e.headers["X-StackMob-API-Key-"+StackMob.publicKey]=""):e.headers["X-StackMob-Proxy"]="stackmob-api";StackMob.isOAuth2Mode()&&StackMob.isAccessTokenMethod(a)?
-e.contentType="application/x-www-form-urlencoded":_.include(["PUT","POST"],StackMob.METHOD_MAP[a])&&(e.contentType=e.contentType||StackMob.CONTENT_TYPE_JSON);isNaN(h[StackMob.CASCADE_DELETE])||(e.headers["X-StackMob-CascadeDelete"]=!0==h[StackMob.CASCADE_DELETE]);if(h.query&&(h=e.query||throwError("No StackMobQuery object provided to the query call."),h.selectFields&&0<h.selectFields.length&&(e.headers["X-StackMob-Select"]=h.selectFields.join()),h.range&&(e.headers.Range="objects="+h.range.start+
-"-"+h.range.end),_.extend(e.data,h.params),h.orderBy&&0<h.orderBy.length)){h=h.orderBy;k="";j=h.length;for(n=0;n<j;n++)k+=h[n],n+1<j&&(k+=",");e.headers["X-StackMob-OrderBy"]=k}h=a;k=function(a){return _.map(_.keys(a),function(b){return b+"="+encodeURIComponent(a[b])}).join("&")};d=d||{};if(StackMob.isOAuth2Mode()&&StackMob.isAccessTokenMethod(h))e.data=k(e.data);else if("POST"==e.type||"PUT"==e.type)if("resetPassword"==h||"forgotPassword"==h)e.data=JSON.stringify(e.data);else if("addRelationship"==
-h||"appendAndSave"==h)d&&d[StackMob.ARRAY_VALUES]&&(e.data=JSON.stringify(d[StackMob.ARRAY_VALUES]));else if(b){var m=b.toJSON();_.each(d.remote_ignore||[],function(a){delete m[a]});delete m.lastmoddate;delete m.createddate;"update"==h&&delete m[StackMob.passwordField];StackMob.isOAuth2Mode()&&delete m.sm_owner;e.data=JSON.stringify(_.extend(m,e.data))}else e.data=JSON.stringify(e.data);else"GET"==e.type&&!_.isEmpty(e.data)&&(e.url+="?",d=k(e.data),e.url+=d),delete e.data;d=e||{};d.processData=!1;
-d.accepts=d.headers.Accept;StackMob.isAccessTokenMethod(a)||(d=a,StackMob.isAccessTokenMethod(d)||(d=c(d,e))&&(e.headers.Authorization=d));StackMob.makeAPICall(b,e,a)},refreshSession:function(a){var b={};_.extend(b,a);if(StackMob.hasRefreshToken()){b.url="/"+StackMob.userSchema;b.contentType="application/x-www-form-urlencoded";b.data={refresh_token:StackMob.getOAuthCredentials()[StackMob.REFRESH_TOKEN_KEY],grant_type:"refresh_token",token_type:"mac",mac_algorithm:"hmac-sha1"};var c=a.oncomplete;c&&
+    a)},login:function(a,b){b=b||{};StackMob.keepLoggedIn("undefined"===typeof a?!1:a);b.data=b.data||{};b.data[StackMob.loginField]=this.get(StackMob.loginField);b.data[StackMob.passwordField]=this.get(StackMob.passwordField);StackMob.isOAuth2Mode()&&(b.data.token_type="mac");b.stackmob_onaccessToken=StackMob.processLogin;(this.sync||Backbone.sync).call(this,StackMob.isOAuth2Mode()?"accessToken":"login",this,b)},logout:function(a){a=a||{};a.data=a.data||{};a.stackmob_onlogout=function(){StackMob.Storage.remove(StackMob.loggedInUserKey);
+    StackMob.Storage.remove("oauth2.accessToken");StackMob.Storage.remove(StackMob.REFRESH_TOKEN_KEY);StackMob.Storage.remove("oauth2.macKey");StackMob.Storage.remove("oauth2.expires");StackMob.Storage.remove("oauth2.user")};(this.sync||Backbone.sync).call(this,"logout",this,a)},loginWithFacebookToken:function(a,b,d){d=d||{};d.data=d.data||{};_.extend(d.data,{fb_at:a,token_type:"mac"});d.stackmob_onfacebookAccessToken=StackMob.processLogin;(this.sync||Backbone.sync).call(this,"facebookAccessToken",this,
+    d)},createUserWithFacebook:function(a,b){b=b||{};b.data=b.data||{};_.extend(b.data,{fb_at:a,token_type:"mac"});b.data[StackMob.loginField]=b[StackMob.loginField]||this.get(StackMob.loginField);(this.sync||Backbone.sync).call(this,"createUserWithFacebook",this,b)},linkUserWithFacebook:function(a,b){b=b||{};b.data=b.data||{};_.extend(b.data,{fb_at:a,token_type:"mac"});(this.sync||Backbone.sync).call(this,"linkUserWithFacebook",this,b)},loginWithTempAndSetNewPassword:function(a,b,d,c){c=c||{};c.data=
+    c.data||{};var g={};g[StackMob.passwordField]=a;this.set(g);c.data[StackMob.newPasswordField]=b;this.login(d,c)},forgotPassword:function(a){a=a||{};a.data=a.data||{};a.data[StackMob.loginField]=this.get(StackMob.loginField);(this.sync||Backbone.sync).call(this,"forgotPassword",this,a)},resetPassword:function(a,b,d){d=d||{};d.data=d.data||{};d.data.old={password:a};d.data["new"]={password:b};(this.sync||Backbone.sync).call(this,"resetPassword",this,d)}});StackMob.Users=StackMob.Collection.extend({model:StackMob.User});
+    StackMob.GeoPoint=function(a,b){_.isNumber(a)?((-90>a||90<a)&&StackMob.throwError("Latitude value must be between -90 and 90 inclusive."),(-180>b||180<b)&&StackMob.throwError("Longitude value must be between -180 and 180 inclusive."),this.lat=a,this.lon=b):((-90>a.lat||90<a.lat)&&StackMob.throwError("Latitude value must be between -90 and 90 inclusive."),(-180>a.lon||180<a.lon)&&StackMob.throwError("Longitude value must be between -180 and 180 inclusive."),this.lat=a.lat,this.lon=a.lon)};StackMob.GeoPoint.prototype.toJSON=
+        function(){return{lat:this.lat,lon:this.lon}};StackMob.Model.Query=function(){this.selectFields=[];this.params={}};_.extend(StackMob.Model.Query.prototype,{select:function(a){this.selectFields.push(a);return this},setExpand:function(a){this.params._expand=a;return this}});StackMob.Collection.Query=function(){this.params={};this.selectFields=[];this.orderBy=[];this.range=null};StackMob.Collection.Query.prototype=new StackMob.Model.Query;StackMob.Collection.Query.prototype.constructor=StackMob.Collection.Query;
+    _.extend(StackMob.Collection.Query.prototype,{addParam:function(a,b){this.params[a]=b;return this},equals:function(a,b){this.params[a]=b;return this},lt:function(a,b){this.params[a+"[lt]"]=b;return this},lte:function(a,b){this.params[a+"[lte]"]=b;return this},gt:function(a,b){this.params[a+"[gt]"]=b;return this},gte:function(a,b){this.params[a+"[gte]"]=b;return this},notEquals:function(a,b){this.params[a+"[ne]"]=b;return this},isNull:function(a){this.params[a+"[null]"]=!0;return this},isNotNull:function(a){this.params[a+
+        "[null]"]=!1;return this},mustBeOneOf:function(a,b){var d="";if(_.isArray(b))for(var c=b.length,g=0;g<c;g++)d+=b[g],g+1<c&&(d+=",");else d=b;this.params[a+"[in]"]=d;return this},orderAsc:function(a){this.orderBy.push(a+":asc");return this},orderDesc:function(a){this.orderBy.push(a+":desc");return this},setRange:function(a,b){this.range={start:a,end:b};return this},mustBeNear:function(a,b,d){this.params[a+"[near]"]=b.lat+","+b.lon+","+d;return this},mustBeNearMi:function(a,b,d){this.mustBeNear(a,b,
+        d/StackMob.EARTH_RADIANS_MI);return this},mustBeNearKm:function(a,b,d){this.mustBeNear(a,b,d/StackMob.EARTH_RADIANS_KM);return this},isWithin:function(a,b,d){this.params[a+"[within]"]=b.lat+","+b.lon+","+d;return this},isWithinMi:function(a,b,d){this.isWithin(a,b,d/StackMob.EARTH_RADIANS_MI);return this},isWithinKm:function(a,b,d){this.isWithin(a,b,d/StackMob.EARTH_RADIANS_KM);return this},isWithinBox:function(a,b,d){this.params[a+"[within]"]=b.lat+","+b.lon+","+d.lat+","+d.lon;return this}})},cc:function(a,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       b,d,c){this.customcode(a,b,d,c)},customcode:function(a,b,d,c){_.isObject(d)?(c=d||{},d=(d=c.httpVerb)&&!_.isUndefined(StackMob.METHOD_MAP[d.toLowerCase()])?d:"GET",c.httpVerb=d):(c=c||{},_.isString(d)&&(d&&!_.isUndefined(StackMob.METHOD_MAP[d.toLowerCase()]))&&(c.httpVerb=d.toUpperCase()));c.data=c.data||{};"GET"!==d&&(c.contentType=c.contentType||StackMob.CONTENT_TYPE_JSON);_.extend(c.data,b);c.url=this.getBaseURL();this.sync.call(StackMob,a,null,c)},processLogin:function(a){if(StackMob.isOAuth2Mode()){var b=
+    a.access_token,d=a.refresh_token,c=a.mac_key,g=a.expires_in,f=null;try{var f=a.stackmob.user[StackMob.loginField],j=StackMob.prepareCredsForSaving(b,d,c,g,f);StackMob.saveOAuthCredentials(j);StackMob.Storage.persist(StackMob.loggedInUserKey,f)}catch(e){console&&console.error("Problem saving OAuth 2.0 credentials and user")}}},getCallId:function(a,b){var c={method:a,model:b||{},time:(new Date).getTime()};return JSON.stringify(c)},sync:function(a,b,d){d=d||{};if(!StackMob.isAccessTokenMethod(a)&&StackMob.shouldSendRefreshToken()&&
+    !0!==d.stackmob_attempted_refresh){var f=a,g=d;g.stackmob_attempted_refresh=!0;var i=this;StackMob.refreshSession.call(StackMob,{oncomplete:function(){StackMob.sync.call(i,f,b,g)}});return!1}var j=!0===d[StackMob.FORCE_CREATE_REQUEST];j&&(a="create");var e=_.extend({type:d.httpVerb||StackMob.METHOD_MAP[a]||"GET",dataType:"json"},d);e.data=e.data||{};!e.url&&b&&(e.url=StackMob.getProperty(b,"url"));var h="cc"!=a,k=b&&b.isNew&&!b.isNew(),j=!j,n="addRelationship"==a||"appendAndSave"==a||"deleteAndSave"==
+    a;if(_.include("create update delete read query deleteAndSave appendAndSave addRelationship".split(" "),a)){if(n||h&&k&&j)e.url+=("/"==e.url.charAt(e.url.length-1)?"":"/")+encodeURIComponent(b.get(b.getPrimaryKeyField())),n&&(e.url+="/"+d[StackMob.ARRAY_FIELDNAME]),"deleteAndSave"==a&&(h="",h=_.isArray(d[StackMob.ARRAY_VALUES])?_.map(d[StackMob.ARRAY_VALUES],function(a){return encodeURIComponent(a)}).join(","):encodeURIComponent(d[StackMob.ARRAY_VALUES]),e.url+="/"+h)}else e.url+=("/"==e.url.charAt(e.url.length-
+    1)?"":"/")+a;h=d;e.headers=e.headers||{};e.headers=_.extend({Accept:"application/vnd.stackmob+json; version="+StackMob.apiVersion},e.headers);_.extend(e.headers,{"X-StackMob-User-Agent":"StackMob (JS; "+StackMob.sdkVersion+")"});StackMob.publicKey&&!StackMob.privateKey?(e.headers["X-StackMob-API-Key"]=StackMob.publicKey,e.headers["X-StackMob-Proxy-Plain"]="stackmob-api",e.headers["X-StackMob-API-Key-"+StackMob.publicKey]=""):e.headers["X-StackMob-Proxy"]="stackmob-api";StackMob.isOAuth2Mode()&&StackMob.isAccessTokenMethod(a)?
+    e.contentType="application/x-www-form-urlencoded":_.include(["PUT","POST"],StackMob.METHOD_MAP[a])&&(e.contentType=e.contentType||StackMob.CONTENT_TYPE_JSON);isNaN(h[StackMob.CASCADE_DELETE])||(e.headers["X-StackMob-CascadeDelete"]=!0==h[StackMob.CASCADE_DELETE]);if(h.query&&(h=e.query||throwError("No StackMobQuery object provided to the query call."),h.selectFields&&0<h.selectFields.length&&(e.headers["X-StackMob-Select"]=h.selectFields.join()),h.range&&(e.headers.Range="objects="+h.range.start+
+    "-"+h.range.end),_.extend(e.data,h.params),h.orderBy&&0<h.orderBy.length)){h=h.orderBy;k="";j=h.length;for(n=0;n<j;n++)k+=h[n],n+1<j&&(k+=",");e.headers["X-StackMob-OrderBy"]=k}h=a;k=function(a){return _.map(_.keys(a),function(b){return b+"="+encodeURIComponent(a[b])}).join("&")};d=d||{};if(StackMob.isOAuth2Mode()&&StackMob.isAccessTokenMethod(h))e.data=k(e.data);else if("POST"==e.type||"PUT"==e.type)if("resetPassword"==h||"forgotPassword"==h)e.data=JSON.stringify(e.data);else if("addRelationship"==
+    h||"appendAndSave"==h)d&&d[StackMob.ARRAY_VALUES]&&(e.data=JSON.stringify(d[StackMob.ARRAY_VALUES]));else if(b){var m=b.toJSON();_.each(d.remote_ignore||[],function(a){delete m[a]});delete m.lastmoddate;delete m.createddate;"update"==h&&delete m[StackMob.passwordField];StackMob.isOAuth2Mode()&&delete m.sm_owner;e.data=JSON.stringify(_.extend(m,e.data))}else e.data=JSON.stringify(e.data);else"GET"==e.type&&!_.isEmpty(e.data)&&(e.url+="?",d=k(e.data),e.url+=d),delete e.data;d=e||{};d.processData=!1;
+    d.accepts=d.headers.Accept;StackMob.isAccessTokenMethod(a)||(d=a,StackMob.isAccessTokenMethod(d)||(d=c(d,e))&&(e.headers.Authorization=d));StackMob.makeAPICall(b,e,a)},refreshSession:function(a){var b={};_.extend(b,a);if(StackMob.hasRefreshToken()){b.url="/"+StackMob.userSchema;b.contentType="application/x-www-form-urlencoded";b.data={refresh_token:StackMob.getOAuthCredentials()[StackMob.REFRESH_TOKEN_KEY],grant_type:"refresh_token",token_type:"mac",mac_algorithm:"hmac-sha1"};var c=a.oncomplete;c&&
 (b.oncomplete=function(){c()});a&&a.success&&(b.success=a.success);b.stackmob_onrefreshToken=StackMob.processLogin;b.error=function(){a&&a.error&&a.error();StackMob.Storage.remove(StackMob.REFRESH_TOKEN_KEY)};(this.sync||Backbone.sync).call(this,"refreshToken",this,b)}else a&&a.error&&a.error()},makeAPICall:function(a,b,c){return StackMob.ajax?StackMob.ajax(a,b,c):StackMob.isSencha()?StackMob.ajaxOptions.sencha(a,b,c):StackMob.isZepto()?StackMob.ajaxOptions.zepto(a,b,c):StackMob.ajaxOptions.jquery(a,
-b,c)},onsuccess:function(a,b,c,f,g){if(c){if(_.isFunction(c["stackmob_on"+b]))c["stackmob_on"+b](f);if(_.isFunction(c.oncomplete))c.oncomplete(f)}g&&(f?(StackMob.isOAuth2Mode()&&(StackMob.isAccessTokenMethod(b)&&f.stackmob)&&(f=f.stackmob.user),g(f)):g())},onerror:function(a,b,d,f,g,i){var j=a.status,e;try{e=JSON.parse(b)}catch(h){e={error:"Invalid JSON returned."}}if(503==j){a=a.getResponseHeader("retry-after");try{a=1E3*parseInt(responseHeaderValue)}catch(k){a=StackMob.RETRY_WAIT}if("number"===
-typeof g.stackmob_retry){if(g.stackmob_retry-=1,0>=g.stackmob_retry)return}else g.stackmob_retry=StackMob.RETRY_ATTEMPTS;_.delay(function(){var a=c(f,g);g.headers.Authorization=a;d(g)},a)}else{if(_.isFunction(g.oncomplete))g.oncomplete(e);i&&i(f,e)}},isAccessTokenMethod:function(a){return _.include(["accessToken","facebookAccessToken","refreshToken"],a)}})}).call(this);
+    b,c)},onsuccess:function(a,b,c,f,g){if(c){if(_.isFunction(c["stackmob_on"+b]))c["stackmob_on"+b](f);if(_.isFunction(c.oncomplete))c.oncomplete(f)}g&&(f?(StackMob.isOAuth2Mode()&&(StackMob.isAccessTokenMethod(b)&&f.stackmob)&&(f=f.stackmob.user),g(f)):g())},onerror:function(a,b,d,f,g,i){var j=a.status,e;try{e=JSON.parse(b)}catch(h){e={error:"Invalid JSON returned."}}if(503==j){a=a.getResponseHeader("retry-after");try{a=1E3*parseInt(responseHeaderValue)}catch(k){a=StackMob.RETRY_WAIT}if("number"===
+    typeof g.stackmob_retry){if(g.stackmob_retry-=1,0>=g.stackmob_retry)return}else g.stackmob_retry=StackMob.RETRY_ATTEMPTS;_.delay(function(){var a=c(f,g);g.headers.Authorization=a;d(g)},a)}else{if(_.isFunction(g.oncomplete))g.oncomplete(e);i&&i(f,e)}},isAccessTokenMethod:function(a){return _.include(["accessToken","facebookAccessToken","refreshToken"],a)}})}).call(this);
 (function(){var c=this.jQuery||this.Ext||this.Zepto;_.extend(StackMob,{ajaxOptions:{sencha:function(f,a,b){var d={},l=a.success;a.success=function(c){var d=c&&c.responseText?JSON.parse(c.responseText):null;!0===a.stackmob_count&&(d=c);StackMob.onsuccess(f,b,a,d,l)};var g=a.error;d.url=a.url;d.headers=a.headers;d.params=a.data;d.success=a.success;d.disableCaching=!1;d.method=a.type;a.error=function(a){StackMob.onerror(a,a.responseText||a.text,c.Ajax.request,f,d,g)};d.failure=a.error;return c.Ajax.request(d)},
-zepto:function(f,a,b){var d=a.success,l=function(c,g){g=c?JSON.parse(c):null;StackMob.onsuccess(f,b,a,g,d)};a.success=l;var g=a.error,i=function(b){StackMob.onerror(b,b.responseText||b.text,c.ajax,f,a,g)};a.error=i;var j={};j.url=a.url;j.headers=a.headers;j.contentType=a.headers.contentType;j.type=a.type;j.data=a.data;j.success=l;j.error=i;return c.ajax(j)},jquery:function(f,a,b){a.beforeSend=function(a,b){a.setRequestHeader("Accept",b.accepts);if(!_.isEmpty(b.headers))for(key in b.headers)a.setRequestHeader(key,
-b.headers[key])};var d=a.error;a.error=function(b,i,j){if(0==b.status&&a.query&&"object"===typeof a.query.range)this.success(b,i,j);else StackMob.onerror(b,b.responseText||b.text,c.ajax,f,a,d)};var l=a.success;a.success=function(c,d,f){var e;!0===a.stackmob_count?e=f:c&&c.toJSON?e=c:c&&(c.responseText||c.text)?e=JSON.parse(c.responseText||c.text):c&&(e=c);StackMob.onsuccess(c,b,a,e,l)};return c.ajax(a)}}})}).call(this);
+    zepto:function(f,a,b){var d=a.success,l=function(c,g){g=c?JSON.parse(c):null;StackMob.onsuccess(f,b,a,g,d)};a.success=l;var g=a.error,i=function(b){StackMob.onerror(b,b.responseText||b.text,c.ajax,f,a,g)};a.error=i;var j={};j.url=a.url;j.headers=a.headers;j.contentType=a.headers.contentType;j.type=a.type;j.data=a.data;j.success=l;j.error=i;return c.ajax(j)},jquery:function(f,a,b){a.beforeSend=function(a,b){a.setRequestHeader("Accept",b.accepts);if(!_.isEmpty(b.headers))for(key in b.headers)a.setRequestHeader(key,
+        b.headers[key])};var d=a.error;a.error=function(b,i,j){if(0==b.status&&a.query&&"object"===typeof a.query.range)this.success(b,i,j);else StackMob.onerror(b,b.responseText||b.text,c.ajax,f,a,d)};var l=a.success;a.success=function(c,d,f){var e;!0===a.stackmob_count?e=f:c&&c.toJSON?e=c:c&&(c.responseText||c.text)?e=JSON.parse(c.responseText||c.text):c&&(e=c);StackMob.onsuccess(c,b,a,e,l)};return c.ajax(a)}}})}).call(this);
 var CryptoJS=CryptoJS||function(c,f){var a={},b=a.lib={},d=function(){},l=b.Base={extend:function(a){d.prototype=this;var b=new d;a&&b.mixIn(a);b.$super=this;return b},create:function(){var a=this.extend();a.init.apply(a,arguments);return a},init:function(){},mixIn:function(a){for(var b in a)a.hasOwnProperty(b)&&(this[b]=a[b]);a.hasOwnProperty("toString")&&(this.toString=a.toString)},clone:function(){return this.$super.extend(this)}},g=b.WordArray=l.extend({init:function(a,b){a=this.words=a||[];this.sigBytes=
-b!=f?b:4*a.length},toString:function(a){return(a||j).stringify(this)},concat:function(a){var b=this.words,c=a.words,d=this.sigBytes,a=a.sigBytes;this.clamp();if(d%4)for(var e=0;e<a;e++)b[d+e>>>2]|=(c[e>>>2]>>>24-8*(e%4)&255)<<24-8*((d+e)%4);else if(65535<c.length)for(e=0;e<a;e+=4)b[d+e>>>2]=c[e>>>2];else b.push.apply(b,c);this.sigBytes+=a;return this},clamp:function(){var a=this.words,b=this.sigBytes;a[b>>>2]&=4294967295<<32-8*(b%4);a.length=c.ceil(b/4)},clone:function(){var a=l.clone.call(this);
-a.words=this.words.slice(0);return a},random:function(a){for(var b=[],d=0;d<a;d+=4)b.push(4294967296*c.random()|0);return g.create(b,a)}}),i=a.enc={},j=i.Hex={stringify:function(a){for(var b=a.words,a=a.sigBytes,c=[],d=0;d<a;d++){var e=b[d>>>2]>>>24-8*(d%4)&255;c.push((e>>>4).toString(16));c.push((e&15).toString(16))}return c.join("")},parse:function(a){for(var b=a.length,c=[],d=0;d<b;d+=2)c[d>>>3]|=parseInt(a.substr(d,2),16)<<24-4*(d%8);return g.create(c,b/2)}},e=i.Latin1={stringify:function(a){for(var b=
-a.words,a=a.sigBytes,c=[],d=0;d<a;d++)c.push(String.fromCharCode(b[d>>>2]>>>24-8*(d%4)&255));return c.join("")},parse:function(a){for(var b=a.length,c=[],d=0;d<b;d++)c[d>>>2]|=(a.charCodeAt(d)&255)<<24-8*(d%4);return g.create(c,b)}},h=i.Utf8={stringify:function(a){try{return decodeURIComponent(escape(e.stringify(a)))}catch(b){throw Error("Malformed UTF-8 data");}},parse:function(a){return e.parse(unescape(encodeURIComponent(a)))}},k=b.BufferedBlockAlgorithm=l.extend({reset:function(){this._data=g.create();
-this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=h.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var b=this._data,d=b.words,e=b.sigBytes,f=this.blockSize,h=e/(4*f),h=a?c.ceil(h):c.max((h|0)-this._minBufferSize,0),a=h*f,e=c.min(4*a,e);if(a){for(var i=0;i<a;i+=f)this._doProcessBlock(d,i);i=d.splice(0,a);b.sigBytes-=e}return g.create(i,e)},clone:function(){var a=l.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0});b.Hasher=k.extend({init:function(){this.reset()},
-reset:function(){k.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);this._doFinalize();return this._hash},clone:function(){var a=k.clone.call(this);a._hash=this._hash.clone();return a},blockSize:16,_createHelper:function(a){return function(b,c){return a.create(c).finalize(b)}},_createHmacHelper:function(a){return function(b,c){return n.HMAC.create(a,c).finalize(b)}}});var n=a.algo={};return a}(Math);
+    b!=f?b:4*a.length},toString:function(a){return(a||j).stringify(this)},concat:function(a){var b=this.words,c=a.words,d=this.sigBytes,a=a.sigBytes;this.clamp();if(d%4)for(var e=0;e<a;e++)b[d+e>>>2]|=(c[e>>>2]>>>24-8*(e%4)&255)<<24-8*((d+e)%4);else if(65535<c.length)for(e=0;e<a;e+=4)b[d+e>>>2]=c[e>>>2];else b.push.apply(b,c);this.sigBytes+=a;return this},clamp:function(){var a=this.words,b=this.sigBytes;a[b>>>2]&=4294967295<<32-8*(b%4);a.length=c.ceil(b/4)},clone:function(){var a=l.clone.call(this);
+    a.words=this.words.slice(0);return a},random:function(a){for(var b=[],d=0;d<a;d+=4)b.push(4294967296*c.random()|0);return g.create(b,a)}}),i=a.enc={},j=i.Hex={stringify:function(a){for(var b=a.words,a=a.sigBytes,c=[],d=0;d<a;d++){var e=b[d>>>2]>>>24-8*(d%4)&255;c.push((e>>>4).toString(16));c.push((e&15).toString(16))}return c.join("")},parse:function(a){for(var b=a.length,c=[],d=0;d<b;d+=2)c[d>>>3]|=parseInt(a.substr(d,2),16)<<24-4*(d%8);return g.create(c,b/2)}},e=i.Latin1={stringify:function(a){for(var b=
+    a.words,a=a.sigBytes,c=[],d=0;d<a;d++)c.push(String.fromCharCode(b[d>>>2]>>>24-8*(d%4)&255));return c.join("")},parse:function(a){for(var b=a.length,c=[],d=0;d<b;d++)c[d>>>2]|=(a.charCodeAt(d)&255)<<24-8*(d%4);return g.create(c,b)}},h=i.Utf8={stringify:function(a){try{return decodeURIComponent(escape(e.stringify(a)))}catch(b){throw Error("Malformed UTF-8 data");}},parse:function(a){return e.parse(unescape(encodeURIComponent(a)))}},k=b.BufferedBlockAlgorithm=l.extend({reset:function(){this._data=g.create();
+    this._nDataBytes=0},_append:function(a){"string"==typeof a&&(a=h.parse(a));this._data.concat(a);this._nDataBytes+=a.sigBytes},_process:function(a){var b=this._data,d=b.words,e=b.sigBytes,f=this.blockSize,h=e/(4*f),h=a?c.ceil(h):c.max((h|0)-this._minBufferSize,0),a=h*f,e=c.min(4*a,e);if(a){for(var i=0;i<a;i+=f)this._doProcessBlock(d,i);i=d.splice(0,a);b.sigBytes-=e}return g.create(i,e)},clone:function(){var a=l.clone.call(this);a._data=this._data.clone();return a},_minBufferSize:0});b.Hasher=k.extend({init:function(){this.reset()},
+    reset:function(){k.reset.call(this);this._doReset()},update:function(a){this._append(a);this._process();return this},finalize:function(a){a&&this._append(a);this._doFinalize();return this._hash},clone:function(){var a=k.clone.call(this);a._hash=this._hash.clone();return a},blockSize:16,_createHelper:function(a){return function(b,c){return a.create(c).finalize(b)}},_createHmacHelper:function(a){return function(b,c){return n.HMAC.create(a,c).finalize(b)}}});var n=a.algo={};return a}(Math);
 (function(){var c=CryptoJS,f=c.lib,a=f.WordArray,f=f.Hasher,b=[],d=c.algo.SHA1=f.extend({_doReset:function(){this._hash=a.create([1732584193,4023233417,2562383102,271733878,3285377520])},_doProcessBlock:function(a,c){for(var d=this._hash.words,f=d[0],e=d[1],h=d[2],k=d[3],n=d[4],m=0;80>m;m++){if(16>m)b[m]=a[c+m]|0;else{var p=b[m-3]^b[m-8]^b[m-14]^b[m-16];b[m]=p<<1|p>>>31}p=(f<<5|f>>>27)+n+b[m];p=20>m?p+((e&h|~e&k)+1518500249):40>m?p+((e^h^k)+1859775393):60>m?p+((e&h|e&k|h&k)-1894007588):p+((e^h^k)-
-899497514);n=k;k=h;h=e<<30|e>>>2;e=f;f=p}d[0]=d[0]+f|0;d[1]=d[1]+e|0;d[2]=d[2]+h|0;d[3]=d[3]+k|0;d[4]=d[4]+n|0},_doFinalize:function(){var a=this._data,b=a.words,c=8*this._nDataBytes,d=8*a.sigBytes;b[d>>>5]|=128<<24-d%32;b[(d+64>>>9<<4)+15]=c;a.sigBytes=4*b.length;this._process()}});c.SHA1=f._createHelper(d);c.HmacSHA1=f._createHmacHelper(d)})();
+    899497514);n=k;k=h;h=e<<30|e>>>2;e=f;f=p}d[0]=d[0]+f|0;d[1]=d[1]+e|0;d[2]=d[2]+h|0;d[3]=d[3]+k|0;d[4]=d[4]+n|0},_doFinalize:function(){var a=this._data,b=a.words,c=8*this._nDataBytes,d=8*a.sigBytes;b[d>>>5]|=128<<24-d%32;b[(d+64>>>9<<4)+15]=c;a.sigBytes=4*b.length;this._process()}});c.SHA1=f._createHelper(d);c.HmacSHA1=f._createHmacHelper(d)})();
 (function(){var c=CryptoJS,f=c.enc.Utf8;c.algo.HMAC=c.lib.Base.extend({init:function(a,b){a=this._hasher=a.create();"string"==typeof b&&(b=f.parse(b));var c=a.blockSize,l=4*c;b.sigBytes>l&&(b=a.finalize(b));for(var g=this._oKey=b.clone(),i=this._iKey=b.clone(),j=g.words,e=i.words,h=0;h<c;h++)j[h]^=1549556828,e[h]^=909522486;g.sigBytes=i.sigBytes=l;this.reset()},reset:function(){var a=this._hasher;a.reset();a.update(this._iKey)},update:function(a){this._hasher.update(a);return this},finalize:function(a){var b=
-this._hasher,a=b.finalize(a);b.reset();return b.finalize(this._oKey.clone().concat(a))}})})();
+    this._hasher,a=b.finalize(a);b.reset();return b.finalize(this._oKey.clone().concat(a))}})})();
 (function(){var c=CryptoJS,f=c.lib.WordArray;c.enc.Base64={stringify:function(a){var b=a.words,c=a.sigBytes,f=this._map;a.clamp();for(var a=[],g=0;g<c;g+=3)for(var i=(b[g>>>2]>>>24-8*(g%4)&255)<<16|(b[g+1>>>2]>>>24-8*((g+1)%4)&255)<<8|b[g+2>>>2]>>>24-8*((g+2)%4)&255,j=0;4>j&&g+0.75*j<c;j++)a.push(f.charAt(i>>>6*(3-j)&63));if(b=f.charAt(64))for(;a.length%4;)a.push(b);return a.join("")},parse:function(a){var a=a.replace(/\s/g,""),b=a.length,c=this._map,l=c.charAt(64);l&&(l=a.indexOf(l),-1!=l&&(b=l));
-for(var l=[],g=0,i=0;i<b;i++)if(i%4){var j=c.indexOf(a.charAt(i-1))<<2*(i%4),e=c.indexOf(a.charAt(i))>>>6-2*(i%4);l[g>>>2]|=(j|e)<<24-8*(g%4);g++}return f.create(l,g)},_map:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="}})();
+    for(var l=[],g=0,i=0;i<b;i++)if(i%4){var j=c.indexOf(a.charAt(i-1))<<2*(i%4),e=c.indexOf(a.charAt(i))>>>6-2*(i%4);l[g>>>2]|=(j|e)<<24-8*(g%4);g++}return f.create(l,g)},_map:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="}})();
 
 define("stackmob", ["jquery","backbone"], (function (global) {
     return function () {
@@ -165,73 +165,73 @@ define("stackmobinit", ["stackmob"], function(StackMob ) {
 define("fitness", ["jquery", "stackmobinit"], function($, __SI) {
     //
     return {
-            parseDate : function(dateStr) {
-                var parts = dateStr.match(/(\d+)/g);
-                // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-                return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
-            },
+        parseDate : function(dateStr) {
+            var parts = dateStr.match(/(\d+)/g);
+            // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+            return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+        },
 
-            showMessage : function(message) {
-                alert(message);
-            },
+        showMessage : function(message) {
+            alert(message);
+        },
 
-            log : function(message) {
-                if (console && typeof console.log === 'function') {
-                    console.log(message);
+        log : function(message) {
+            if (console && typeof console.log === 'function') {
+                console.log(message);
+            }
+        },
+
+        isLoggedIn: function() {
+            return !!this.user;
+        },
+
+        logout : function() {
+            localStorage.removeItem('username');
+            delete this.user;
+        },
+
+        deleteUser : function(callback) {
+            var that = this;
+            this.user.destroy({
+                success: function(data) {
+                    that.logout();
+                    callback(true, data);
+                },
+                error: function(data) {
+                    callback(false, data);
                 }
-            },
-
-            isLoggedIn: function() {
-                return !!this.user;
-            },
-
-            logout : function() {
-                localStorage.removeItem('username');
-                delete this.user;
-            },
-
-            deleteUser : function(callback) {
-                var that = this;
-                this.user.destroy({
-                    success: function(data) {
-                        that.logout();
-                        callback(true, data);
-                    },
-                    error: function(data) {
-                        callback(false, data);
-                    }
-                });
-            },
+            });
+        },
 
 
-            loginWithID : function(username, callback) {
-                var that = this;
-                if (typeof callback !== "function") {
-                    throw 'callback is required';
+        loginWithID : function(username, callback) {
+            var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            if (!username) {
+                callback(false);
+                return;
+            }
+            var sm_user = new StackMob.User({ username: username });
+            sm_user.fetch({
+                success: function(model) {
+                    that.user = model;
+                    callback(true, model);
+                },
+                error: function(data) {
+                    that.showMessage('Could not retrieve your user data');
+                    callback(false, data);
                 }
-                if (!username) {
-                    callback(false);
-                    return;
-                }
-                var sm_user = new StackMob.User({ username: username });
-                sm_user.fetch({
-                    success: function(model) {
-                        that.user = model;
-                        callback(true, model);
-                    },
-                    error: function(data) {
-                        that.showMessage('Could not retrieve your user data');
-                        callback(false, data);
-                    }
-                });
-            },
+            });
+        },
 
 //            router : new FitnessRouter(),
 
-            init : function() {
-                var that = this;
-            }
+        init : function() {
+            var that = this;
         }
+    }
 
 });
 
@@ -590,27 +590,27 @@ define("customCodeClient", ["jquery"], function($) {
             this.getFitbitAccessToken(requestToken, requestTokenSecret, oauthVerifier, function(success, tokenData) {
                 if (success) {
 //                    if (that.user) {
-                        that.getFitbitUser(tokenData.oauth_token, tokenData.oauth_token_secret, tokenData.fitbit_user_id, function(success, fitbitUserData) {
-                            if (success) {
-                                delete fitbitUserData.encodedID;
-                                var params = fitbitUserData;
-                                params.accesstoken =  tokenData.oauth_token;
-                                params.accesstokensecret = tokenData.oauth_token_secret;
-                                params.fitbituserid = tokenData.fitbit_user_id;
+                    that.getFitbitUser(tokenData.oauth_token, tokenData.oauth_token_secret, tokenData.fitbit_user_id, function(success, fitbitUserData) {
+                        if (success) {
+                            delete fitbitUserData.encodedID;
+                            var params = fitbitUserData;
+                            params.accesstoken =  tokenData.oauth_token;
+                            params.accesstokensecret = tokenData.oauth_token_secret;
+                            params.fitbituserid = tokenData.fitbit_user_id;
 
-                                that.updateUserWithParams(stackMobUser, params, function(success, stackMobUserData) {
-                                    if (success) {
-                                        callback(true, stackMobUserData);
-                                    }
-                                    else {
-                                        callback(false, 'failed to update with fitbit info\n ' + stackMobUserData.error);
-                                    }
-                                });
-                            }
-                            else {
-                                callback(false, 'failed to get Fitbit User: ' + fitbitUserData);
-                            }
-                        });
+                            that.updateUserWithParams(stackMobUser, params, function(success, stackMobUserData) {
+                                if (success) {
+                                    callback(true, stackMobUserData);
+                                }
+                                else {
+                                    callback(false, 'failed to update with fitbit info\n ' + stackMobUserData.error);
+                                }
+                            });
+                        }
+                        else {
+                            callback(false, 'failed to get Fitbit User: ' + fitbitUserData);
+                        }
+                    });
 //                    }
                 }
                 else {
@@ -737,609 +737,609 @@ define("views/FooterView", [ "jquery", "backbone", "fitness"], function( $, Back
 var Mustache;
 
 (function (exports) {
-  if (typeof module !== "undefined") {
-    module.exports = exports; // CommonJS
-  } else if (typeof define === "function") {
-    define('mustache',exports); // AMD
-  } else {
-    Mustache = exports; // <script>
-  }
-}(function () {
-  var exports = {};
-
-  exports.name = "mustache.js";
-  exports.version = "0.5.1-dev";
-  exports.tags = ["{{", "}}"];
-
-  exports.parse = parse;
-  exports.clearCache = clearCache;
-  exports.compile = compile;
-  exports.compilePartial = compilePartial;
-  exports.render = render;
-
-  exports.Scanner = Scanner;
-  exports.Context = Context;
-  exports.Renderer = Renderer;
-
-  // This is here for backwards compatibility with 0.4.x.
-  exports.to_html = function (template, view, partials, send) {
-    var result = render(template, view, partials);
-
-    if (typeof send === "function") {
-      send(result);
+    if (typeof module !== "undefined") {
+        module.exports = exports; // CommonJS
+    } else if (typeof define === "function") {
+        define('mustache',exports); // AMD
     } else {
-      return result;
+        Mustache = exports; // <script>
     }
-  };
+}(function () {
+    var exports = {};
 
-  var whiteRe = /\s*/;
-  var spaceRe = /\s+/;
-  var nonSpaceRe = /\S/;
-  var eqRe = /\s*=/;
-  var curlyRe = /\s*\}/;
-  var tagRe = /#|\^|\/|>|\{|&|=|!/;
+    exports.name = "mustache.js";
+    exports.version = "0.5.1-dev";
+    exports.tags = ["{{", "}}"];
 
-  // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
-  // See https://github.com/janl/mustache.js/issues/189
-  function testRe(re, string) {
-    return RegExp.prototype.test.call(re, string);
-  }
+    exports.parse = parse;
+    exports.clearCache = clearCache;
+    exports.compile = compile;
+    exports.compilePartial = compilePartial;
+    exports.render = render;
 
-  function isWhitespace(string) {
-    return !testRe(nonSpaceRe, string);
-  }
+    exports.Scanner = Scanner;
+    exports.Context = Context;
+    exports.Renderer = Renderer;
 
-  var isArray = Array.isArray || function (obj) {
-    return Object.prototype.toString.call(obj) === "[object Array]";
-  };
+    // This is here for backwards compatibility with 0.4.x.
+    exports.to_html = function (template, view, partials, send) {
+        var result = render(template, view, partials);
 
-  // OSWASP Guidelines: escape all non alphanumeric characters in ASCII space.
-  var jsCharsRe = /[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\xFF\u2028\u2029]/gm;
-
-  function quote(text) {
-    var escaped = text.replace(jsCharsRe, function (c) {
-      return "\\u" + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
-    });
-
-    return '"' + escaped + '"';
-  }
-
-  function escapeRe(string) {
-    return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
-  }
-
-  var entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': '&quot;',
-    "'": '&#39;',
-    "/": '&#x2F;'
-  };
-
-  function escapeHtml(string) {
-    return String(string).replace(/[&<>"'\/]/g, function (s) {
-      return entityMap[s];
-    });
-  }
-
-  // Export these utility functions.
-  exports.isWhitespace = isWhitespace;
-  exports.isArray = isArray;
-  exports.quote = quote;
-  exports.escapeRe = escapeRe;
-  exports.escapeHtml = escapeHtml;
-
-  function Scanner(string) {
-    this.string = string;
-    this.tail = string;
-    this.pos = 0;
-  }
-
-  /**
-   * Returns `true` if the tail is empty (end of string).
-   */
-  Scanner.prototype.eos = function () {
-    return this.tail === "";
-  };
-
-  /**
-   * Tries to match the given regular expression at the current position.
-   * Returns the matched text if it can match, `null` otherwise.
-   */
-  Scanner.prototype.scan = function (re) {
-    var match = this.tail.match(re);
-
-    if (match && match.index === 0) {
-      this.tail = this.tail.substring(match[0].length);
-      this.pos += match[0].length;
-      return match[0];
-    }
-
-    return null;
-  };
-
-  /**
-   * Skips all text until the given regular expression can be matched. Returns
-   * the skipped string, which is the entire tail of this scanner if no match
-   * can be made.
-   */
-  Scanner.prototype.scanUntil = function (re) {
-    var match, pos = this.tail.search(re);
-
-    switch (pos) {
-    case -1:
-      match = this.tail;
-      this.pos += this.tail.length;
-      this.tail = "";
-      break;
-    case 0:
-      match = null;
-      break;
-    default:
-      match = this.tail.substring(0, pos);
-      this.tail = this.tail.substring(pos);
-      this.pos += pos;
-    }
-
-    return match;
-  };
-
-  function Context(view, parent) {
-    this.view = view;
-    this.parent = parent;
-    this.clearCache();
-  }
-
-  Context.make = function (view) {
-    return (view instanceof Context) ? view : new Context(view);
-  };
-
-  Context.prototype.clearCache = function () {
-    this._cache = {};
-  };
-
-  Context.prototype.push = function (view) {
-    return new Context(view, this);
-  };
-
-  Context.prototype.lookup = function (name) {
-    var value = this._cache[name];
-
-    if (!value) {
-      if (name === ".") {
-        value = this.view;
-      } else {
-        var context = this;
-
-        while (context) {
-          if (name.indexOf(".") > 0) {
-            var names = name.split("."), i = 0;
-
-            value = context.view;
-
-            while (value && i < names.length) {
-              value = value[names[i++]];
-            }
-          } else {
-            value = context.view[name];
-          }
-
-          if (value != null) {
-            break;
-          }
-
-          context = context.parent;
+        if (typeof send === "function") {
+            send(result);
+        } else {
+            return result;
         }
-      }
-
-      this._cache[name] = value;
-    }
-
-    if (typeof value === "function") {
-      value = value.call(this.view);
-    }
-
-    return value;
-  };
-
-  function Renderer() {
-    this.clearCache();
-  }
-
-  Renderer.prototype.clearCache = function () {
-    this._cache = {};
-    this._partialCache = {};
-  };
-
-  Renderer.prototype.compile = function (tokens, tags) {
-    if (typeof tokens === "string") {
-      tokens = parse(tokens, tags);
-    }
-
-    var fn = compileTokens(tokens),
-        self = this;
-
-    return function (view) {
-      return fn(Context.make(view), self);
     };
-  };
 
-  Renderer.prototype.compilePartial = function (name, tokens, tags) {
-    this._partialCache[name] = this.compile(tokens, tags);
-    return this._partialCache[name];
-  };
+    var whiteRe = /\s*/;
+    var spaceRe = /\s+/;
+    var nonSpaceRe = /\S/;
+    var eqRe = /\s*=/;
+    var curlyRe = /\s*\}/;
+    var tagRe = /#|\^|\/|>|\{|&|=|!/;
 
-  Renderer.prototype.render = function (template, view) {
-    var fn = this._cache[template];
-
-    if (!fn) {
-      fn = this.compile(template);
-      this._cache[template] = fn;
+    // Workaround for https://issues.apache.org/jira/browse/COUCHDB-577
+    // See https://github.com/janl/mustache.js/issues/189
+    function testRe(re, string) {
+        return RegExp.prototype.test.call(re, string);
     }
 
-    return fn(view);
-  };
+    function isWhitespace(string) {
+        return !testRe(nonSpaceRe, string);
+    }
 
-  Renderer.prototype._section = function (name, context, callback) {
-    var value = context.lookup(name);
+    var isArray = Array.isArray || function (obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+    };
 
-    switch (typeof value) {
-    case "object":
-      if (isArray(value)) {
-        var buffer = "";
+    // OSWASP Guidelines: escape all non alphanumeric characters in ASCII space.
+    var jsCharsRe = /[\x00-\x2F\x3A-\x40\x5B-\x60\x7B-\xFF\u2028\u2029]/gm;
 
-        for (var i = 0, len = value.length; i < len; ++i) {
-          buffer += callback(context.push(value[i]), this);
+    function quote(text) {
+        var escaped = text.replace(jsCharsRe, function (c) {
+            return "\\u" + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+        });
+
+        return '"' + escaped + '"';
+    }
+
+    function escapeRe(string) {
+        return string.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    }
+
+    var entityMap = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': '&quot;',
+        "'": '&#39;',
+        "/": '&#x2F;'
+    };
+
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"'\/]/g, function (s) {
+            return entityMap[s];
+        });
+    }
+
+    // Export these utility functions.
+    exports.isWhitespace = isWhitespace;
+    exports.isArray = isArray;
+    exports.quote = quote;
+    exports.escapeRe = escapeRe;
+    exports.escapeHtml = escapeHtml;
+
+    function Scanner(string) {
+        this.string = string;
+        this.tail = string;
+        this.pos = 0;
+    }
+
+    /**
+     * Returns `true` if the tail is empty (end of string).
+     */
+    Scanner.prototype.eos = function () {
+        return this.tail === "";
+    };
+
+    /**
+     * Tries to match the given regular expression at the current position.
+     * Returns the matched text if it can match, `null` otherwise.
+     */
+    Scanner.prototype.scan = function (re) {
+        var match = this.tail.match(re);
+
+        if (match && match.index === 0) {
+            this.tail = this.tail.substring(match[0].length);
+            this.pos += match[0].length;
+            return match[0];
         }
 
-        return buffer;
-      }
+        return null;
+    };
 
-      return value ? callback(context.push(value), this) : "";
-    case "function":
-      // TODO: The text should be passed to the callback plain, not rendered.
-      var sectionText = callback(context, this),
-          self = this;
+    /**
+     * Skips all text until the given regular expression can be matched. Returns
+     * the skipped string, which is the entire tail of this scanner if no match
+     * can be made.
+     */
+    Scanner.prototype.scanUntil = function (re) {
+        var match, pos = this.tail.search(re);
 
-      var scopedRender = function (template) {
-        return self.render(template, context);
-      };
-
-      return value.call(context.view, sectionText, scopedRender) || "";
-    default:
-      if (value) {
-        return callback(context, this);
-      }
-    }
-
-    return "";
-  };
-
-  Renderer.prototype._inverted = function (name, context, callback) {
-    var value = context.lookup(name);
-
-    // From the spec: inverted sections may render text once based on the
-    // inverse value of the key. That is, they will be rendered if the key
-    // doesn't exist, is false, or is an empty list.
-    if (value == null || value === false || (isArray(value) && value.length === 0)) {
-      return callback(context, this);
-    }
-
-    return "";
-  };
-
-  Renderer.prototype._partial = function (name, context) {
-    var fn = this._partialCache[name];
-
-    if (fn) {
-      return fn(context, this);
-    }
-
-    return "";
-  };
-
-  Renderer.prototype._name = function (name, context, escape) {
-    var value = context.lookup(name);
-
-    if (typeof value === "function") {
-      value = value.call(context.view);
-    }
-
-    var string = (value == null) ? "" : String(value);
-
-    if (escape) {
-      return escapeHtml(string);
-    }
-
-    return string;
-  };
-
-  /**
-   * Low-level function that compiles the given `tokens` into a
-   * function that accepts two arguments: a Context and a
-   * Renderer. Returns the body of the function as a string if
-   * `returnBody` is true.
-   */
-  function compileTokens(tokens, returnBody) {
-    var body = ['""'];
-    var token, method, escape;
-
-    for (var i = 0, len = tokens.length; i < len; ++i) {
-      token = tokens[i];
-
-      switch (token.type) {
-      case "#":
-      case "^":
-        method = (token.type === "#") ? "_section" : "_inverted";
-        body.push("r." + method + "(" + quote(token.value) + ", c, function (c, r) {\n" +
-          "  " + compileTokens(token.tokens, true) + "\n" +
-          "})");
-        break;
-      case "{":
-      case "&":
-      case "name":
-        escape = token.type === "name" ? "true" : "false";
-        body.push("r._name(" + quote(token.value) + ", c, " + escape + ")");
-        break;
-      case ">":
-        body.push("r._partial(" + quote(token.value) + ", c)");
-        break;
-      case "text":
-        body.push(quote(token.value));
-        break;
-      }
-    }
-
-    // Convert to a string body.
-    body = "return " + body.join(" + ") + ";";
-
-    // Good for debugging.
-    // console.log(body);
-
-    if (returnBody) {
-      return body;
-    }
-
-    // For great evil!
-    return new Function("c, r", body);
-  }
-
-  function escapeTags(tags) {
-    if (tags.length === 2) {
-      return [
-        new RegExp(escapeRe(tags[0]) + "\\s*"),
-        new RegExp("\\s*" + escapeRe(tags[1]))
-      ];
-    }
-
-    throw new Error("Invalid tags: " + tags.join(" "));
-  }
-
-  /**
-   * Forms the given linear array of `tokens` into a nested tree structure
-   * where tokens that represent a section have a "tokens" array property
-   * that contains all tokens that are in that section.
-   */
-  function nestTokens(tokens) {
-    var tree = [];
-    var collector = tree;
-    var sections = [];
-    var token, section;
-
-    for (var i = 0; i < tokens.length; ++i) {
-      token = tokens[i];
-
-      switch (token.type) {
-      case "#":
-      case "^":
-        token.tokens = [];
-        sections.push(token);
-        collector.push(token);
-        collector = token.tokens;
-        break;
-      case "/":
-        if (sections.length === 0) {
-          throw new Error("Unopened section: " + token.value);
+        switch (pos) {
+            case -1:
+                match = this.tail;
+                this.pos += this.tail.length;
+                this.tail = "";
+                break;
+            case 0:
+                match = null;
+                break;
+            default:
+                match = this.tail.substring(0, pos);
+                this.tail = this.tail.substring(pos);
+                this.pos += pos;
         }
 
+        return match;
+    };
+
+    function Context(view, parent) {
+        this.view = view;
+        this.parent = parent;
+        this.clearCache();
+    }
+
+    Context.make = function (view) {
+        return (view instanceof Context) ? view : new Context(view);
+    };
+
+    Context.prototype.clearCache = function () {
+        this._cache = {};
+    };
+
+    Context.prototype.push = function (view) {
+        return new Context(view, this);
+    };
+
+    Context.prototype.lookup = function (name) {
+        var value = this._cache[name];
+
+        if (!value) {
+            if (name === ".") {
+                value = this.view;
+            } else {
+                var context = this;
+
+                while (context) {
+                    if (name.indexOf(".") > 0) {
+                        var names = name.split("."), i = 0;
+
+                        value = context.view;
+
+                        while (value && i < names.length) {
+                            value = value[names[i++]];
+                        }
+                    } else {
+                        value = context.view[name];
+                    }
+
+                    if (value != null) {
+                        break;
+                    }
+
+                    context = context.parent;
+                }
+            }
+
+            this._cache[name] = value;
+        }
+
+        if (typeof value === "function") {
+            value = value.call(this.view);
+        }
+
+        return value;
+    };
+
+    function Renderer() {
+        this.clearCache();
+    }
+
+    Renderer.prototype.clearCache = function () {
+        this._cache = {};
+        this._partialCache = {};
+    };
+
+    Renderer.prototype.compile = function (tokens, tags) {
+        if (typeof tokens === "string") {
+            tokens = parse(tokens, tags);
+        }
+
+        var fn = compileTokens(tokens),
+            self = this;
+
+        return function (view) {
+            return fn(Context.make(view), self);
+        };
+    };
+
+    Renderer.prototype.compilePartial = function (name, tokens, tags) {
+        this._partialCache[name] = this.compile(tokens, tags);
+        return this._partialCache[name];
+    };
+
+    Renderer.prototype.render = function (template, view) {
+        var fn = this._cache[template];
+
+        if (!fn) {
+            fn = this.compile(template);
+            this._cache[template] = fn;
+        }
+
+        return fn(view);
+    };
+
+    Renderer.prototype._section = function (name, context, callback) {
+        var value = context.lookup(name);
+
+        switch (typeof value) {
+            case "object":
+                if (isArray(value)) {
+                    var buffer = "";
+
+                    for (var i = 0, len = value.length; i < len; ++i) {
+                        buffer += callback(context.push(value[i]), this);
+                    }
+
+                    return buffer;
+                }
+
+                return value ? callback(context.push(value), this) : "";
+            case "function":
+                // TODO: The text should be passed to the callback plain, not rendered.
+                var sectionText = callback(context, this),
+                    self = this;
+
+                var scopedRender = function (template) {
+                    return self.render(template, context);
+                };
+
+                return value.call(context.view, sectionText, scopedRender) || "";
+            default:
+                if (value) {
+                    return callback(context, this);
+                }
+        }
+
+        return "";
+    };
+
+    Renderer.prototype._inverted = function (name, context, callback) {
+        var value = context.lookup(name);
+
+        // From the spec: inverted sections may render text once based on the
+        // inverse value of the key. That is, they will be rendered if the key
+        // doesn't exist, is false, or is an empty list.
+        if (value == null || value === false || (isArray(value) && value.length === 0)) {
+            return callback(context, this);
+        }
+
+        return "";
+    };
+
+    Renderer.prototype._partial = function (name, context) {
+        var fn = this._partialCache[name];
+
+        if (fn) {
+            return fn(context, this);
+        }
+
+        return "";
+    };
+
+    Renderer.prototype._name = function (name, context, escape) {
+        var value = context.lookup(name);
+
+        if (typeof value === "function") {
+            value = value.call(context.view);
+        }
+
+        var string = (value == null) ? "" : String(value);
+
+        if (escape) {
+            return escapeHtml(string);
+        }
+
+        return string;
+    };
+
+    /**
+     * Low-level function that compiles the given `tokens` into a
+     * function that accepts two arguments: a Context and a
+     * Renderer. Returns the body of the function as a string if
+     * `returnBody` is true.
+     */
+    function compileTokens(tokens, returnBody) {
+        var body = ['""'];
+        var token, method, escape;
+
+        for (var i = 0, len = tokens.length; i < len; ++i) {
+            token = tokens[i];
+
+            switch (token.type) {
+                case "#":
+                case "^":
+                    method = (token.type === "#") ? "_section" : "_inverted";
+                    body.push("r." + method + "(" + quote(token.value) + ", c, function (c, r) {\n" +
+                        "  " + compileTokens(token.tokens, true) + "\n" +
+                        "})");
+                    break;
+                case "{":
+                case "&":
+                case "name":
+                    escape = token.type === "name" ? "true" : "false";
+                    body.push("r._name(" + quote(token.value) + ", c, " + escape + ")");
+                    break;
+                case ">":
+                    body.push("r._partial(" + quote(token.value) + ", c)");
+                    break;
+                case "text":
+                    body.push(quote(token.value));
+                    break;
+            }
+        }
+
+        // Convert to a string body.
+        body = "return " + body.join(" + ") + ";";
+
+        // Good for debugging.
+        // console.log(body);
+
+        if (returnBody) {
+            return body;
+        }
+
+        // For great evil!
+        return new Function("c, r", body);
+    }
+
+    function escapeTags(tags) {
+        if (tags.length === 2) {
+            return [
+                new RegExp(escapeRe(tags[0]) + "\\s*"),
+                new RegExp("\\s*" + escapeRe(tags[1]))
+            ];
+        }
+
+        throw new Error("Invalid tags: " + tags.join(" "));
+    }
+
+    /**
+     * Forms the given linear array of `tokens` into a nested tree structure
+     * where tokens that represent a section have a "tokens" array property
+     * that contains all tokens that are in that section.
+     */
+    function nestTokens(tokens) {
+        var tree = [];
+        var collector = tree;
+        var sections = [];
+        var token, section;
+
+        for (var i = 0; i < tokens.length; ++i) {
+            token = tokens[i];
+
+            switch (token.type) {
+                case "#":
+                case "^":
+                    token.tokens = [];
+                    sections.push(token);
+                    collector.push(token);
+                    collector = token.tokens;
+                    break;
+                case "/":
+                    if (sections.length === 0) {
+                        throw new Error("Unopened section: " + token.value);
+                    }
+
+                    section = sections.pop();
+
+                    if (section.value !== token.value) {
+                        throw new Error("Unclosed section: " + section.value);
+                    }
+
+                    if (sections.length > 0) {
+                        collector = sections[sections.length - 1].tokens;
+                    } else {
+                        collector = tree;
+                    }
+                    break;
+                default:
+                    collector.push(token);
+            }
+        }
+
+        // Make sure there were no open sections when we're done.
         section = sections.pop();
 
-        if (section.value !== token.value) {
-          throw new Error("Unclosed section: " + section.value);
+        if (section) {
+            throw new Error("Unclosed section: " + section.value);
         }
 
-        if (sections.length > 0) {
-          collector = sections[sections.length - 1].tokens;
-        } else {
-          collector = tree;
+        return tree;
+    }
+
+    /**
+     * Combines the values of consecutive text tokens in the given `tokens` array
+     * to a single token.
+     */
+    function squashTokens(tokens) {
+        var lastToken;
+
+        for (var i = 0; i < tokens.length; ++i) {
+            var token = tokens[i];
+
+            if (lastToken && lastToken.type === "text" && token.type === "text") {
+                lastToken.value += token.value;
+                tokens.splice(i--, 1); // Remove this token from the array.
+            } else {
+                lastToken = token;
+            }
         }
-        break;
-      default:
-        collector.push(token);
-      }
     }
 
-    // Make sure there were no open sections when we're done.
-    section = sections.pop();
+    /**
+     * Breaks up the given `template` string into a tree of token objects. If
+     * `tags` is given here it must be an array with two string values: the
+     * opening and closing tags used in the template (e.g. ["<%", "%>"]). Of
+     * course, the default is to use mustaches (i.e. Mustache.tags).
+     */
+    function parse(template, tags) {
+        tags = tags || exports.tags;
 
-    if (section) {
-      throw new Error("Unclosed section: " + section.value);
-    }
+        var tagRes = escapeTags(tags);
+        var scanner = new Scanner(template);
 
-    return tree;
-  }
+        var tokens = [],      // Buffer to hold the tokens
+            spaces = [],      // Indices of whitespace tokens on the current line
+            hasTag = false,   // Is there a {{tag}} on the current line?
+            nonSpace = false; // Is there a non-space char on the current line?
 
-  /**
-   * Combines the values of consecutive text tokens in the given `tokens` array
-   * to a single token.
-   */
-  function squashTokens(tokens) {
-    var lastToken;
+        // Strips all whitespace tokens array for the current line
+        // if there was a {{#tag}} on it and otherwise only space.
+        var stripSpace = function () {
+            if (hasTag && !nonSpace) {
+                while (spaces.length) {
+                    tokens.splice(spaces.pop(), 1);
+                }
+            } else {
+                spaces = [];
+            }
 
-    for (var i = 0; i < tokens.length; ++i) {
-      var token = tokens[i];
+            hasTag = false;
+            nonSpace = false;
+        };
 
-      if (lastToken && lastToken.type === "text" && token.type === "text") {
-        lastToken.value += token.value;
-        tokens.splice(i--, 1); // Remove this token from the array.
-      } else {
-        lastToken = token;
-      }
-    }
-  }
+        var type, value, chr;
 
-  /**
-   * Breaks up the given `template` string into a tree of token objects. If
-   * `tags` is given here it must be an array with two string values: the
-   * opening and closing tags used in the template (e.g. ["<%", "%>"]). Of
-   * course, the default is to use mustaches (i.e. Mustache.tags).
-   */
-  function parse(template, tags) {
-    tags = tags || exports.tags;
+        while (!scanner.eos()) {
+            value = scanner.scanUntil(tagRes[0]);
 
-    var tagRes = escapeTags(tags);
-    var scanner = new Scanner(template);
+            if (value) {
+                for (var i = 0, len = value.length; i < len; ++i) {
+                    chr = value.charAt(i);
 
-    var tokens = [],      // Buffer to hold the tokens
-        spaces = [],      // Indices of whitespace tokens on the current line
-        hasTag = false,   // Is there a {{tag}} on the current line?
-        nonSpace = false; // Is there a non-space char on the current line?
+                    if (isWhitespace(chr)) {
+                        spaces.push(tokens.length);
+                    } else {
+                        nonSpace = true;
+                    }
 
-    // Strips all whitespace tokens array for the current line
-    // if there was a {{#tag}} on it and otherwise only space.
-    var stripSpace = function () {
-      if (hasTag && !nonSpace) {
-        while (spaces.length) {
-          tokens.splice(spaces.pop(), 1);
+                    tokens.push({type: "text", value: chr});
+
+                    if (chr === "\n") {
+                        stripSpace(); // Check for whitespace on the current line.
+                    }
+                }
+            }
+
+            // Match the opening tag.
+            if (!scanner.scan(tagRes[0])) {
+                break;
+            }
+
+            hasTag = true;
+            type = scanner.scan(tagRe) || "name";
+
+            // Skip any whitespace between tag and value.
+            scanner.scan(whiteRe);
+
+            // Extract the tag value.
+            if (type === "=") {
+                value = scanner.scanUntil(eqRe);
+                scanner.scan(eqRe);
+                scanner.scanUntil(tagRes[1]);
+            } else if (type === "{") {
+                var closeRe = new RegExp("\\s*" + escapeRe("}" + tags[1]));
+                value = scanner.scanUntil(closeRe);
+                scanner.scan(curlyRe);
+                scanner.scanUntil(tagRes[1]);
+            } else {
+                value = scanner.scanUntil(tagRes[1]);
+            }
+
+            // Match the closing tag.
+            if (!scanner.scan(tagRes[1])) {
+                throw new Error("Unclosed tag at " + scanner.pos);
+            }
+
+            tokens.push({type: type, value: value});
+
+            if (type === "name" || type === "{" || type === "&") {
+                nonSpace = true;
+            }
+
+            // Set the tags for the next time around.
+            if (type === "=") {
+                tags = value.split(spaceRe);
+                tagRes = escapeTags(tags);
+            }
         }
-      } else {
-        spaces = [];
-      }
 
-      hasTag = false;
-      nonSpace = false;
-    };
+        squashTokens(tokens);
 
-    var type, value, chr;
+        return nestTokens(tokens);
+    }
 
-    while (!scanner.eos()) {
-      value = scanner.scanUntil(tagRes[0]);
+    // The high-level clearCache, compile, compilePartial, and render functions
+    // use this default renderer.
+    var _renderer = new Renderer();
 
-      if (value) {
-        for (var i = 0, len = value.length; i < len; ++i) {
-          chr = value.charAt(i);
+    /**
+     * Clears all cached templates and partials.
+     */
+    function clearCache() {
+        _renderer.clearCache();
+    }
 
-          if (isWhitespace(chr)) {
-            spaces.push(tokens.length);
-          } else {
-            nonSpace = true;
-          }
+    /**
+     * High-level API for compiling the given `tokens` down to a reusable
+     * function. If `tokens` is a string it will be parsed using the given `tags`
+     * before it is compiled.
+     */
+    function compile(tokens, tags) {
+        return _renderer.compile(tokens, tags);
+    }
 
-          tokens.push({type: "text", value: chr});
+    /**
+     * High-level API for compiling the `tokens` for the partial with the given
+     * `name` down to a reusable function. If `tokens` is a string it will be
+     * parsed using the given `tags` before it is compiled.
+     */
+    function compilePartial(name, tokens, tags) {
+        return _renderer.compilePartial(name, tokens, tags);
+    }
 
-          if (chr === "\n") {
-            stripSpace(); // Check for whitespace on the current line.
-          }
+    /**
+     * High-level API for rendering the `template` using the given `view`. The
+     * optional `partials` object may be given here for convenience, but note that
+     * it will cause all partials to be re-compiled, thus hurting performance. Of
+     * course, this only matters if you're going to render the same template more
+     * than once. If so, it is best to call `compilePartial` before calling this
+     * function and to leave the `partials` argument blank.
+     */
+    function render(template, view, partials) {
+        if (partials) {
+            for (var name in partials) {
+                compilePartial(name, partials[name]);
+            }
         }
-      }
 
-      // Match the opening tag.
-      if (!scanner.scan(tagRes[0])) {
-        break;
-      }
-
-      hasTag = true;
-      type = scanner.scan(tagRe) || "name";
-
-      // Skip any whitespace between tag and value.
-      scanner.scan(whiteRe);
-
-      // Extract the tag value.
-      if (type === "=") {
-        value = scanner.scanUntil(eqRe);
-        scanner.scan(eqRe);
-        scanner.scanUntil(tagRes[1]);
-      } else if (type === "{") {
-        var closeRe = new RegExp("\\s*" + escapeRe("}" + tags[1]));
-        value = scanner.scanUntil(closeRe);
-        scanner.scan(curlyRe);
-        scanner.scanUntil(tagRes[1]);
-      } else {
-        value = scanner.scanUntil(tagRes[1]);
-      }
-
-      // Match the closing tag.
-      if (!scanner.scan(tagRes[1])) {
-        throw new Error("Unclosed tag at " + scanner.pos);
-      }
-
-      tokens.push({type: type, value: value});
-
-      if (type === "name" || type === "{" || type === "&") {
-        nonSpace = true;
-      }
-
-      // Set the tags for the next time around.
-      if (type === "=") {
-        tags = value.split(spaceRe);
-        tagRes = escapeTags(tags);
-      }
+        return _renderer.render(template, view);
     }
 
-    squashTokens(tokens);
-
-    return nestTokens(tokens);
-  }
-
-  // The high-level clearCache, compile, compilePartial, and render functions
-  // use this default renderer.
-  var _renderer = new Renderer();
-
-  /**
-   * Clears all cached templates and partials.
-   */
-  function clearCache() {
-    _renderer.clearCache();
-  }
-
-  /**
-   * High-level API for compiling the given `tokens` down to a reusable
-   * function. If `tokens` is a string it will be parsed using the given `tags`
-   * before it is compiled.
-   */
-  function compile(tokens, tags) {
-    return _renderer.compile(tokens, tags);
-  }
-
-  /**
-   * High-level API for compiling the `tokens` for the partial with the given
-   * `name` down to a reusable function. If `tokens` is a string it will be
-   * parsed using the given `tags` before it is compiled.
-   */
-  function compilePartial(name, tokens, tags) {
-    return _renderer.compilePartial(name, tokens, tags);
-  }
-
-  /**
-   * High-level API for rendering the `template` using the given `view`. The
-   * optional `partials` object may be given here for convenience, but note that
-   * it will cause all partials to be re-compiled, thus hurting performance. Of
-   * course, this only matters if you're going to render the same template more
-   * than once. If so, it is best to call `compilePartial` before calling this
-   * function and to leave the `partials` argument blank.
-   */
-  function render(template, view, partials) {
-    if (partials) {
-      for (var name in partials) {
-        compilePartial(name, partials[name]);
-      }
-    }
-
-    return _renderer.render(template, view);
-  }
-
-  return exports;
+    return exports;
 
 }()));
 
@@ -1472,58 +1472,58 @@ define("views/LoginView", [ "jquery", "backbone", "fitness", "customCodeClient"]
 
 define("views/RegisterView", [ "jquery", "backbone", "fitness", "customCodeClient"], function( $, Backbone, fitness, customCode) {
 
-     var RegisterView = Backbone.View.extend({
+    var RegisterView = Backbone.View.extend({
 
         initialize: function() {
             this.render();
         },
 
-         events: {"click #register_submit" : "registerSubmit"} ,
+        events: {"click #register_submit" : "registerSubmit"} ,
 
-         render: function() {
-             var template = $('#register_template');
-             var header = $('#header_template');
-             this.$el.empty();
-             this.$el.append(header.html()).append(template.html());
-             this.$el.trigger('create');
-             var lastEmail = localStorage.getItem('lastEmail');
-             if (lastEmail) {
-                 $("#register_email").val(lastEmail);
-             }
-             return this;
-         },
+        render: function() {
+            var template = $('#register_template');
+            var header = $('#header_template');
+            this.$el.empty();
+            this.$el.append(header.html()).append(template.html());
+            this.$el.trigger('create');
+            var lastEmail = localStorage.getItem('lastEmail');
+            if (lastEmail) {
+                $("#register_email").val(lastEmail);
+            }
+            return this;
+        },
 
-         registerSubmit: function() {
+        registerSubmit: function() {
 
-             var email = $("#register_email").val();
-             if (email) {
-                 localStorage.setItem('lastEmail', email);
-             }
-             var newPassword = $('#new_password').val();
-             var confirmPassword = $('#confirm_password').val();
-             if (newPassword !== confirmPassword) {
-                 fitness.showMessage("Passwords do not match");
-                 return;
-             }
-             $.mobile.loading("show");
-             customCode.createStackmobUser(email, newPassword, function(success, data) {
-                 if (success) {
-                     $.mobile.loading("hide");
-                     fitness.user = data;
-                     if (fitness.user.get('username')) {
-                         localStorage.setItem('username', fitness.user.get('username'));
-                     }
-                     router.navigate("auth", true);
+            var email = $("#register_email").val();
+            if (email) {
+                localStorage.setItem('lastEmail', email);
+            }
+            var newPassword = $('#new_password').val();
+            var confirmPassword = $('#confirm_password').val();
+            if (newPassword !== confirmPassword) {
+                fitness.showMessage("Passwords do not match");
+                return;
+            }
+            $.mobile.loading("show");
+            customCode.createStackmobUser(email, newPassword, function(success, data) {
+                if (success) {
+                    $.mobile.loading("hide");
+                    fitness.user = data;
+                    if (fitness.user.get('username')) {
+                        localStorage.setItem('username', fitness.user.get('username'));
+                    }
+                    router.navigate("auth", true);
 
-                     //window.location.href = '/#auth'; // could send to '#' and let the router decide to go to #auth
+                    //window.location.href = '/#auth'; // could send to '#' and let the router decide to go to #auth
 
-                 }
-                 else {
-                     $.mobile.loading("hide");
-                     fitness.showMessage('Failed to save user:\n' + data);
-                 }
-             });
-         }
+                }
+                else {
+                    $.mobile.loading("hide");
+                    fitness.showMessage('Failed to save user:\n' + data);
+                }
+            });
+        }
 
     });
     return RegisterView;
@@ -1735,242 +1735,242 @@ define('routers/FitnessRouter',[ "jquery", "backbone", "fitness", "customCodeCli
 //define([ "jquery", "backbone", "../fitness", "../views/FooterView", "../views/HomeView", "jquerymobile" ],
 //    function( $, Backbone, fitness, FooterView, HomeView) {
 
-        
-    // Extends Backbone.Router
-    var FitnessRouter = Backbone.Router.extend( {
+
+        // Extends Backbone.Router
+        var FitnessRouter = Backbone.Router.extend( {
 
 
-        // The Router constructor
-        initialize: function() {
+            // The Router constructor
+            initialize: function() {
 
 //            $('#header').html(new HeaderView().render().el);
 
-            //this.loginView = new LoginView( { el: "#login" } );
-            //this.registerView = new RegisterView( { el: "#register"} );
+                this.loginView = new LoginView( { el: "#login" } );
+                this.registerView = new RegisterView( { el: "#register"} );
 
-            // Tells Backbone to start watching for hashchange events
-            Backbone.history.start();
+                // Tells Backbone to start watching for hashchange events
+                Backbone.history.start();
 
-        },
+            },
 
-        // Backbone.js Routes
-        routes: {
-            "": "whereTo",
-            "home": "showHome",
-            "login" : "showLogin",
-            "create" : "showCreate",
-            "profile" : "showProfile",
-            "friends" : "showFriends",
-            "register" : "showRegister",
-            "auth" : "showAuth"
-        },
+            // Backbone.js Routes
+            routes: {
+                "": "whereTo",
+                "home": "showHome",
+                "login" : "showLogin",
+                "create" : "showCreate",
+                "profile" : "showProfile",
+                "friends" : "showFriends",
+                "register" : "showRegister",
+                "auth" : "showAuth"
+            },
 
-        ensureLogin: function(callback) {
-            if (fitness.isLoggedIn()) {
-                callback(true);
-                return;
-            }
-            var username = localStorage.getItem('username');
-            if (!username) {
-                callback(false);
-                return;
-            }
-            fitness.loginWithID(username, function(success) {
-                callback(success);
-                return;
-            });
-        },
-
-        // Home method
-        whereTo: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
+            ensureLogin: function(callback) {
+                if (fitness.isLoggedIn()) {
+                    callback(true);
                     return;
                 }
-                if (fitness.user && fitness.user.get('accesstoken')) {
-                    that.showHome();
+                var username = localStorage.getItem('username');
+                if (!username) {
+                    callback(false);
+                    return;
                 }
-                else { // need to auth with Fitbit
-                    if (window.location.href.indexOf('oauth_token') !== -1) { // user authorized on Fitbit and was redirected here
-                        var requestToken = localStorage.getItem("request_token");
-                        if (!requestToken) {
-                            fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
-                            var footerView = new FooterView( { el: "#auth .footer"} );
-                            $.mobile.loading("show");
-                            this.showAuth();
-                            return;
-                        }
-                        var requestTokenSecret = localStorage.getItem("request_token_secret");
-                        var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier'); // TODO move getQueryVariable to another js lib
+                fitness.loginWithID(username, function(success) {
+                    callback(success);
+                    return;
+                });
+            },
 
-                        var pos = oauthVerifier.length - 1;
-                        if (oauthVerifier[pos] === '/') { // stackmob mistakenly adds a slash to the URL, so remove it
-                            oauthVerifier = oauthVerifier.substring(0, pos).replace('#',''); // also kill a # if there is one
-                        }
-                        customCode.completeFitbitAuth(fitness.user, requestToken, requestTokenSecret, oauthVerifier, function(success, data) {
-                            if (success) {
-                                var accessTokenData = data;
-                                fitness.user.set('accesstoken', accessTokenData.oauth_token);
-                                fitness.user.set('accesstokensecret', accessTokenData.oauth_token_secret);
-                                fitness.user.set('fitbituserid', accessTokenData.fitbit_user_id);
-                                localStorage.removeItem('request_token');
-                                localStorage.removeItem('request_token_secret');
-
-                                that.showHome();
-
-                                var footerView = new FooterView( { el: "#home .footer"} );
-                                $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
+            // Home method
+            whereTo: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!success) {
+                        that.showLogin();
+                        return;
+                    }
+                    if (fitness.user && fitness.user.get('accesstoken')) {
+                        that.showHome();
+                    }
+                    else { // need to auth with Fitbit
+                        if (window.location.href.indexOf('oauth_token') !== -1) { // user authorized on Fitbit and was redirected here
+                            var requestToken = localStorage.getItem("request_token");
+                            if (!requestToken) {
+                                fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
+                                var footerView = new FooterView( { el: "#auth .footer"} );
+                                $.mobile.loading("show");
+                                this.showAuth();
+                                return;
                             }
-                            else {
-                                localStorage.removeItem('request_token');
-                                localStorage.removeItem('request_token_secret');
-                                fitness.showMessage(data);
+                            var requestTokenSecret = localStorage.getItem("request_token_secret");
+                            var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier'); // TODO move getQueryVariable to another js lib
+
+                            var pos = oauthVerifier.length - 1;
+                            if (oauthVerifier[pos] === '/') { // stackmob mistakenly adds a slash to the URL, so remove it
+                                oauthVerifier = oauthVerifier.substring(0, pos).replace('#',''); // also kill a # if there is one
                             }
-                        })
+                            customCode.completeFitbitAuth(fitness.user, requestToken, requestTokenSecret, oauthVerifier, function(success, data) {
+                                if (success) {
+                                    var accessTokenData = data;
+                                    fitness.user.set('accesstoken', accessTokenData.oauth_token);
+                                    fitness.user.set('accesstokensecret', accessTokenData.oauth_token_secret);
+                                    fitness.user.set('fitbituserid', accessTokenData.fitbit_user_id);
+                                    localStorage.removeItem('request_token');
+                                    localStorage.removeItem('request_token_secret');
+
+                                    that.showHome();
+
+                                    var footerView = new FooterView( { el: "#home .footer"} );
+                                    $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
+                                }
+                                else {
+                                    localStorage.removeItem('request_token');
+                                    localStorage.removeItem('request_token_secret');
+                                    fitness.showMessage(data);
+                                }
+                            })
+                        }
+                        else {
+                            that.showAuth();
+                        }
+                    }
+                });
+            },
+
+            // Home method
+            showHome: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!success) {
+                        that.showLogin();
+                        return;
+                    }
+                    if (fitness.user && fitness.user.get('accesstoken')) {
+                        that.homeView = new HomeView( { el: "#home"} );
+                        var footerView = new FooterView( { el: "#home .footer"} );
+                        $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
                     }
                     else {
                         that.showAuth();
                     }
-                }
-            });
-        },
+                });
+            },
 
-        // Home method
-        showHome: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
-                    return;
-                }
-                if (fitness.user && fitness.user.get('accesstoken')) {
-                    that.homeView = new HomeView( { el: "#home"} );
-                    var footerView = new FooterView( { el: "#home .footer"} );
-                    $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
-                }
-                else {
-                    that.showAuth();
-                }
-            });
-        },
-
-        showActiveChallenges: function() {
-            var footerView = new FooterView( { el: "#profile .footer"} );
-            $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-        },
-
-        showProfile: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!that.profileView) {
-                    that.profileView = new ProfileView( { el: "#profile" } );
-                    var footerView = new FooterView( { el: "#profile .footer"});
-                }
+            showActiveChallenges: function() {
+                var footerView = new FooterView( { el: "#profile .footer"} );
                 $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-            });
-        },
+            },
 
-        showLogin: function() {
-            var footerView = new FooterView( { el: "#login .footer"} );
-            $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
-        },
+            showProfile: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!that.profileView) {
+                        that.profileView = new ProfileView( { el: "#profile" } );
+                        var footerView = new FooterView( { el: "#profile .footer"});
+                    }
+                    $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
+                });
+            },
 
-        showRegister: function() {
-            var footerView = new FooterView( { el: "#register .footer" } );
-            $.mobile.changePage( "#register" , { reverse: false, changeHash: true } );
-        },
+            showLogin: function() {
+                var footerView = new FooterView( { el: "#login .footer"} );
+                $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
+            },
 
-        showAuth: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
-                    return;
-                }
-                if (!that.authView) {
-                    var footerView = new FooterView( { el: "#auth .footer" } );
-                    that.authView = new AuthView( { el: "#auth" } );
-                }
-                $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
-            });
-        },
+            showRegister: function() {
+                var footerView = new FooterView( { el: "#register .footer" } );
+                $.mobile.changePage( "#register" , { reverse: false, changeHash: true } );
+            },
 
-        showCreate: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
-                    return;
-                }
-                if (!that.challengeView) {
-                    that.challengeView = new ChallengeView( { el: "#create" } );
-                    var footerView = new FooterView( { el: "#create .footer" } );
-                }
-                $.mobile.changePage( "#create" , { reverse: true, changeHash: true } );
-            });
-        },
+            showAuth: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!success) {
+                        that.showLogin();
+                        return;
+                    }
+                    if (!that.authView) {
+                        var footerView = new FooterView( { el: "#auth .footer" } );
+                        that.authView = new AuthView( { el: "#auth" } );
+                    }
+                    $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                });
+            },
 
-        showFriends: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
-                    return;
-                }
-                if (!that.friendsView) {
-                    that.friendsView = new FriendsView( { el: "#friends" } );
-                    var footerView = new FooterView( { el: "#friends .footer" } );
-                }
-                $.mobile.changePage( "#friends" , { reverse: true, changeHash: true } );
-            });
-        }
+            showCreate: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!success) {
+                        that.showLogin();
+                        return;
+                    }
+                    if (!that.challengeView) {
+                        that.challengeView = new ChallengeView( { el: "#create" } );
+                        var footerView = new FooterView( { el: "#create .footer" } );
+                    }
+                    $.mobile.changePage( "#create" , { reverse: true, changeHash: true } );
+                });
+            },
 
-    });
+            showFriends: function() {
+                var that = this;
+                this.ensureLogin(function(success) {
+                    if (!success) {
+                        that.showLogin();
+                        return;
+                    }
+                    if (!that.friendsView) {
+                        that.friendsView = new FriendsView( { el: "#friends" } );
+                        var footerView = new FooterView( { el: "#friends .footer" } );
+                    }
+                    $.mobile.changePage( "#friends" , { reverse: true, changeHash: true } );
+                });
+            }
+
+        });
 
 
 
         // Returns the Router class
-    return FitnessRouter;
+        return FitnessRouter;
 
-} );
+    } );
 // Sets the require.js configuration for your application.
 require.config( {
 
     baseUrl: "/js/",
-      // 3rd party script alias names (Easier to type "jquery" than "libs/jquery-1.8.2.min")
-      paths: {
+    // 3rd party script alias names (Easier to type "jquery" than "libs/jquery-1.8.2.min")
+    paths: {
 
-            // Core Libraries
-          "json2": "libs/json2-min",
-          "underscore": "libs/underscore-1.4.1-min",
-          //"underscore": "libs/lodash",
-          "jquery": "libs/jquery-1.8.2.min",
-          "jquerymobile": "libs/jquery.mobile-1.2.0.min",
-          //"backbone": "libs/backbone-0.9.2-min",
-          //"stackmob" : "libs/stackmob-js-0.8.0-min",
-          "mustache": "libs/mustache"
-      },
+        // Core Libraries
+        "json2": "libs/json2-min",
+        "underscore": "libs/underscore-1.4.1-min",
+        //"underscore": "libs/lodash",
+        "jquery": "libs/jquery-1.8.2.min",
+        "jquerymobile": "libs/jquery.mobile-1.2.0.min",
+        //"backbone": "libs/backbone-0.9.2-min",
+        //"stackmob" : "libs/stackmob-js-0.8.0-min",
+        //"mustache": "libs/mustache"
+    },
 
-      // Sets the configuration for your third party scripts that are not AMD compatible
-      shim: {
-          "underscore": {
-              "exports" : "_"
-          },
+    // Sets the configuration for your third party scripts that are not AMD compatible
+    shim: {
+        "underscore": {
+            "exports" : "_"
+        },
 
-          "backbone": {
-                  "deps": [ "underscore", "jquery" ],
-                  "exports": "Backbone"  //attaches "Backbone" to the window object
-          },
-          "stackmob": {
-                  "deps": [ "jquery", "backbone" ],
-               "exports": "StackMob"
-          },
-          "mustache": {
-              "exports": "Mustache"
-          }
-      } // end Shim Configuration
+        "backbone": {
+            "deps": [ "underscore", "jquery" ],
+            "exports": "Backbone"  //attaches "Backbone" to the window object
+        },
+        "stackmob": {
+            "deps": [ "jquery", "backbone" ],
+            "exports": "StackMob"
+        },
+        "mustache": {
+            "exports": "Mustache"
+        }
+    } // end Shim Configuration
 
 } );
 
@@ -1978,14 +1978,13 @@ require.config( {
 require(["routers/FitnessRouter"], function(FitnessRouter) {
     // Set up the "mobileinit" handler before requiring jQuery Mobile's module
     //$(document).on("mobileinit", function() {
-        //$.mobile.ajaxEnabled = false; // ???
-        $.mobile.linkBindingEnabled = false;
-        $.mobile.hashListeningEnabled = false;
-        $.mobile.pushStateEnabled = false;
-        window.router = new FitnessRouter(); // TODO: figure out how to put this in a namespace
-        //router.navigate();
+    //$.mobile.ajaxEnabled = false; // ???
+    $.mobile.linkBindingEnabled = false;
+    $.mobile.hashListeningEnabled = false;
+    $.mobile.pushStateEnabled = false;
+    window.router = new FitnessRouter(); // TODO: figure out how to put this in a namespace
+    //router.navigate();
     //});
 });
-
 
 define("../webapp-build/js/main.js", function(){});

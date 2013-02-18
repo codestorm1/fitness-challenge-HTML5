@@ -14,8 +14,8 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
 
 //            $('#header').html(new HeaderView().render().el);
 
-            //this.loginView = new LoginView( { el: "#login" } );
-            //this.registerView = new RegisterView( { el: "#register"} );
+            this.loginView = new LoginView( { el: "#login" } );
+            this.registerView = new RegisterView( { el: "#register"} );
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
