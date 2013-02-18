@@ -2,8 +2,8 @@
 // =============
 
 // Includes file dependencies
-define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/CategoryModel", "../models/ChallengeModel", "../views/FooterView", "../views/HomeView", "../views/FriendsView", "../views/LoginView", "../views/RegisterView", "../views/ProfileView", "../views/AuthView", "../views/ChallengeView" ],
-    function( $, Backbone, fitness, customCode, CategoryModel, ChallengeModel, FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView ) {
+define([ "jquery","backbone", "../fitness", "../customCodeClient", "../models/ChallengeModel", "../views/FooterView", "../views/HomeView", "../views/FriendsView", "../views/LoginView", "../views/RegisterView", "../views/ProfileView", "../views/AuthView", "../views/ChallengeView" ],
+    function( $, Backbone, fitness, customCode, ChallengeModel, FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView ) {
 
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {

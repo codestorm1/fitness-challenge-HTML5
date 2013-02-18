@@ -18,11 +18,18 @@ define([ "jquery", "backbone", "../fitness", "../customCodeClient"], function( $
             this.$el.empty();
             this.$el.append(header.html()).append(template.html());
             this.$el.trigger('create');
+            var lastEmail = localStorage.getItem('lastEmail');
+            if (lastEmail) {
+                $("#email").val(lastEmail);
+            }
             return this;
         },
 
         loginSubmit : function() {
             var email = $("#email").val();
+            if (email) {
+                localStorage.setItem('lastEmail', email);
+            }
             var password = $('#password').val();
             $.mobile.loading("show");
             customCode.lookupFitnessUser(email, password, function(success, data) {
