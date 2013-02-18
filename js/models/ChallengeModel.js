@@ -1,16 +1,1 @@
-// Challenge Model
-// ==============
-
-// Includes file dependencies
-define("models/ChallengeModel", [ "stackmob", "stackmobinit"], function(StackMob, stackmobinit ) {
-
-    // The ChallengeModel constructor
-
-    var ChallengeModel = StackMob.Model.extend(
-        { schemaName: 'challenge'}
-    );
-
-    // Returns the ChallengeModel class
-    return ChallengeModel;
-
-} );
+define("models/ChallengeModel",["stackmob","stackmobinit"],function(e,t){var n=e.Model.extend({schemaName:"challenge"});return n});

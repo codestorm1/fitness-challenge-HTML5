@@ -1,13 +1,10 @@
 body {
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
-
 code { font-weight: bold; }
-
 .success {
 	display: none;
 }
-
 .button, .button a
 {
 	background: #98be47;
