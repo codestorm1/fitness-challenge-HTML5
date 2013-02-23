@@ -34,6 +34,7 @@ define("views/HomeView", [ "jquery", "backbone", "mustache"], function( $, Backb
             this.$el.empty();
             this.$el.append(template.html());
             this.$el.trigger('create');
+
             return this;
         }
     });

@@ -1,1 +1,54 @@
-define("views/LoginView",["jquery","backbone","fitness","customCodeClient"],function(e,t,n,r){var i=t.View.extend({initialize:function(){this.render()},events:{"click #login_submit":"loginSubmit"},render:function(){var t=e("#header_template"),n=e("#login_template");this.$el.empty(),this.$el.append(t.html()).append(n.html()),this.$el.trigger("create");var r=localStorage.getItem("lastEmail");return r&&e("#email").val(r),this},loginSubmit:function(){var t=e("#email").val();t&&localStorage.setItem("lastEmail",t);var i=e("#password").val();e.mobile.loading("show"),r.lookupFitnessUser(t,i,function(t,r){if(t){e.mobile.loading("hide"),n.user=r;var i=n.user.get("username");i&&(n.log("logged in as "+i+" ("+n.user.get("email")+")"),localStorage.setItem("username",i)),e.mobile.loading("show"),router.navigate("#home",!0)}else e.mobile.loading("hide"),n.showMessage("login failed\n "+r)})}});return i});
+define("views/LoginView", [ "jquery", "backbone", "fitness", "customCodeClient"], function( $, Backbone, fitness, customCode) {
+
+    var LoginView = Backbone.View.extend({
+
+        initialize: function() {
+            this.render();
+        },
+
+        events: {"click #login_submit" : "loginSubmit"} ,
+
+        render: function() {
+
+            //var footerView = new FooterView( { el: "#login .footer" } );
+
+            var header = $('#header_template');
+            var template = $('#login_template');
+            this.$el.empty();
+            this.$el.append(header.html()).append(template.html());
+            this.$el.trigger('create');
+            var lastEmail = localStorage.getItem('lastEmail');
+            if (lastEmail) {
+                $("#email").val(lastEmail);
+            }
+            return this;
+        },
+
+        loginSubmit : function() {
+            var email = $("#email").val();
+            if (email) {
+                localStorage.setItem('lastEmail', email);
+            }
+            var password = $('#password').val();
+            $.mobile.loading("show");
+            customCode.lookupFitnessUser(email, password, function(success, data) {
+                if (success) { // logged in
+                    $.mobile.loading("hide");
+                    fitness.user = data;
+                    var username = fitness.user.get('username');
+                    if (username) {
+                        fitness.log("logged in as " + username + " (" + fitness.user.get('email') + ")");
+                        localStorage.setItem('username', username);
+                    }
+                    $.mobile.loading("show");
+                    router.navigate('#home', true);
+                }
+                else {
+                    $.mobile.loading("hide");
+                    fitness.showMessage('login failed\n ' + data);
+                }
+            });
+        }
+    });
+    return LoginView;
+});
