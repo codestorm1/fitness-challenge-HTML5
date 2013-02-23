@@ -14,6 +14,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
 
 //            $('#header').html(new HeaderView().render().el);
 
+            var that = this;
             this.loginView = new LoginView( { el: "#login" } );
             this.registerView = new RegisterView( { el: "#register"} );
 //            if (!this.friendsView) {
@@ -70,8 +71,6 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                         var requestToken = localStorage.getItem("request_token");
                         if (!requestToken) {
                             fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
-                            var footerView = new FooterView( { el: "#auth .footer"} );
-                            $.mobile.loading("show");
                             this.showAuth();
                             return;
                         }
@@ -90,11 +89,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                                 fitness.user.set('fitbituserid', accessTokenData.fitbit_user_id);
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
-
                                 that.showHome();
-
-                                var footerView = new FooterView( { el: "#home .footer"} );
-                                $.mobile.changePage( "#home" , { reverse: false, changeHash: true } );
                             }
                             else {
                                 localStorage.removeItem('request_token');
@@ -122,6 +117,9 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     that.homeView = new HomeView( { el: "#home"} );
                     var footerView = new FooterView( { el: "#home .footer"} );
                     $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
+//                    var activePage = $.mobile.activePage[0].id;
+//                    if (activePage != "home" && activePage != '') {
+//                    }
                 }
                 else {
                     that.showAuth();
@@ -132,6 +130,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
         showActiveChallenges: function() {
             var footerView = new FooterView( { el: "#profile .footer"} );
             $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
+            $.mobile.showPageLoadingMsg();
         },
 
         showProfile: function() {
@@ -142,17 +141,20 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     var footerView = new FooterView( { el: "#profile .footer"});
                 }
                 $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
+                $.mobile.showPageLoadingMsg();
             });
         },
 
         showLogin: function() {
             var footerView = new FooterView( { el: "#login .footer"} );
             $.mobile.changePage( "#login" , { reverse: false, changeHash: true } );
+            $.mobile.showPageLoadingMsg();
         },
 
         showRegister: function() {
             var footerView = new FooterView( { el: "#register .footer" } );
             $.mobile.changePage( "#register" , { reverse: false, changeHash: true } );
+            $.mobile.showPageLoadingMsg();
         },
 
         showAuth: function() {
@@ -167,6 +169,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     that.authView = new AuthView( { el: "#auth" } );
                 }
                 $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                $.mobile.showPageLoadingMsg();
             });
         },
 
@@ -182,6 +185,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     var footerView = new FooterView( { el: "#create .footer" } );
                 }
                 $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
+                $.mobile.showPageLoadingMsg();
             });
         },
 
@@ -197,6 +201,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     var footerView = new FooterView( { el: "#friends .footer" } );
                 }
                 $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
+                $.mobile.showPageLoadingMsg();
             });
         }
 

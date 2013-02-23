@@ -6,8 +6,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--<link rel="stylesheet" href="/css/jquery.mobile-1.2.0.min.css" />-->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" href="/css/jquery.mobile-1.3.0.min.css" />
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.3.0.min.css" />-->
     <link rel="stylesheet" href="css/fitness.css">
 
     <!--<script src="js/libs/underscore-1.4.1-min.js"></script>-->
@@ -49,20 +49,25 @@
 
 <script id="header_template" type="text/template">
     <header data-role="header" data-theme="j">
-        <a href='#' class='ui-btn-left' data-icon='arrow-l' data-theme="b" data-ajax="false">Back</a>
+        <a href='#' class='ui-btn-left back_button' data-icon='arrow-l' data-theme="b" data-ajax="false">Back</a>
         <h1 class="ir logo">Fitness Challenge</h1>
         <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button" data-direction="reverse" data-ajax="false">Home</a>
+    </header>
+</script>
+
+<script id="static_header_template" type="text/template">
+    <header data-role="header" data-theme="j">
+        <h1 class="ir logo">Fitness Challenge</h1>
     </header>
 </script>
 
 <div id="home" data-role="page" data-title="Fitness Challenge">
 </div>
 
-<div id="profile" data-role="page" data-title="Your Profile
-">
+<div id="login" data-role="page" data-title="Fitness Challenge - Login">
 </div>
 
-<div id="login" data-role="page" data-title="Fitness Challenge - Login">
+<div id="profile" data-role="page" data-title="Your Profile">
 </div>
 
 <div id="create" data-role="page" data-title="Create Challenge">
@@ -112,19 +117,11 @@
                 </a>
             </li>
         </ul>
-
-        <!--<h2>Select a Category Below:</h2>-->
-        <!--<ul data-role="listview" data-inset="true">-->
-            <!--<li><a href="#category?animals" class="animals">Animals</a></li>-->
-            <!--<li><a href="#category?colors" class="colors">Colors</a></li>-->
-            <!--<li><a href="#category?vehicles" class="vehicles">Vehicles</a></li>-->
-        <!--</ul>-->
     </div><!-- /content -->
     <div class="footer"></div>
 </script>
 
 <script id="friends_template" type="text/template">
-
     <div data-role="content">
         <h2>Your Friends</h2>
         {{#friends}}

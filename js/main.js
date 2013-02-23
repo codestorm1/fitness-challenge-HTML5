@@ -10,7 +10,7 @@ require.config( {
         "underscore": "libs/underscore-1.4.1-min",
         //"underscore": "libs/lodash",
         "jquery": "libs/jquery-1.8.2.min",
-        "jquerymobile": "libs/jquery.mobile-1.2.0.min",
+        "jquerymobile": "libs/jquery.mobile-1.3.0.min",
         "backbone": "libs/backbone-0.9.2-min",
         "stackmob" : "libs/stackmob-js-0.8.0-min",
         "mustache": "libs/mustache"
@@ -38,6 +38,11 @@ require.config( {
 } );
 
 require(["jquery"], function($) {
+    // console.log shim
+    if (!window.console) {
+        window.console = {};
+        window.console.log = function() {};
+    }
     // Set up the "mobileinit" handler before requiring jQuery Mobile's module
     $(document).live("mobileinit", function() {
         //$.mobile.ajaxEnabled = false; // ???
@@ -48,6 +53,11 @@ require(["jquery"], function($) {
 
         $('ul[data-role="listview"] a').live('click', function (event, ui) {
             $(event.currentTarget).addClass('ui-btn-active');
+        });
+        $('div[data-role="page"]').live('pageshow', function (event, ui) {
+            $.mobile.hidePageLoadingMsg();
+        });
+        $('.back_button, .home_button').live('click', function(event, ui) {
             $.mobile.showPageLoadingMsg();
         });
     });
