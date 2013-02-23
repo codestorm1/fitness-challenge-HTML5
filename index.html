@@ -48,11 +48,11 @@
 <body>
 
 <script id="header_template" type="text/template">
-    <div data-role="header" data-theme="j">
+    <header data-role="header" data-theme="j">
         <a href='#' class='ui-btn-left' data-icon='arrow-l' data-theme="b" data-ajax="false">Back</a>
         <h1 class="ir logo">Fitness Challenge</h1>
-        <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button" data-ajax="false">Home</a>
-    </div>
+        <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button" data-direction="reverse" data-ajax="false">Home</a>
+    </header>
 </script>
 
 <div id="home" data-role="page" data-title="Fitness Challenge">
@@ -82,6 +82,9 @@
     <div data-role="header" data-theme="j" class="ui-header ui-bar-a ui-bar-j" role="banner">
         <h1 class="ir logo ui-title" role="heading" aria-level="1">Fitness Challenge</h1>
     </div>
+    <!--<header data-role="header" data-theme="j">-->
+        <!--<h1 class="ir logo ui-title">Fitness Challenge</h1>-->
+    <!--</header>-->
     <div data-role="content">
         <ul data-role="listview" data-inset="true" class="home_links" data-checknew="true">
             <li class="profile">
@@ -121,6 +124,7 @@
 </script>
 
 <script id="friends_template" type="text/template">
+
     <div data-role="content">
         <h2>Your Friends</h2>
         {{#friends}}
