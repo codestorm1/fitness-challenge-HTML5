@@ -48,6 +48,7 @@ require(["jquery"], function($) {
 
         $('ul[data-role="listview"] a').live('click', function (event, ui) {
             $(event.currentTarget).addClass('ui-btn-active');
+            $.mobile.showPageLoadingMsg();
         });
     });
 });
