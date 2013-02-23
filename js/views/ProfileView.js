@@ -46,6 +46,7 @@ define([ "jquery", "backbone", "mustache", "fitness", "customCodeClient"], funct
                 $.mobile.loading("hide");
                 if (success) {
                     fitness.showMessage('Account deleted');
+                    router.navigate("login", true);
                 }
                 else {
                     var message = 'Failed to delete account ' + response || '';

@@ -70,12 +70,11 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     if (window.location.href.indexOf('oauth_token') !== -1) { // user authorized on Fitbit and was redirected here
                         var requestToken = localStorage.getItem("request_token");
                         if (!requestToken) {
-                            fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call
+                            fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call on auth page
                             this.showAuth();
-                            return;
                         }
                         var requestTokenSecret = localStorage.getItem("request_token_secret");
-                        var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier'); // TODO move getQueryVariable to another js lib
+                        var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier');
 
                         var pos = oauthVerifier.length - 1;
                         if (oauthVerifier[pos] === '/') { // stackmob mistakenly adds a slash to the URL, so remove it
@@ -89,14 +88,14 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                                 fitness.user.set('fitbituserid', accessTokenData.fitbit_user_id);
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
-                                that.showHome();
+                                window.location.href = '/#home'; // using location.href instead of router navigation to clear the query string
                             }
                             else {
                                 localStorage.removeItem('request_token');
                                 localStorage.removeItem('request_token_secret');
                                 fitness.showMessage(data);
                             }
-                        })
+                        });
                     }
                     else {
                         that.showAuth();

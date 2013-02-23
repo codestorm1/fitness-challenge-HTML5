@@ -12,7 +12,7 @@ define("views/LoginView", [ "jquery", "backbone", "fitness", "customCodeClient"]
 
             //var footerView = new FooterView( { el: "#login .footer" } );
 
-            var header = $('#header_template');
+            var header = $('#static_header_template');
             var template = $('#login_template');
             this.$el.empty();
             this.$el.append(header.html()).append(template.html());

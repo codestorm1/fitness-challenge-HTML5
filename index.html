@@ -142,15 +142,15 @@
                 <h3><img id="avatar" src="{{avatar}}"> Logged in as {{ displayname }}</h3>
                 <h3>Your fitness challenge ID is {{ username }}, Your Fitbit ID is  {{ fitbitUserID }}</h3>
                 <h3>Email: {{ email }}, Password: {{ fc_password }}</h3>
-            {{#accessToken}}
-                <h3>You are currently authenticated with Fitbit</h3>
-                <h3>Fitbit Access Token: {{ accessToken }}</h3>
-                <a id="deauthorize" type="button" data-theme="e">Clear Fitbit authorization</a>
-            {{/accessToken}}
-            {{^accessToken}}
-                <h3>You are not authenticated with Fitbit</h3>
-                <a href="#auth" type="button" data-theme="e">Go to auth page</a>
-            {{/accessToken}}
+                {{#accesstoken}}
+                    <h3>You are currently authenticated with Fitbit</h3>
+                    <h3>Fitbit Access Token: {{ accesstoken }}</h3>
+                    <a id="deauthorize" type="button" data-theme="e">Clear Fitbit authorization</a>
+                {{/accesstoken}}
+                {{^accesstoken}}
+                    <h3>You are not authorized with Fitbit</h3>
+                    <a href="#auth" type="button" data-theme="e">Go to auth page</a>
+                {{/accesstoken}}
                 <a id="delete_user" type="button" data-theme="e">Delete My Account</a>
             {{/username}}
             {{^username}}

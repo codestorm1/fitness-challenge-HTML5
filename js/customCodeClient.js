@@ -14,7 +14,7 @@ define("customCodeClient", ["jquery"], function($) {
 
 
     return {
-        getQueryVariable : function (url, key) {
+        getQueryVariable : function (url, key) { // TODO move getQueryVariable to another js lib
             var query = url.split("?");
             if (query.length > 1) {
                 var vars = query[1].split("&");
@@ -440,7 +440,6 @@ define("customCodeClient", ["jquery"], function($) {
                     }
                 }
             });
-
         }
     }
 });
