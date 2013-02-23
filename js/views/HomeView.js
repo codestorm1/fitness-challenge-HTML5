@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-define("views/HomeView",["jquery","backbone","mustache"],function(e,t,n){return this.HomeView=t.View.extend({initialize:function(){this.render()},render:function(){var t=e("#home_template");return this.$el.empty(),this.$el.append(t.html()),this.$el.trigger("create"),this}}),HomeView});
-=======
 define("views/HomeView", [ "jquery", "backbone", "mustache"], function( $, Backbone, Mustache) {
 
 
@@ -42,4 +39,3 @@ define("views/HomeView", [ "jquery", "backbone", "mustache"], function( $, Backb
     });
     return HomeView;
 });
->>>>>>> mainly jqm fix to get nav bars always working, and also style a clicked link
