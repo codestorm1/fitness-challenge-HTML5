@@ -3,18 +3,16 @@ define("customCodeClient", ["jquery"], function($) {
     var that = this;
 
 
-
-    var formatDate = function(date) {
+    return {
+    formatDate : function(date) {
         var day = date.getDate();
         var month = date.getMonth() + 1; //Months are zero based
         var year = date.getFullYear();
         var dateStr = month + "/" + day  + "/" + year;
         return dateStr;
-    };
+    },
 
-
-    return {
-        getQueryVariable : function (url, key) { // TODO move getQueryVariable to another js lib
+    getQueryVariable : function (url, key) { // TODO move getQueryVariable to another js lib
             var query = url.split("?");
             if (query.length > 1) {
                 var vars = query[1].split("&");
@@ -218,7 +216,6 @@ define("customCodeClient", ["jquery"], function($) {
             var user = new StackMob.User({ username : stackMobUser.get('username') });
             user.save(stackMobUser, {
                 success: function(model) {
-                    console.debug(model.toJSON());
                     callback(true, model);
                 },
                 error: function(model, response) {
@@ -230,10 +227,8 @@ define("customCodeClient", ["jquery"], function($) {
 
         getFitbitFriends : function(username, callback) {
             var that = this;
-            var results;
             StackMob.customcode('fetch_fitbit_friends', {"stackmob_user_id" : username}, 'GET', {
                 success: function(jsonResult) {
-                    results = 'got friends!<br/>\n';
                     var friendsResponse = jsonResult['friendsJson'];
                     var friends = JSON.parse(friendsResponse)['friends'];
 
@@ -243,7 +238,6 @@ define("customCodeClient", ["jquery"], function($) {
                 },
 
                 error: function(response) {
-                    that.showMessage('failed to get your Fitbit friends');
                     if (typeof callback === "function") {
                         callback(false, response);
                     }
@@ -272,8 +266,15 @@ define("customCodeClient", ["jquery"], function($) {
 
         },
 
-        saveFriendsToStackmob : function(friends) {
-            var that = fitness;
+        saveFriendsToStackmob : function(username, friends, callback) { // TODO change list of friends to a backbone collection
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            if (!friends) {
+                callback(false, 'no friends to update');
+            }
+
+            var that = this;
             var fitbitUserIDs = [];
             var len = friends.length;
             for (var i = 0; i < len; i++) {
@@ -294,10 +295,10 @@ define("customCodeClient", ["jquery"], function($) {
                         len = friends.models.length;
                         for (var i = 0; i < len; i++) {
                             var friend = friends.models[i];
-                            stackmobFriendIDs.push(friend['username']);
+                            stackmobFriendIDs.push(friend.get('username'));
                         }
                     }
-                    var user = new StackMob.User({ username : that.user.get('username') });
+                    var user = new StackMob.User({ username : username });
                     var params = {
                         "friends" : stackmobFriendIDs,
                         "friendcount" : stackmobFriendIDs.length,
@@ -305,31 +306,27 @@ define("customCodeClient", ["jquery"], function($) {
                     };
                     user.save(params, {
                         success: function(model) {
-                            console.debug(model.toJSON());
-                            if (typeof callback === "function") {
-                                callback(true, model);
-                            }
+                            callback(true, model);
                         },
                         error: function(model, response) {
                             console.debug(response);
-                            if (typeof callback === "function") {
-                                callback(false, response);
-                            }
+                            callback(false, response);
                         }
                     });
                 },
                 error: function(repsonse) {
-
+                    console.debug(response);
+                    callback(false, response);
                 }
             });
         },
 
-        updateActivities : function(callback) {
+        updateActivities : function(username, callback) {
             var today = new Date();
             var lastWeek = new Date(today.getTime() - 6*24*60*60*1000);
 
             var params = {
-                "stackmob_user_id" : this.user.get('username'), // TODO: fix
+                "stackmob_user_id" : username,
                 "start_date" : this.formatDate(lastWeek),
                 "end_date" : this.formatDate(today)
             };
@@ -398,46 +395,45 @@ define("customCodeClient", ["jquery"], function($) {
             }
         },
 
-        getChallengeInvites : function(callback) {
-
+        getChallengeInvites : function(username, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
             var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
             var Invitations = StackMob.Collection.extend({ model: Invitation });
             var invitations = new Invitations();
             var q = new StackMob.Collection.Query();
-            q.equals('inviteduser', this.user.get('username'));
+            q.equals('inviteduser', username);
             q.equals('responded', false);
             invitations.query(q, {
                 success: function(model) {
                     var len = model.models.length;
                     if (len === 0) {
-                        if (typeof callback === 'function') {
-                            callback(false, model);
-                        }
+                        callback(true, model);
                         return;
                     }
+
+                    // TODO: move this into a separate call?
                     for (var i = 0; i < len; i++) {
                         var invite = model.models[i];
-
                         var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
                         var challenge = new Challenge();
                         challenge.fetch( {
                             success: function(model) {
-                                alert('you have a challenge invitation from ' + model.get('challengecreator') + '!');
-                                console.debug(model.toJSON());
+                                callback(true, response);
                             },
                             error: function(model, response) {
                                 console.debug(response);
+                                callback(true, response);
                             }
                         });
-
                     }
+                    callback(true, model);
                 },
                 error: function(response) {
                     that.showMessage('query failed trying to get user ' + response);
                     console.debug(response);
-                    if (typeof callback === 'function') {
-                        callback(false, response);
-                    }
+                    callback(false, response);
                 }
             });
         }

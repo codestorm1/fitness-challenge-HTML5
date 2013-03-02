@@ -1,55 +1,63 @@
-# StackMob Javascript Examples
+# [HTML5 Boilerplate](http://html5boilerplate.com)
 
-Welcome!  You're here because you downloaded the JS SDK Starter zip or you've forked/cloned the <a href="https://github.com/stackmob/stackmob-javascript-examples" target="_blank">JS Examples GitHub repo</a>.
+HTML5 Boilerplate is a professional front-end template for building fast,
+robust, and adaptable web apps or sites.
 
-Here are several examples utilizing the JS SDK.  Feel free to use the code as you wish - copy, reuse.. recycle?  
+This project is the product of many years of iterative development and combined
+community knowledge. It does not impose a specific development philosophy or
+framework, so you're free to architect your code in the way that you want.
 
-There are demos and examples for your reference.
+* Source: [https://github.com/h5bp/html5-boilerplate](https://github.com/h5bp/html5-boilerplate)
+* Homepage: [http://html5boilerplate.com](http://html5boilerplate.com)
+* Twitter: [@h5bp](http://twitter.com/h5bp)
 
-Do you need a GitHub project to try <a href="http://www.stackmob.com/devcenter/docs/StackMob-Hosted-HTML5:-GitHub" target="_blank">StackMob hosting</a>?  Feel free to use this one by forking it to your GitHub account!
 
-You can find the `stackmob-javascript-examples` repo at <a target="_blank" href="https://github.com/stackmob/stackmob-javascript-examples">https://github.com/stackmob/stackmob-javascript-examples</a>   
+## Quick start
 
-# Contents
+Choose one of the following options:
 
-The root folder has `index.html` which will get you started right away!
+1. Download the latest stable release from
+   [html5boilerplate.com](http://html5boilerplate.com/) or a custom build from
+   [Initializr](http://www.initializr.com).
+2. Clone the git repo — `git clone
+   https://github.com/h5bp/html5-boilerplate.git` - and checkout the tagged
+   release you'd like to use.
 
-Included are examples housed in each respective folder.   
 
-There is also the StackMob Web Server (stackmobserver.py) included for testing your application locally.
+## Features
 
-# Running the Examples 
+* HTML5 ready. Use the new elements with confidence.
+* Cross-browser compatible (Chrome, Opera, Safari, Firefox 3.6+, IE6+).
+* Designed with progressive enhancement in mind.
+* Includes [Normalize.css](http://necolas.github.com/normalize.css/) for CSS
+  normalizations and common bug fixes.
+* The latest [jQuery](http://jquery.com/) via CDN, with a local fallback.
+* The latest [Modernizr](http://modernizr.com/) build for feature detection.
+* IE-specific classes for easier cross-browser control.
+* Placeholder CSS Media Queries.
+* Useful CSS helpers.
+* Default print CSS, performance optimized.
+* Protection against any stray `console.log` causing JavaScript errors in
+  IE6/7.
+* An optimized Google Analytics snippet.
+* Apache server caching, compression, and other configuration defaults for
+  Grade-A performance.
+* Cross-domain Ajax and Flash.
+* "Delete-key friendly." Easy to strip out parts you don't need.
+* Extensive inline and accompanying documentation.
 
-You'll need to initialize `StackMob.init({ ... })` with your application's information.  Some of these examples also need specific schemas and relationships set up.  These will be described in the example pages and respective READMEs.
 
-First, <a href="https://developer.stackmob.com/sdks/js/config" target="_blank">initialize Stackmob</a> within each example file (index.html, api/examples.html, etc. in the below).
+## Documentation
 
-Then run the StackMob Web Server below.
+Take a look at the [documentation table of
+contents](/h5bp/html5-boilerplate/blob/master/doc/TOC.md). This
+documentation is bundled with the project, which makes it readily available for
+offline reading and provides a useful starting point for any documentation
+you want to write about your project.
 
-### Python
-The Python Web Server is often a faster way to get running than the old Ruby version below.  In your terminal/command prompt, run:
 
-		>  cd /mycomputer/path/to/stackmob-javascript-examples/
-		>  python stackmobserver.py
+## Contributing
 
-### Ruby
-Note: You must have already installed the stackmob server before by running:
-
-		>  sudo gem install stackmob
-	
-Once installed, start the Ruby Local Runner by opening your terminal/command prompt, and type:
-
-		>  stackmob server	
-		
-## Explore
-
-Once the web server is running, feel free to start exploring by visiting these pages:
-
-* <a href="http://127.0.0.1:4567/index.html" target="_blank">http://127.0.0.1:4567/index.html</a>
-* <a href="http://127.0.0.1:4567/more-examples/index.html" target="_blank">http://127.0.0.1:4567/more-examples/index.html</a>
-
-# Contributing to the Examples
-
-Have some examples on how to use the StackMob JS SDK in NodeJS?  How about CoffeeScript?  Email us at support@stackmob.com or simply fork this repo and submit a pull request!  
-
-If you'd like to share your repo, contact us at support@stackmob.com and we can also link to it.
+Anyone and everyone is welcome to
+[contribute](/h5bp/html5-boilerplate/blob/master/CONTRIBUTING.md). Hundreds
+of developers have helped make the HTML5 Boilerplate what it is today.

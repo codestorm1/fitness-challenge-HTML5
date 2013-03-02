@@ -125,10 +125,16 @@
     <div data-role="content">
         <h2>Your Friends</h2>
         {{#friends}}
-        <h3><img src="{{ avatar }}" class="friend_avatar"> {{ display_name }} {{ username }}</h3>
+        <!--<ul data-role="listview" data-inset="true" data-checknew="true">-->
+        <ul data-role="listview">
+            <li>
+                <img src="{{ user.avatar }}" class="friend_avatar">
+                <h3>{{ user.displayName }}</h3>
+            </li>
+        </ul>
         {{/friends}}
         {{^friends}}
-        <h3>You have no friend who have registered with Fitness Challenge</h3>
+        <h3>None of your fitbit friends are using Fitness Challenge</h3>
         {{/friends}}
     </div>
     <div class="footer"></div>

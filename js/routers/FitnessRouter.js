@@ -112,17 +112,20 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     that.showLogin();
                     return;
                 }
-                if (fitness.user && fitness.user.get('accesstoken')) {
-                    that.homeView = new HomeView( { el: "#home"} );
-                    var footerView = new FooterView( { el: "#home .footer"} );
-                    $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
-//                    var activePage = $.mobile.activePage[0].id;
-//                    if (activePage != "home" && activePage != '') {
-//                    }
-                }
-                else {
-                    that.showAuth();
-                }
+                var username = fitness.user.get('username');
+                fitness.updateIfStale(username, function(success, data) {
+                    if (fitness.user && fitness.user.get('accesstoken')) {
+                        that.homeView = new HomeView( { el: "#home"} );
+                        var footerView = new FooterView( { el: "#home .footer"} );
+                        $.mobile.changePage( "#home" , { reverse: true, changeHash: true } );
+    //                    var activePage = $.mobile.activePage[0].id;
+    //                    if (activePage != "home" && activePage != '') {
+    //                    }
+                    }
+                    else {
+                        that.showAuth();
+                    }
+                });
             });
         },
 
@@ -195,12 +198,15 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
                     that.showLogin();
                     return;
                 }
-                if (!that.friendsView) {
-                    that.friendsView = new FriendsView( { el: "#friends" } );
-                    var footerView = new FooterView( { el: "#friends .footer" } );
-                }
-                $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
-                $.mobile.showPageLoadingMsg();
+                fitness.updateIfStale(fitness.user.get('username'), function(success, data) {
+
+                    if (!that.friendsView) {
+                        that.friendsView = new FriendsView( { el: "#friends" } );
+                        var footerView = new FooterView( { el: "#friends .footer" } );
+                    }
+                    $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
+                    $.mobile.showPageLoadingMsg();
+                });
             });
         }
 

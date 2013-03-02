@@ -11,8 +11,10 @@ define("views/FriendsView", [ "jquery", "backbone", "mustache", "fitness" ], fun
             var template = $('#friends_template');
 
             var dto;
-            if (fitness.isLoggedIn() && fitness.user.get('friends')) {
-                dto = fitness.user.toJSON().friends;
+            if (fitness.isLoggedIn() && fitness.friends) {
+                dto = {
+                    "friends" : fitness.friends
+                }
             }
             else {
                 dto = {};
@@ -20,7 +22,8 @@ define("views/FriendsView", [ "jquery", "backbone", "mustache", "fitness" ], fun
             var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(header.html()).append(html);
-            this.$el.trigger('create');
+            $('#friends[data-role="listview"]').listview();
+            //this.$el.trigger('create');
             return this;
         }
     });
