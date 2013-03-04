@@ -1,4 +1,4 @@
-define([ "jquery", "backbone", "mustache", "fitness", "customCodeClient"], function( $, Backbone, Mustache, fitness, customCode) {
+define("views/ProfileView", [ "jquery", "backbone", "mustache", "fitness", "customCodeClient"], function( $, Backbone, Mustache, fitness, customCode) {
 
     var ProfileView = Backbone.View.extend({
 

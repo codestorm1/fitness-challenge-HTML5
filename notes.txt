@@ -1,0 +1,5 @@
+fitness challenge:
+
+What causes the header to not get jquery styles?
+    1- jquery mobile still trying to handle paging
+    2- $.mobilechangepage was called before view was created (callback didn't finish)

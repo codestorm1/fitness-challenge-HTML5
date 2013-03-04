@@ -1,8 +1,5 @@
-// Category Collection
-// ===================
-
-// Includes file dependencies
-define([ "jquery","backbone","models/ChallengeModel" ], function( $, Backbone, ChallengeModel ) {
+define("models\ChallengesCollection", ["jquery","backbone","models/ChallengeModel"],
+    function($, Backbone, ChallengeModel) {
 
     // Extends Backbone.Router
     var Collection = Backbone.Collection.extend( {
@@ -15,7 +12,6 @@ define([ "jquery","backbone","models/ChallengeModel" ], function( $, Backbone, C
 
         },
 
-        // Sets the Collection model property to be a Category Model
         model: CategoryModel,
 
         // Sample JSON data that in a real app will most likely come from a REST web service

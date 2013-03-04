@@ -420,7 +420,7 @@ define("customCodeClient", ["jquery"], function($) {
                         var challenge = new Challenge();
                         challenge.fetch( {
                             success: function(model) {
-                                callback(true, response);
+                                callback(true, model);
                             },
                             error: function(model, response) {
                                 console.debug(response);
@@ -436,7 +436,29 @@ define("customCodeClient", ["jquery"], function($) {
                     callback(false, response);
                 }
             });
+        },
+
+        getChallenges : function(username, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
+            var Challenges = StackMob.Collection.extend({ model: Challenge });
+            var challenges = new Challenges();
+            var q = new StackMob.Collection.Query();
+            q.mustBeOneOf('users', username);
+            challenges.query(q, {
+                success: function(model) {
+                    callback(true, model);
+                },
+                error: function(response) {
+                    console.debug(response);
+                    callback(false, response);
+                }
+            });
         }
+
+
     }
 });
 

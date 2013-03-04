@@ -48,7 +48,7 @@
 <body>
 
 <script id="header_template" type="text/template">
-    <header data-role="header" data-theme="j">
+    <header data-role="header" data-theme="j" class="ui-header ui-bar-j">
         <a href='#' class='ui-btn-left back_button' data-icon='arrow-l' data-theme="b" data-ajax="false">Back</a>
         <h1 class="ir logo">Fitness Challenge</h1>
         <a href="#home" data-icon="home" data-role="button" data-theme="b" class="home_button" data-direction="reverse" data-ajax="false">Home</a>
@@ -68,6 +68,9 @@
 </div>
 
 <div id="profile" data-role="page" data-title="Your Profile">
+</div>
+
+<div id="challenge_list" data-role="page" data-title="Challenges">
 </div>
 
 <div id="create" data-role="page" data-title="Create Challenge">
@@ -95,22 +98,22 @@
             <li class="profile">
                 <a href="#profile">My Profile</a>
             </li>
-            <li class="challenges">
-                <a href="#challenges">Active Challenges</a>
+            <li class="challenge_list">
+                <a href="#challenge_list">Challenges</a>
             </li>
-            <li class="invitations">
-                <a href="#invitations">
-                    Invitations<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
-                </a>
-            </li>
+            <!--<li class="invitations">-->
+                <!--<a href="#invitations">-->
+                    <!--Invitations<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>-->
+                <!--</a>-->
+            <!--</li>-->
             <li class="create">
                 <a href="#create">
                     Create A New Challenge<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
                 </a>
             </li>
-            <li class="history">
-                <a href="#challenge_history">Challenge History</a>
-            </li>
+            <!--<li class="history">-->
+                <!--<a href="#challenge_history">Challenge History</a>-->
+            <!--</li>-->
             <li class="friends">
                 <a href="#friends">
                     Friends<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
@@ -124,21 +127,46 @@
 <script id="friends_template" type="text/template">
     <div data-role="content">
         <h2>Your Friends</h2>
+        <ul data-role="listview" data-inset="true">
         {{#friends}}
-        <!--<ul data-role="listview" data-inset="true" data-checknew="true">-->
-        <ul data-role="listview">
             <li>
                 <img src="{{ user.avatar }}" class="friend_avatar">
                 <h3>{{ user.displayName }}</h3>
             </li>
-        </ul>
         {{/friends}}
         {{^friends}}
-        <h3>None of your fitbit friends are using Fitness Challenge</h3>
+            <li>
+                <h3>None of your fitbit friends are using Fitness Challenge</h3>
+            </li>
         {{/friends}}
+        </ul>
     </div>
     <div class="footer"></div>
 </script>
+
+<script id="challenge_list_template" type="text/template">
+    <div data-role="content">
+        <h2>Your active challenges</h2>
+        <ul data-role="listview" data-inset="true">
+        {{#challenges}}
+            <li>
+                <a>
+                    <span>{{ description }}</span>
+                    <span class="new ui-li-count" style="float:right">{{ count }}</span>
+                </a>
+            </li>
+        {{/challenges}}
+        {{^challenges}}
+        <li>
+            <h3>You are not competing in any challenges</h3>
+        </li>
+        {{/challenges}}
+        </ul>
+    </div>
+    <div class="footer"></div>
+</script>
+
+
 
 <script id="profile_template" type="text/template">
     <div data-role="content">

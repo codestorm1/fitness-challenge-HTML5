@@ -1,8 +1,7 @@
-define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel", "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView", "views/ChallengeView", "jquerymobile" ],
-    function( $, Backbone, fitness, customCode, ChallengeModel, FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView,$__jqm ) {
-
-//define([ "jquery", "backbone", "../fitness", "../views/FooterView", "../views/HomeView", "jquerymobile" ],
-//    function( $, Backbone, fitness, FooterView, HomeView) {
+define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel",
+    "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView", "views/ChallengeView", "views/ChallengeListView", "jquerymobile" ],
+    function( $, Backbone, fitness, customCode, ChallengeModel,
+              FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView, ChallengeListView, $__jqm ) {
 
        // "use strict";
     // Extends Backbone.Router
@@ -17,10 +16,6 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
             var that = this;
             this.loginView = new LoginView( { el: "#login" } );
             this.registerView = new RegisterView( { el: "#register"} );
-//            if (!this.friendsView) {
-//                this.friendsView = new FriendsView( { el: "#friends" } );
-//                var footerView = new FooterView( { el: "#friends .footer" } );
-//            }
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
@@ -32,6 +27,7 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
             "": "whereTo",
             "home": "showHome",
             "login" : "showLogin",
+            "challenge_list" : "showChallengeList",
             "create" : "showCreate",
             "profile" : "showProfile",
             "friends" : "showFriends",
@@ -129,10 +125,30 @@ define([ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeM
             });
         },
 
-        showActiveChallenges: function() {
-            var footerView = new FooterView( { el: "#profile .footer"} );
-            $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-            $.mobile.showPageLoadingMsg();
+        showChallengeList: function() {
+            var that = this;
+            var pageSelector = '#challenge_list';
+            var footerSelector = pageSelector + ' .footer';
+            this.ensureLogin(function(success) {
+                if (!that.challengesView) {
+                    customCode.getChallenges(fitness.user.get('username'), function(success, data) {
+                        if (success) {
+                            fitness.challenges = data;
+                        }
+                        else {
+                            fitness.showMessage('Failed to get challenges');
+                        }
+                        that.challengesView = new ChallengeListView({el: pageSelector, model: fitness.challenges});
+                        var footerView = new FooterView({el: footerSelector});
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                        $.mobile.showPageLoadingMsg();
+                    });
+                }
+                else {
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                    $.mobile.showPageLoadingMsg();
+                }
+            });
         },
 
         showProfile: function() {

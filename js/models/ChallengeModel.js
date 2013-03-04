@@ -1,7 +1,3 @@
-// Challenge Model
-// ==============
-
-// Includes file dependencies
 define("models/ChallengeModel", [ "stackmob", "stackmobinit"], function(StackMob, stackmobinit ) {
 
     // The ChallengeModel constructor
