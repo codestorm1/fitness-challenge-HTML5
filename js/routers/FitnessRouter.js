@@ -1,7 +1,7 @@
 define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel",
-    "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView", "views/ChallengeView", "views/ChallengeListView", "jquerymobile" ],
+    "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView", "views/ChallengeView", "views/ChallengeListView", "views/InvitationListView", "jquerymobile" ],
     function( $, Backbone, fitness, customCode, ChallengeModel,
-              FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView, ChallengeListView, $__jqm ) {
+              FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView, ChallengeView, ChallengeListView, InvitationListView, $__jqm ) {
 
        // "use strict";
     // Extends Backbone.Router
@@ -28,6 +28,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             "home": "showHome",
             "login" : "showLogin",
             "challenge_list" : "showChallengeList",
+            "invitation_list" : "showInvitationList",
             "create" : "showCreate",
             "profile" : "showProfile",
             "friends" : "showFriends",
@@ -151,6 +152,31 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             });
         },
 
+        showInvitationList: function() {
+            var that = this;
+            var pageSelector = '#invitation_list';
+            var footerSelector = pageSelector + ' .footer';
+            this.ensureLogin(function(success) {
+                if (!that.invitationsView) {
+                    customCode.getChallengeInvites(fitness.user.get('username'), function(success, data) {
+                        if (!success) {
+                            that.showMessage('Failed to check for challenge invites');
+                            updatedFully = false;
+                        }
+                        fitness.invitations = data;
+                        that.invitationsView = new InvitationListView({el: pageSelector, model: fitness.invitations});
+                        var footerView = new FooterView({el: footerSelector});
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                        $.mobile.showPageLoadingMsg();
+                    });
+                }
+                else {
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                    $.mobile.showPageLoadingMsg();
+                }
+            });
+        },
+
         showProfile: function() {
             var that = this;
             this.ensureLogin(function(success) {
@@ -214,15 +240,19 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     that.showLogin();
                     return;
                 }
-                fitness.updateIfStale(fitness.user.get('username'), function(success, data) {
 
-                    if (!that.friendsView) {
-                        that.friendsView = new FriendsView( { el: "#friends" } );
-                        var footerView = new FooterView( { el: "#friends .footer" } );
-                    }
-                    $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
-                    $.mobile.showPageLoadingMsg();
-                });
+                if (!that.friendsView) {
+                    fitness.updateFitbitFriends(fitness.user.get('username'), function(success, data) {
+                        if (success) {
+                            that.friendsView = new FriendsView( { el: "#friends" } );
+                            var footerView = new FooterView( { el: "#friends .footer" } );
+                            $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
+                            $.mobile.showPageLoadingMsg();
+                        }
+                    });
+                }
+                $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
+                $.mobile.showPageLoadingMsg();
             });
         }
 

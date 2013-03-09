@@ -73,6 +73,12 @@
 <div id="challenge_list" data-role="page" data-title="Challenges">
 </div>
 
+<div id="invitation_list" data-role="page" data-title="Invitations">
+</div>
+
+<div id="challenge_detail" data-role="page" data-title="Challenge Detail">
+</div>
+
 <div id="create" data-role="page" data-title="Create Challenge">
 </div>
 
@@ -101,11 +107,11 @@
             <li class="challenge_list">
                 <a href="#challenge_list">Challenges</a>
             </li>
-            <!--<li class="invitations">-->
-                <!--<a href="#invitations">-->
-                    <!--Invitations<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>-->
-                <!--</a>-->
-            <!--</li>-->
+            <li class="invitation_list">
+                <a href="#invitation_list">
+                    <span class="">Invitations</span>
+                </a>
+            </li>
             <li class="create">
                 <a href="#create">
                     Create A New Challenge<span class="message-status message-status-hidden ui-icon ui-icon-custom icon-email"></span>
@@ -152,7 +158,7 @@
             <li>
                 <a>
                     <span>{{ description }}</span>
-                    <span class="new ui-li-count" style="float:right">{{ count }}</span>
+                    <span class="ui-li-count">{{ count }}</span>
                 </a>
             </li>
         {{/challenges}}
@@ -166,7 +172,32 @@
     <div class="footer"></div>
 </script>
 
+<script id="invitation_list_template" type="text/template">
+    <div data-role="content">
+        <h2>Your Pending Invitations</h2>
+        <ul data-role="listview" data-inset="true">
+            {{#invitations}}
+            <li>
+                <a href="#">
+                    <span>{{ description }}</span>
+                    <span class="ui-li-count">{{ count }}</span>
+                </a>
+                    <!--<div data-role="controlgroup" data-type="vertical" >-->
+                    <!--</div>-->
 
+                <!--<a data-role="button" data-theme="b">Accept</a>-->
+                <!--<a data-role="button" data-theme="c">Decline</a>-->
+            </li>
+            {{/invitations}}
+            {{^invitations}}
+            <li>
+                <h3>You have no pending invitations</h3>
+            </li>
+            {{/invitations}}
+        </ul>
+    </div>
+    <div class="footer"></div>
+</script>
 
 <script id="profile_template" type="text/template">
     <div data-role="content">
@@ -195,7 +226,6 @@
     </div>
     <div class="footer"></div>
 </script>
-
 
 <script id="login_template" type="text/template">
     <div data-role="content">

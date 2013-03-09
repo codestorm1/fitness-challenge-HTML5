@@ -332,6 +332,7 @@ define("customCodeClient", ["jquery"], function($) {
             };
             StackMob.customcode('update_fitbit_activities', params, {
                 success: function(tokens) {
+                    console.debug('tokens response: ' + JSON.stringify(tokens));
                     if (typeof callback === "function") {
                         callback(true, tokens)
                     }
@@ -351,6 +352,7 @@ define("customCodeClient", ["jquery"], function($) {
 //                    if (that.user) {
                         that.getFitbitUser(tokenData.oauth_token, tokenData.oauth_token_secret, tokenData.fitbit_user_id, function(success, fitbitUserData) {
                             if (success) {
+                                console.debug('get fitbit user response: ' + JSON.stringify(fitbitUserData));
                                 delete fitbitUserData.encodedID;
                                 var params = fitbitUserData;
                                 params.accesstoken =  tokenData.oauth_token;
@@ -386,6 +388,7 @@ define("customCodeClient", ["jquery"], function($) {
                 var user = new StackMob.User({ username: username });
                 user.fetch({
                     success: function(model) {
+                        console.debug('login response: ' + JSON.stringify(model.toJSON()));
                         callback(true, model);
                     },
                     error: function(data) {
@@ -405,32 +408,35 @@ define("customCodeClient", ["jquery"], function($) {
             var q = new StackMob.Collection.Query();
             q.equals('inviteduser', username);
             q.equals('responded', false);
+            q.setExpand(1);
             invitations.query(q, {
                 success: function(model) {
                     var len = model.models.length;
+                    console.debug('invitation response: ' + JSON.stringify(model.toJSON()));
                     if (len === 0) {
                         callback(true, model);
                         return;
                     }
 
+
                     // TODO: move this into a separate call?
-                    for (var i = 0; i < len; i++) {
-                        var invite = model.models[i];
-                        var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
-                        var challenge = new Challenge();
-                        challenge.fetch( {
-                            success: function(model) {
-                                callback(true, model);
-                            },
-                            error: function(model, response) {
-                                console.debug(response);
-                                callback(true, response);
-                            }
-                        });
-                    }
+//                    for (var i = 0; i < len; i++) {
+//                        var invite = model.models[i];
+//                        var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
+//                        var challenge = new Challenge();
+//                        challenge.fetch( {
+//                            success: function(model) {
+//                                callback(true, model);
+//                            },
+//                            error: function(model, response) {
+//                                console.debug(response);
+//                                callback(true, response);
+//                            }
+//                        });
+//                    }
                     callback(true, model);
                 },
-                error: function(response) {
+                error: function(model, response) {
                     that.showMessage('query failed trying to get user ' + response);
                     console.debug(response);
                     callback(false, response);
@@ -449,6 +455,7 @@ define("customCodeClient", ["jquery"], function($) {
             q.mustBeOneOf('users', username);
             challenges.query(q, {
                 success: function(model) {
+                    console.debug('challenges response: ' + JSON.stringify(model.toJSON()));
                     callback(true, model);
                 },
                 error: function(response) {
