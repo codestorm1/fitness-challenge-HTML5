@@ -30,29 +30,26 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
 //                    { "attributes" : {"challengecreator" : "someone", "challengetype" : "steps3"}}];
 //                var dto = {"challenges" : challenges};
 
-                var invitations = [];
-                _.each(this.model.models, function(invitation) {
-                    var challenge = invitation.get('challenge');
-                    //var description = challenge.get('challengetype');
-                    var startDate = new Date(challenge.startdate);
-                    var endDate = new Date(challenge.enddate);
-                    var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
-                    var count = challenge.users.length;
-                    var challengeDTO = {
-                        "invitation_id" : invitation.get('invitation_id'),
-                        "description" : description,
-                        "count" : count
-                    };
-                    invitations.push(challengeDTO);
-                });
-                var dto = {"invitations" : invitations};
-                var html = Mustache.to_html(template.html(), dto);
+                var challenge = this.model.get('challenge');
+                //var description = challenge.get('challengetype');
+                var startDate = new Date(challenge.startdate);
+                var endDate = new Date(challenge.enddate);
+                var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
+                var count = challenge.users.length;
+                var invitationDTO = {
+                    "invitation_id" : this.model.get('invitation_id'),
+                    "description" : description,
+                    "count" : count
+                };
+
+                var dto = {"invitation" : invitationDTO};
+                var html = '';// Mustache.to_html(template.html(), dto);
                 this.$el.empty();
                 this.$el.append(header.html()).append(html);
-                //this.$el.trigger('create');
-                $('#invitation_list[data-role="listview"]').listview();
+                this.$el.trigger('create');
+//                $('#invitation[data-role="listview"]').listview();
                 return this;
             }
         });
-        return InvitationListView;
+        return InvitationView;
     });

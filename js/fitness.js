@@ -88,6 +88,27 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             });
         },
 
+        getInvitations : function(username, allowCaching, callback) {
+            var that = this;
+            if (allowCaching && this.invitations) {
+                callback(true, invitations);
+                return;
+            }
+            customCode.getChallengeInvites(username, function(success, data) {
+                if (!success) {
+                    that.showMessage('Failed to check for challenge invites');
+                    callback(false, data);
+                    return;
+                }
+                that.invitations = data;
+                that.invitationLookup = that.invitationLookup || {};
+                _.each(data.models, function(invitation) {
+                    that.invitationLookup[invitation.get('invitation_id')] = invitation;
+                });
+                callback(true, data);
+            });
+        },
+
         updateIfStale : function(username, callback) {
             if (typeof callback !== "function") {
                 throw 'callback is required';
