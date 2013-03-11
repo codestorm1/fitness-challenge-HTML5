@@ -91,7 +91,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
         getInvitations : function(username, allowCaching, callback) {
             var that = this;
             if (allowCaching && this.invitations) {
-                callback(true, invitations);
+                callback(true, this.invitations);
                 return;
             }
             customCode.getChallengeInvites(username, function(success, data) {

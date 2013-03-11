@@ -188,7 +188,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var footerSelector = pageSelector + ' .footer';
             this.ensureLogin(function(success) {
                 var changePage = function() {
-                    $.mobile.changePage(pageSelector + '/' +  invitationID, {reverse: false, changeHash: true});
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                     $.mobile.showPageLoadingMsg();
                 };
                 if (!that.invitationView) {

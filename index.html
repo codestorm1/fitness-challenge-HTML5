@@ -73,10 +73,13 @@
 <div id="challenge_list" data-role="page" data-title="Challenges">
 </div>
 
+<div id="challenge_detail" data-role="page" data-title="Challenge Detail">
+</div>
+
 <div id="invitation_list" data-role="page" data-title="Invitations">
 </div>
 
-<div id="challenge_detail" data-role="page" data-title="Challenge Detail">
+<div id="invitation" data-role="page" data-title="Invitation">
 </div>
 
 <div id="create" data-role="page" data-title="Create Challenge">
@@ -178,15 +181,10 @@
         <ul data-role="listview" data-inset="true">
             {{#invitations}}
             <li>
-                <a href="#">
+                <a href="#invitation/{{ invitation_id}}">
                     <span>{{ description }}</span>
                     <span class="ui-li-count">{{ count }}</span>
                 </a>
-                    <!--<div data-role="controlgroup" data-type="vertical" >-->
-                    <!--</div>-->
-
-                <!--<a data-role="button" data-theme="b">Accept</a>-->
-                <!--<a data-role="button" data-theme="c">Decline</a>-->
             </li>
             {{/invitations}}
             {{^invitations}}
@@ -195,6 +193,17 @@
             </li>
             {{/invitations}}
         </ul>
+    </div>
+    <div class="footer"></div>
+</script>
+
+
+<script id="invitation_template" type="text/template">
+    <div data-role="content">
+        <h2>{{ description }}</h2>
+        <h3>{{ count }} player(s) have joined so far</h3>
+        <a href="#" class="invitation_accept" data-role="button" data-theme="e">Accept</a>
+        <a href="#" class="invitation_decline" data-role="button" data-theme="d">Decline</a>
     </div>
     <div class="footer"></div>
 </script>

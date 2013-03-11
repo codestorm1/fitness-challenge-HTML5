@@ -567,10 +567,10 @@ var fitness = fitness || {
                                 "accepted" : false});
                             invitation.create({
                                 success: function(model) {
-                                    that.showMessage("invitation to " + friendID + " saved");
+                                    that.showMessage("invitation to " + model.get('inviteduser') + " saved");
                                 },
                                 error: function(model) {
-                                    that.showMessage("invitation to " + friendID + " failed");
+                                    that.showMessage("invitation to " + model.get('inviteduser') + " failed");
                                 }
                             });
                         }

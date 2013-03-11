@@ -67,10 +67,10 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness", "mo
                                 "accepted" : false});
                             invitation.create({
                                 success: function(model) {
-                                    fitness.showMessage("invitation to " + friendID + " saved");
+                                    fitness.showMessage("invitation to " + model.get('inviteduser') + " saved");
                                 },
                                 error: function(model, more) {
-                                    fitness.showMessage("invitation to " + friendID + " failed " + more || '');
+                                    fitness.showMessage("invitation to " + model.get('inviteduser') + " failed " + more || '');
                                 }
                             });
                         }
