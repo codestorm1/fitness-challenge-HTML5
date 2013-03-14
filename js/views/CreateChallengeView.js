@@ -1,8 +1,8 @@
 // file dependencies
-define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness", "models/ChallengeModel" ], function( $, Backbone, Mustache, fitness, ChallengeModel ) {
+define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness", "models/ChallengeModel" ], function( $, Backbone, Mustache, fitness, ChallengeModel ) {
 
 
-    var ChallengeView = Backbone.View.extend({
+    var CreateChallengeView = Backbone.View.extend({
         el: '#create',
 
         initialize: function() {
@@ -92,6 +92,6 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness", "mo
     });
 
     // Returns the View class
-    return ChallengeView;
+    return CreateChallengeView;
 
 });

@@ -1,9 +1,9 @@
 define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel",
     "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView",
-    "views/ChallengeView", "views/ChallengeListView", "views/InvitationView", "views/InvitationListView", "jquerymobile" ],
+    "views/CreateChallengeView", "views/ChallengeListView", "views/InvitationView", "views/InvitationListView", "jquerymobile" ],
     function( $, Backbone, fitness, customCode, ChallengeModel,
               FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView,
-              ChallengeView, ChallengeListView, InvitationView, InvitationListView, $__jqm ) {
+              CreateChallengeView, ChallengeListView, InvitationView, InvitationListView, $__jqm ) {
 
        // "use strict";
     // Extends Backbone.Router
@@ -135,6 +135,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var footerSelector = pageSelector + ' .footer';
             this.ensureLogin(function(success) {
                 if (!that.challengesView) {
+                    $.mobile.showPageLoadingMsg();
                     customCode.getChallenges(fitness.user.get('username'), function(success, data) {
                         if (success) {
                             fitness.challenges = data;
@@ -150,7 +151,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 }
                 else {
                     $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                    $.mobile.showPageLoadingMsg();
                 }
             });
         },
@@ -161,11 +161,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var footerSelector = pageSelector + ' .footer';
             function changePage() {
                 $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                $.mobile.showPageLoadingMsg();
             }
 
             this.ensureLogin(function(success) {
                 if (!that.invitationsView) {
+                    $.mobile.showPageLoadingMsg();
                     fitness.getInvitations(fitness.user.get('username'), false, function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to load invitations');
@@ -243,9 +243,13 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 if (!that.authView) {
                     var footerView = new FooterView( { el: "#auth .footer" } );
                     that.authView = new AuthView( { el: "#auth" } );
+                    $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                    $.mobile.showPageLoadingMsg();
                 }
-                $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
-                $.mobile.showPageLoadingMsg();
+                else {
+                    $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
+                    $.mobile.showPageLoadingMsg();
+                }
             });
         },
 
@@ -256,12 +260,15 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     that.showLogin();
                     return;
                 }
-                if (!that.challengeView) {
-                    that.challengeView = new ChallengeView( { el: "#create" } );
+                if (!that.createChallengeView) {
+                    $.mobile.showPageLoadingMsg();
+                    that.createChallengeView = new CreateChallengeView( { el: "#create" } );
                     var footerView = new FooterView( { el: "#create .footer" } );
+                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
                 }
-                $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
-                $.mobile.showPageLoadingMsg();
+                else {
+                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
+                }
             });
         },
 
@@ -274,17 +281,18 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 }
 
                 if (!that.friendsView) {
+                    $.mobile.showPageLoadingMsg();
                     fitness.updateFitbitFriends(fitness.user.get('username'), function(success, data) {
                         if (success) {
                             that.friendsView = new FriendsView( { el: "#friends" } );
                             var footerView = new FooterView( { el: "#friends .footer" } );
                             $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
-                            $.mobile.showPageLoadingMsg();
                         }
                     });
                 }
-                $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
-                $.mobile.showPageLoadingMsg();
+                else {
+                    $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
+                }
             });
         }
 

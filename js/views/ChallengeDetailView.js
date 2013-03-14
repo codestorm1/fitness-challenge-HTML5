@@ -1,4 +1,4 @@
-define("views/FriendsView", [ "jquery", "backbone", "mustache", "fitness" ], function( $, Backbone, Mustache, fitness ) {
+define("views/ChallengeDetailView", [ "jquery", "backbone", "mustache", "fitness" ], function( $, Backbone, Mustache, fitness ) {
 
     this.FriendsView = Backbone.View.extend({
 

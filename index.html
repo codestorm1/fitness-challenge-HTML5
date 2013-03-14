@@ -29,7 +29,7 @@
     <!--<script src="js/models/InviteModel.js"></script>-->
     <!--<script src="js/models/UserModel.js"></script>-->
     <!--<script src="js/views/AuthView.js"></script>-->
-    <!--<script src="js/views/ChallengeView.js"></script>-->
+    <!--<script src="js/views/CreateChallengeView.js"></script>-->
     <!--<script src="js/views/FooterView.js"></script>-->
     <!--<script src="js/views/FriendsView.js"></script>-->
     <!--<script src="js/views/HomeView.js"></script>-->
@@ -170,6 +170,26 @@
             <h3>You are not competing in any challenges</h3>
         </li>
         {{/challenges}}
+        </ul>
+    </div>
+    <div class="footer"></div>
+</script>
+
+<script id="challenge_template" type="text/template">
+    <div data-role="content">
+        <h2>Your Friends</h2>
+        <ul data-role="listview" data-inset="true">
+            {{#friends}}
+            <li>
+                <img src="{{ user.avatar }}" class="friend_avatar">
+                <h3>{{ user.displayName }}</h3>
+            </li>
+            {{/friends}}
+            {{^friends}}
+            <li>
+                <h3>None of your fitbit friends are using Fitness Challenge</h3>
+            </li>
+            {{/friends}}
         </ul>
     </div>
     <div class="footer"></div>
