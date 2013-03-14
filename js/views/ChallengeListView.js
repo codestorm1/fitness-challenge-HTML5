@@ -24,7 +24,8 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "fitness",
                     var endDate = new Date(challenge.get('enddate'));
                     var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
                     var count = challenge.get('users').length;
-                    var challengeDTO = { "description" : description,
+                    var challengeDTO = { "challengeID" : challenge.get("challenge_id"),
+                                         "description" : description,
                                          "count" : count};
                     challenges.push(challengeDTO);
                 });

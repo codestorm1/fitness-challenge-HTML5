@@ -1,9 +1,9 @@
 define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel",
     "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView",
-    "views/CreateChallengeView", "views/ChallengeListView", "views/InvitationView", "views/InvitationListView", "jquerymobile" ],
+    "views/CreateChallengeView", "views/ChallengeListView", "views/ChallengeView", "views/InvitationView", "views/InvitationListView", "jquerymobile" ],
     function( $, Backbone, fitness, customCode, ChallengeModel,
               FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView,
-              CreateChallengeView, ChallengeListView, InvitationView, InvitationListView, $__jqm ) {
+              CreateChallengeView, ChallengeListView, ChallengeView, InvitationView, InvitationListView, $__jqm ) {
 
        // "use strict";
     // Extends Backbone.Router
@@ -30,6 +30,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             "home": "showHome",
             "login" : "showLogin",
             "challenge_list" : "showChallengeList",
+            "challenge/:challenge_id" : "showChallenge",
             "invitation_list" : "showInvitationList",
             "invitation/:invitation_id" : "showInvitation",
             "create" : "showCreate",
@@ -146,7 +147,29 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                         that.challengesView = new ChallengeListView({el: pageSelector, model: fitness.challenges});
                         var footerView = new FooterView({el: footerSelector});
                         $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                        $.mobile.showPageLoadingMsg();
+                    });
+                }
+                else {
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                }
+            });
+        },
+
+        showChallenge: function(challengeID) {
+            var that = this;
+            var pageSelector = '#challenge';
+            var footerSelector = pageSelector + ' .footer';
+            this.ensureLogin(function(success) {
+                if (!fitness.challenges) {
+                    $.mobile.showPageLoadingMsg();
+                    fitness.getChallenges(fitness.user.get('username'), false, function(success, data) {
+                        if (!success) {
+                            fitness.showMessage('Failed to get challenges');
+                            return;
+                        }
+                        that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
+                        var footerView = new FooterView({el: footerSelector});
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                     });
                 }
                 else {
@@ -159,9 +182,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var that = this;
             var pageSelector = '#invitation_list';
             var footerSelector = pageSelector + ' .footer';
-            function changePage() {
-                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-            }
 
             this.ensureLogin(function(success) {
                 if (!that.invitationsView) {
@@ -173,11 +193,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                         }
                         that.invitationsView = new InvitationListView({el: pageSelector, model: data});
                         var footerView = new FooterView({el: footerSelector});
-                        changePage();
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                     });
                 }
                 else {
-                    changePage();
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 }
             });
         },
@@ -187,10 +207,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var pageSelector = '#invitation';
             var footerSelector = pageSelector + ' .footer';
             this.ensureLogin(function(success) {
-                var changePage = function() {
-                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                    $.mobile.showPageLoadingMsg();
-                };
                 if (!that.invitationView) {
                     fitness.getInvitations(fitness.user.get('username'), true, function(success) {
                         if (!success) {
@@ -199,11 +215,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                         }
                         that.invitationView = new InvitationView({el: "#invitation", model: fitness.invitationLookup[invitationID]});
                         var footerView = new FooterView({el: footerSelector});
-                        changePage();
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                     });
                 }
                 else {
-                    changePage();
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 }
             });
         },

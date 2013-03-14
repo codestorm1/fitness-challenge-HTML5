@@ -453,7 +453,7 @@ define("customCodeClient", ["jquery"], function($) {
             var challenges = new Challenges();
             var q = new StackMob.Collection.Query();
             q.mustBeOneOf('users', username);
-            challenges.query(q, {
+            q.setExpand(1);            challenges.query(q, {
                 success: function(model) {
                     console.debug('challenges response: ' + JSON.stringify(model.toJSON()));
                     callback(true, model);

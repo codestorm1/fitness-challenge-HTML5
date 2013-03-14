@@ -73,7 +73,7 @@
 <div id="challenge_list" data-role="page" data-title="Challenges">
 </div>
 
-<div id="challenge_detail" data-role="page" data-title="Challenge Detail">
+<div id="challenge" data-role="page" data-title="Challenge Detail">
 </div>
 
 <div id="invitation_list" data-role="page" data-title="Invitations">
@@ -159,7 +159,7 @@
         <ul data-role="listview" data-inset="true">
         {{#challenges}}
             <li>
-                <a>
+                <a href="#challenge/{{ challengeID }}">
                     <span>{{ description }}</span>
                     <span class="ui-li-count">{{ count }}</span>
                 </a>
@@ -177,19 +177,20 @@
 
 <script id="challenge_template" type="text/template">
     <div data-role="content">
-        <h2>Your Friends</h2>
+        <h2>Your Challenge</h2>
+        <h2>{{description}}</h2>
         <ul data-role="listview" data-inset="true">
-            {{#friends}}
+            {{#users}}
             <li>
-                <img src="{{ user.avatar }}" class="friend_avatar">
-                <h3>{{ user.displayName }}</h3>
+                <img src="{{ avatar }}" class="friend_avatar">
+                <h3>{{ displayname }}</h3>
             </li>
-            {{/friends}}
-            {{^friends}}
+            {{/users}}
+            {{^users}}
             <li>
-                <h3>None of your fitbit friends are using Fitness Challenge</h3>
+                <h3>That's odd, there are no participants in this challenge</h3>
             </li>
-            {{/friends}}
+            {{/users}}
         </ul>
     </div>
     <div class="footer"></div>

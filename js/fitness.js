@@ -101,9 +101,30 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                     return;
                 }
                 that.invitations = data;
-                that.invitationLookup = that.invitationLookup || {};
+                that.invitationLookup = {};
                 _.each(data.models, function(invitation) {
                     that.invitationLookup[invitation.get('invitation_id')] = invitation;
+                });
+                callback(true, data);
+            });
+        },
+
+        getChallenges : function(username, allowCaching, callback) {
+            var that = this;
+            if (allowCaching && this.challenges) {
+                callback(true, this.challenges);
+                return;
+            }
+            customCode.getChallenges(username, function(success, data) {
+                if (!success) {
+                    that.showMessage('Failed to check for challenges');
+                    callback(false, data);
+                    return;
+                }
+                that.challenges = data;
+                that.challengeLookup = {};
+                _.each(data.models, function(challenge) {
+                    that.challengeLookup[challenge.get('challenge_id')] = challenge;
                 });
                 callback(true, data);
             });
