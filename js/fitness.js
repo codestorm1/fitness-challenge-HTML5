@@ -139,18 +139,13 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                callback(true, 'Already updated fitbit info');
 //                return;
 //            }
-            if (this.friends) {
-                callback(true);
-                return;
-            }
+//            if (this.friends) {
+//                callback(true);
+//                return;
+//            }
             var that = this;
-            var updatedFully = true;
-            customCode.getChallengeInvites(username, function(success, data) {
-                if (!success) {
-                    that.showMessage('Failed to check for challenge invites');
-                    updatedFully = false;
-                }
-                that.invitations = data;
+//            var updatedFully = true;
+            that.getInvitations(username, true, callback);
 //                    if (data.models.length > 0) {
 //                        for (var i = 0; i < data.models.length; i++) {
 //                            var model = data.models[i];
@@ -160,8 +155,6 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                    else {
 //                        //that.showMessage('You have no pending challenge invitations');
 //                    }
-                callback(true, data);
-
 //                customCode.getFitbitFriends(username, function(success, friends) {
 //                    if (!success) {
 //                        that.showMessage("Failed to get fitbit friends");
@@ -197,7 +190,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                        callback(updatedFully, data);
 //                    });
 //                });
-            });
+//            });
         },
 
 

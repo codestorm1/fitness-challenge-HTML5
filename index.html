@@ -103,7 +103,7 @@
         <!--<h1 class="ir logo ui-title">Fitness Challenge</h1>-->
     <!--</header>-->
     <div data-role="content">
-        <ul data-role="listview" data-inset="true" class="home_links" data-checknew="true">
+        <ul data-role="listview" data-inset="true">
             <li class="profile">
                 <a href="#profile">My Profile</a>
             </li>
@@ -157,19 +157,26 @@
     <div data-role="content">
         <h2>Your active challenges</h2>
         <ul data-role="listview" data-inset="true">
-        {{#challenges}}
+            <li>
+                <a href="#challenge">
+                    <span>description</span>
+                    <span class="ui-li-count">count</span>
+                </a>
+            </li>
+
+            {{#challenges}}
             <li>
                 <a href="#challenge/{{ challengeID }}">
                     <span>{{ description }}</span>
                     <span class="ui-li-count">{{ count }}</span>
                 </a>
             </li>
-        {{/challenges}}
-        {{^challenges}}
-        <li>
-            <h3>You are not competing in any challenges</h3>
-        </li>
-        {{/challenges}}
+            {{/challenges}}
+            {{^challenges}}
+            <li>
+                <h3>You are not competing in any challenges</h3>
+            </li>
+            {{/challenges}}
         </ul>
     </div>
     <div class="footer"></div>

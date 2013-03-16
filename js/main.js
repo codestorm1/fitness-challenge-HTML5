@@ -49,7 +49,7 @@ require(["jquery"], function($) {
         $.mobile.linkBindingEnabled = false;
         $.mobile.hashListeningEnabled = false;
         $.mobile.pushStateEnabled = false;
-        $.mobile.defaultPageTransition = 'slide';
+        $.mobile.defaultPageTransition = 'fade';
 
         $('ul[data-role="listview"] a').live('click', function (event, ui) {
             $(event.currentTarget).addClass('ui-btn-active');

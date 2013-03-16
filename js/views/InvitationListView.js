@@ -50,7 +50,8 @@ define("views/InvitationListView", [ "jquery", "backbone", "mustache", "fitness"
                 this.$el.empty();
                 this.$el.append(header.html()).append(html);
                 //this.$el.trigger('create');
-                $('#invitation_list[data-role="listview"]').listview();
+                this.$el.trigger('refresh');
+                //$('#invitation_list[data-role="listview"]').listview();
                 return this;
             }
         });
