@@ -21,7 +21,7 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness" ], f
             var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(header.html()).append(html);
-            $('#challenge[data-role="listview"]').listview();
+            $('#challenge[data-role="listview"]').listview().listview('refresh');
             //this.$el.trigger('create');
             return this;
         }

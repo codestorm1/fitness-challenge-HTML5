@@ -137,7 +137,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             this.ensureLogin(function(success) {
                 if (!that.challengesView) {
                     $.mobile.showPageLoadingMsg();
-                    customCode.getChallenges(fitness.user.get('username'), function(success, data) {
+                    fitness.getChallenges(fitness.user.get('username'), true, function(success, data) {
                         if (success) {
                             fitness.challenges = data;
                         }
@@ -159,6 +159,13 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             var that = this;
             var pageSelector = '#challenge';
             var footerSelector = pageSelector + ' .footer';
+            function setView() {
+                if (!that.challengeView) {
+                    that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
+                    var footerView = new FooterView({el: footerSelector});
+                }
+                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+            };
             this.ensureLogin(function(success) {
                 if (!fitness.challenges) {
                     $.mobile.showPageLoadingMsg();
@@ -167,13 +174,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                             fitness.showMessage('Failed to get challenges');
                             return;
                         }
-                        that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
-                        var footerView = new FooterView({el: footerSelector});
-                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                        setView();
                     });
                 }
                 else {
-                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                    setView();
                 }
             });
         },
