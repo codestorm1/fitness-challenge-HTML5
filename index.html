@@ -139,8 +139,8 @@
         <ul data-role="listview" data-inset="true">
         {{#friends}}
             <li>
-                <img src="{{ user.avatar }}" class="friend_avatar">
-                <h3>{{ user.displayName }}</h3>
+                <img src="{{ attributes.avatar }}" class="friend_avatar">
+                <h3>{{ attributes.displayname }}</h3>
             </li>
         {{/friends}}
         {{^friends}}
@@ -180,17 +180,19 @@
         <h2>Your Challenge</h2>
         <h2>{{description}}</h2>
         <ul data-role="listview" data-inset="true">
-            {{#users}}
+            {{#leaders}}
             <li>
-                <img src="{{ avatar }}" class="friend_avatar">
-                <h3>{{ displayname }}</h3>
+                <img src="{{ user.avatar }}" class="friend_avatar">
+                <h3>{{ user.displayname }}</h3>
+                <!--<span style="float:right">Steps</span>-->
+                <span class="ui-li-count">{{ value_int }}</span>
             </li>
-            {{/users}}
-            {{^users}}
+            {{/leaders}}
+            {{^leaders}}
             <li>
                 <h3>That's odd, there are no participants in this challenge</h3>
             </li>
-            {{/users}}
+            {{/leaders}}
         </ul>
     </div>
     <div class="footer"></div>

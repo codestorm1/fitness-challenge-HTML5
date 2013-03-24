@@ -50,7 +50,9 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 callback(false);
                 return;
             }
+            $.mobile.showPageLoadingMsg();
             fitness.loginWithID(username, function(success) {
+                $.mobile.hidePageLoadingMsg();
                 callback(success);
                 return;
             });
@@ -72,7 +74,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                         var requestToken = localStorage.getItem("request_token");
                         if (!requestToken) {
                             fitness.showMessage('Missing Fitbit request token.'); // need to start over with request token call on auth page
-                            this.showAuth();
+                            that.showAuth();
                         }
                         var requestTokenSecret = localStorage.getItem("request_token_secret");
                         var oauthVerifier = customCode.getQueryVariable(window.location.href, 'oauth_verifier');
@@ -144,7 +146,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             this.ensureLogin(function(success) {
                 if (!fitness.challenges) {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getChallenges(fitness.user.get('username'), true, function(success, data) {
+                    fitness.getUserChallenges(fitness.user.get('username'), true, function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to get challenges');
                             return;
@@ -171,18 +173,18 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
             };
             this.ensureLogin(function(success) {
-                if (!fitness.challenges) {
+                if (fitness.challengeLookup && fitness.challengeLookup[challengeID]) {
+                    setView();
+                }
+                else {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getChallenges(fitness.user.get('username'), false, function(success, data) {
+                    fitness.getChallenge(challengeID, function(success, data) {
                         if (!success) {
-                            fitness.showMessage('Failed to get challenges');
+                            fitness.showMessage('Failed to get challenge');
                             return;
                         }
                         setView();
                     });
-                }
-                else {
-                    setView();
                 }
             });
         },
@@ -295,11 +297,19 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     that.showLogin();
                     return;
                 }
-                if (!that.createChallengeView) {
-                    $.mobile.showPageLoadingMsg();
+                function createAndshowView() {
                     that.createChallengeView = new CreateChallengeView( { el: "#create" } );
                     var footerView = new FooterView( { el: "#create .footer" } );
                     $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
+                }
+                if (!that.createChallengeView) {
+                    $.mobile.showPageLoadingMsg();
+                    if (!fitness.friends) {
+                        fitness.getStackmobFriends(fitness.user.get('friends'), function(success, data) {
+                            createAndshowView();
+                        });
+                    }
+                    createAndshowView();
                 }
                 else {
                     $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
@@ -318,11 +328,14 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 if (!that.friendsView) {
                     $.mobile.showPageLoadingMsg();
                     fitness.updateFitbitFriends(fitness.user.get('username'), function(success, data) {
-                        if (success) {
-                            that.friendsView = new FriendsView( { el: "#friends" } );
+                        if (!success) {
+                            console.debug('Failed to update fitbit friends');
+                        }
+                        fitness.getStackmobFriends(fitness.user.get('friends'), function(success, data) {
+                            that.friendsView = new FriendsView( { el: "#friends", model: fitness.friends } );
                             var footerView = new FooterView( { el: "#friends .footer" } );
                             $.mobile.changePage( "#friends" , { reverse: false, changeHash: true } );
-                        }
+                        });
                     });
                 }
                 else {

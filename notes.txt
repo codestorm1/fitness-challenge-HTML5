@@ -3,3 +3,20 @@ fitness challenge:
 What causes the header to not get jquery styles?
     1- jquery mobile still trying to handle paging
     2- $.mobilechangepage was called before view was created (callback didn't finish)
+
+
+todo:
+challenge view: showing same challenge every time
+                show leaderboard
+update challenge progress
+update activities
+cron job?
+accept/decline - error?
+
+auto update collections when changed:
+invitations
+challenges
+
+add back button
+
+use stackmob login system

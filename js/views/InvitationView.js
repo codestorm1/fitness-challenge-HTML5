@@ -39,7 +39,7 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                 var startDate = new Date(challenge.startdate);
                 var endDate = new Date(challenge.enddate);
                 var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
-                var count = challenge.users.length;
+                var count = challenge.leaders.length;
                 var invitationDTO = {
                     "invitation_id" : this.model.get('invitation_id'),
                     "description" : description,
@@ -62,8 +62,8 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                     success: function(model) {
                         console.debug(JSON.stringify(model.toJSON()));
                         //fitness.showMessage('updated invitation');
-                        //window.router.navigate('invitation_list');
-                        $.mobile.changePage('#invitation_list', {'reverse' : true, 'changeHash' : true});
+                        router.navigate('#invitation_list', true);
+                        //$.mobile.changePage('#invitation_list', {'reverse' : true, 'changeHash' : true});
                     },
                     error: function(model, response) {
                         console.debug(response);
@@ -76,45 +76,18 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                 var that = this;
                 e.preventDefault();
                 var inviteChallenge = this.model.get('challenge');
-                function updateInvite() {
-                    var changes = {'accepted': true, 'responded' : true};
-                    that.model.set(changes);
-                    that.saveModelChangePage(changes);
-                }
+                $.mobile.showPageLoadingMsg();
+                fitness.joinUserToChallenge(fitness.user.get('username'), inviteChallenge.challenge_id, function(success) {
+                    if (!success) {
+                        $.mobile.hidePageLoadingMsg();
+                        fitness.showMessage('Failed to accept challenge, please try again');
+                        return;
+                    }
+                });
                 var username = this.model.get('inviteduser').username;
-                if (inviteChallenge.users.indexOf(username) === -1) {
-                    var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
-                    var challenge = new Challenge({ challenge_id: inviteChallenge.challenge_id});
-                    challenge.fetch({
-                        success: function(model) {
-                            console.debug(JSON.stringify(model.toJSON()));
-                            var users = challenge.get('users');
-                            if (users.indexOf(username) === -1) {
-                                users.push(username);
-                                challenge.save({ 'users' : users}, {
-                                    success: function(model) {
-                                        console.debug(JSON.stringify(model.toJSON()));
-                                        updateInvite();
-                                    },
-                                    error: function(model, response) {
-                                        console.debug(response);
-                                        fitness.showMessage('failed to update challenge');
-                                    }
-                                });
-                            }
-                            else {
-                                updateInvite();
-                            }
-
-                        },
-                        error: function(model, response) {
-                            console.debug(response);
-                        }
-                    });
-                }
-                else {
-                    updateInvite();
-                }
+                var changes = {'accepted': true, 'responded' : true};
+                that.model.set(changes);
+                that.saveModelChangePage(changes);
             },
 
             declineInvitation : function(e) {

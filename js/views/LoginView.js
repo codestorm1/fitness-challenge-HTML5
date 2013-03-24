@@ -33,15 +33,27 @@ define("views/LoginView", [ "jquery", "backbone", "fitness", "customCodeClient"]
             $.mobile.loading("show");
             customCode.lookupFitnessUser(email, password, function(success, data) {
                 if (success) { // logged in
-                    $.mobile.loading("hide");
                     fitness.user = data;
                     var username = fitness.user.get('username');
-                    if (username) {
-                        fitness.log("logged in as " + username + " (" + fitness.user.get('email') + ")");
-                        localStorage.setItem('username', username);
-                    }
-                    $.mobile.loading("show");
-                    router.navigate('#home', true);
+                    var user = new StackMob.User({ username: username, password: password });
+                    user.login(false, {
+                        success: function(model) {
+//                            $.mobile.loading("hide");
+                            fitness.user = data;
+                            if (username) {
+                                fitness.log("logged in as " + username + " (" + fitness.user.get('email') + ")");
+                                localStorage.setItem('username', username);
+                            }
+//                            $.mobile.loading("show");
+                            console.debug(model);
+                            router.navigate('#home', true);
+                        },
+                        error: function(model, response) {
+                            console.debug(response);
+                            $.mobile.loading("hide");
+                            fitness.showMessage('login failed\n ' + data);
+                        }
+                    });
                 }
                 else {
                     $.mobile.loading("hide");

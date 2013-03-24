@@ -37,7 +37,7 @@ define("views/InvitationListView", [ "jquery", "backbone", "mustache", "fitness"
                     var startDate = new Date(challenge.startdate);
                     var endDate = new Date(challenge.enddate);
                     var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
-                    var count = challenge.users.length;
+                    var count = challenge.leaders.length;
                     var challengeDTO = {
                         "invitation_id" : invitation.get('invitation_id'),
                         "description" : description,

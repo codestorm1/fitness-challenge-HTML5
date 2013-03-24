@@ -69,7 +69,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                     callback(false, friends);
                 }
                 else {
-                    that.friends = friends;
+                    that.fitbitFriends = friends;
                     if (friends) {
                         customCode.saveFriendsToStackmob(username, friends, function(success, data) {
                             if (!success) {
@@ -77,13 +77,38 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                                 if (typeof data === "string") {
                                     console.log(data);
                                 }
+                                callback(false, data);
                             }
                             else {
+                                that.friendIDs = data.get('friends');
                                 callback(true, data);
                                 //that.showMessage(data.get('friendcount') + ' of your ' + data.get('fitbitfriendcount') + ' friends are using fitness challenge');
                             }
                         });
                     }
+                }
+            });
+        },
+
+        getStackmobFriends: function(friendIDs, callback) {
+            var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            var User = StackMob.Model.extend({ schemaName: 'user' });
+            var Users = StackMob.Collection.extend({ model: User });
+            var users = new Users();
+
+            var friendsQuery = new StackMob.Collection.Query();
+            friendsQuery.mustBeOneOf('username', friendIDs);
+            users.query(friendsQuery, {
+                success: function(friends) {
+                    that.friends = friends;
+                    callback(true, friends);
+                },
+                error: function(friends, response) {
+                    console.debug('failed to get fitness challenge friends');
+                    callback(false, response);
                 }
             });
         },
@@ -109,24 +134,64 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             });
         },
 
-        getChallenges : function(username, allowCaching, callback) {
+
+        getChallenge : function(challengeID, callback) {
             var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+            if (!challengeID) {
+                callback(false);
+                return;
+            }
+
+            var Challenge = StackMob.Model.extend({ schemaName: 'challenge'});
+            var challenge = new Challenge({'challenge_id' : challengeID});
+            challenge.fetchExpanded(2, {
+                success: function(model) {
+                    console.debug(JSON.stringify(model.toJSON()));
+                    that.challengeLookup = that.challengeLookup || {};
+                    that.challengeLookup[model.get('challenge_id')] = model;
+                    callback(true, model);
+                },
+                error: function(model, response) {
+                    console.debug(response);
+                    callback(false, response);
+                }
+            });
+        },
+
+
+        getUserChallenges : function(username, allowCaching, callback) {
+            var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
             if (allowCaching && this.challenges) {
                 callback(true, this.challenges);
                 return;
             }
-            customCode.getChallenges(username, function(success, data) {
-                if (!success) {
-                    that.showMessage('Failed to check for challenges');
-                    callback(false, data);
-                    return;
+            if (!username) {
+                callback(false);
+                return;
+            }
+
+            var sm_user = new StackMob.User({ username: username });
+            sm_user.fetchExpanded(1, {
+                success: function(model) {
+                    var tempUser = model;
+                    that.challenges = tempUser.get('challenges');
+                    if (!that.challenges) {
+                        that.showMessage('Could not retrieve your user data');
+                        callback(false, response);
+                        return;
+                    }
+                    callback(true, model);
+                },
+                error: function(data, response) {
+                    that.showMessage('Could not retrieve your user data');
+                    callback(false, response);
                 }
-                that.challenges = data;
-                that.challengeLookup = {};
-                _.each(data.models, function(challenge) {
-                    that.challengeLookup[challenge.get('challenge_id')] = challenge;
-                });
-                callback(true, data);
             });
         },
 
@@ -193,6 +258,126 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //            });
         },
 
+        joinUserToChallenge : function(stackmobUserID, challengeID, callback) {
+            var that = this;
+            if (typeof callback !== "function") {
+                throw 'callback is required';
+            }
+
+            var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
+            var challenge = new Challenge({'challenge_id' : challengeID});
+            challenge.fetch({
+                success: function(model) {
+
+                    var Leader = StackMob.Model.extend({ schemaName: 'leader' });
+                    var leaderID = challengeID + '_' + stackmobUserID;
+                    var leaderData =  {
+                            "leader_id" : leaderID,
+                            "user" : stackmobUserID,
+                            "challenge" : challengeID
+                        };
+                    var challengeType = model.get('value_type');
+                    switch (challengeType) {
+                        case "int":
+                        case null:
+                            leaderData.value_int = 0;
+                            break;
+                        case "float":
+                            leaderData.value_float = 0.0;
+                            break;
+                        case "boolean":
+                            leaderData.value_boolen = false;
+                    }
+                    var leader = new Leader(leaderData);
+
+                    leader.create({
+                        success: function(model) {
+                            var leaderID = model.get('leader_id');
+                            console.debug('leader object is saved, leader_id: ' + leaderID);
+                            var leaders = challenge.get('leaders') || [];
+                            leaders.push(leaderID);
+                            challenge.save({"leaders" : leaders}, {
+                                success: function(model) {
+                                    var challengeList = that.user.get('challenges');
+                                    challengeList = challengeList || [];
+                                    if ($.inArray(challengeID, challengeList) == -1) {
+                                        challengeList.push(challengeID);
+                                        that.user.save({'challenges' : challengeList}, {
+                                            success: function(model) {
+                                                callback(true, model);
+                                            },
+                                            error: function(model, response) {
+                                                console.debug("Failed to update challenge");
+                                                leader.delete();
+                                                callback(false, response);
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(model, response) {
+                                    console.debug("Failed to update challenge with new leader entry");
+                                    leader.delete();
+                                    console.debug(response);
+                                    callback(false, response);
+                                }
+                            });
+                        },
+                        error: function(model, response) {
+                            console.debug(response);
+                            console.debug("Failed to create leader entry");
+                            callback(false, response);
+                        }
+                    });
+                },
+                error: function(model, response) {
+                    console.debug(response);
+                    console.debug("Failed to fetch challenge");
+                    callback(false, response);
+                }
+            });
+        },
+
+        inviteFriendsToChallenge : function(challengeID, callback) {
+            var that = this;
+            var friendIDs = that.friends.models; //that.user.get('friends');
+            if (friendIDs && friendIDs.length > 0) {
+                var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
+                var len = friendIDs.length;
+                var successCount = 0;
+                var errorCount = 0;
+                for (var i = 0; i < len; i++) {
+                    function makeCallbackIfDone() {
+                        if (i = len) {
+                            var success = len === successCount;
+                            callback(success, successCount + ' invitations sent, ' + errorCount + ' failed.');
+                        }
+                    }
+                    var friendID = friendIDs[i];
+                    if (typeof friendID === "object") {
+                        friendID = friendID.get('username');
+                    }
+                    var invitation = new Invitation({
+                        "challenge" : challengeID,
+                        "challengeinviter" : that.user.get('username'),
+                        "inviteduser" : friendID,
+                        "responded" : false,
+                        "accepted" : false});
+                    invitation.create({
+                        success: function(model) {
+                            successCount++;
+                            makeCallbackIfDone();
+                            console.debug('Invitation to ' + friendID + ' sent.');
+                        },
+                        error: function(model, response) {
+                            errorCount++;
+                            console.debug(response);
+                            makeCallbackIfDone();
+                            console.debug('Invitation to ' + friendID + ' failed.');
+                        }
+                    });
+                }
+            }
+        },
 
 
 //            router : new FitnessRouter(),

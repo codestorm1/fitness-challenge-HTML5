@@ -10,15 +10,9 @@ define("views/FriendsView", [ "jquery", "backbone", "mustache", "fitness" ], fun
             var header = $('#header_template');
             var template = $('#friends_template');
 
-            var dto;
-            if (fitness.isLoggedIn() && fitness.friends) {
-                dto = {
-                    "friends" : fitness.friends
-                }
-            }
-            else {
-                dto = {};
-            }
+            var dto = {
+                    "friends" : this.model.models
+            };
             var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(header.html()).append(html);

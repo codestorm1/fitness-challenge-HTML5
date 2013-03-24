@@ -12,13 +12,13 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "fitness",
                 var header = $('#header_template');
                 var template = $('#challenge_list_template');
                 var challenges = [];
-                _.each(this.model.models, function(challenge) {
+                _.each(this.model, function(challenge) {
                     //var description = challenge.get('challengetype');
-                    var startDate = new Date(challenge.get('startdate'));
-                    var endDate = new Date(challenge.get('enddate'));
+                    var startDate = new Date(challenge.startdate);
+                    var endDate = new Date(challenge.enddate);
                     var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
-                    var count = challenge.get('users').length;
-                    var challengeDTO = { "challengeID" : challenge.get("challenge_id"),
+                    var count = challenge.leaders.length;
+                    var challengeDTO = { "challengeID" : challenge.challenge_id,
                                          "description" : description,
                                          "count" : count};
                     challenges.push(challengeDTO);

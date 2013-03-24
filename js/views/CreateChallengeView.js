@@ -47,35 +47,24 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
                 "startdate" : startDate.getTime(),
                 "enddate" : endDate.getTime(),
                 "challengecreator" : fitness.user.get('username'),
-                "users" : [fitness.user.get('username')]});
+                "value_type" : "int"
+//                "users" : [fitness.user.get('username')]
+                });
             $.mobile.loading("show");
             challenge.create({
                 success: function(model) {
                     $.mobile.loading("hide");
-                    var friendIDs = fitness.user.get('friends');
-                    if (friendIDs && friendIDs.length > 0) {
-                        var challenge_id = model.attributes.challenge_id;
-                        var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
-                        var len = friendIDs.length;
-                        for (var i = 0; i < len; i++) {
-                            var friendID = friendIDs[i];
-                            var invitation = new Invitation({
-                                "challenge" : challenge_id,
-                                "challengeinviter" : fitness.user.get('username'),
-                                "inviteduser" : friendID,
-                                "responded" : false,
-                                "accepted" : false});
-                            invitation.create({
-                                success: function(model) {
-                                    fitness.showMessage("invitation to " + model.get('inviteduser') + " saved");
-                                },
-                                error: function(model, more) {
-                                    fitness.showMessage("invitation to " + model.get('inviteduser') + " failed " + more || '');
-                                }
-                            });
+                    fitness.joinUserToChallenge(fitness.user.get('username'), challengeID, function(success, leaderModel) {
+                        if (!success) {
+                            fitness.showMessage('Failed to create challenge, please try again');
+                            challenge.delete();
+                            return;
                         }
-                    }
-                    fitness.showMessage('Challenge created!');
+                        fitness.showMessage('Challenge created!');
+                        fitness.inviteFriendsToChallenge(challengeID, function(success, data) {
+                            fitness.showMessage('Finished inviting friends: ' + data);
+                        })
+                    });
                 },
                 error: function(model, response) {
                     $.mobile.loading("hide");

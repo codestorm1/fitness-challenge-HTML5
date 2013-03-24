@@ -13,11 +13,13 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness" ], f
             var startDate = new Date(this.model.get('startdate'));
             var endDate = new Date(this.model.get('enddate'));
 
-            var dto = { "challengeID" : this.model.get("challenge_id"),
+            var dto = { "challengeID" : this.model.get('challenge_id'),
                 "description" : "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString(),
-                "users" : this.model.get('users')
+                "leaders" : this.model.get('leaders')
             };
-
+//            var Leader = StackMob.Model.extend({ schemaName: 'leader' });
+//            var Leaders = StackMob.Collection.extend({ model: Leader });
+//            var leaders = new Leaders();
             var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(header.html()).append(html);
