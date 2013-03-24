@@ -134,19 +134,19 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showChallengeList: function() {
             var that = this;
-            var pageSelector = '#challenge_list';
-            var footerSelector = pageSelector + ' .footer';
-            function createAndShowView() {
-                if (!that.challengesView) {
-                    that.challengesView = new ChallengeListView({el: pageSelector, model: fitness.challenges});
-                    var footerView = new FooterView({el: footerSelector});
-                }
-                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-            }
             this.ensureLogin(function(success) {
                 if (!success) {
                     that.showLogin();
                     return;
+                }
+                var pageSelector = '#challenge_list';
+                var footerSelector = pageSelector + ' .footer';
+                function createAndShowView() {
+                    if (!that.challengesView) {
+                        that.challengesView = new ChallengeListView({el: pageSelector, model: fitness.challenges});
+                        var footerView = new FooterView({el: footerSelector});
+                    }
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 }
                 if (!fitness.challenges) {
                     $.mobile.showPageLoadingMsg();
@@ -167,21 +167,20 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showChallenge: function(challengeID) {
             var that = this;
-            if (!success) {
-                that.showLogin();
-                return;
-            }
-
-            var pageSelector = '#challenge';
-            var footerSelector = pageSelector + ' .footer';
-            function setView() {
-                if (!that.challengeView) {
-                    that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
-                    var footerView = new FooterView({el: footerSelector});
-                }
-                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-            };
             this.ensureLogin(function(success) {
+                if (!success) {
+                    that.showLogin();
+                    return;
+                }
+                var pageSelector = '#challenge';
+                var footerSelector = pageSelector + ' .footer';
+                function setView() {
+                    if (!that.challengeView) {
+                        that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
+                        var footerView = new FooterView({el: footerSelector});
+                    }
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                };
                 if (fitness.challengeLookup && fitness.challengeLookup[challengeID]) {
                     setView();
                 }
@@ -200,22 +199,22 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showInvitationList: function() {
             var that = this;
-            if (!success) {
-                that.showLogin();
-                return;
-            }
-
-            var pageSelector = '#invitation_list';
-            var footerSelector = pageSelector + ' .footer';
-
-            function createAndShowView() {
-                if (!that.invitationsView) {
-                    that.invitationsView = new InvitationListView({el: pageSelector, model: fitness.invitations});
-                    var footerView = new FooterView({el: footerSelector});
-                }
-                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-            }
             this.ensureLogin(function(success) {
+                    if (!success) {
+                    that.showLogin();
+                    return;
+                }
+
+                var pageSelector = '#invitation_list';
+                var footerSelector = pageSelector + ' .footer';
+
+                function createAndShowView() {
+                    if (!that.invitationsView) {
+                        that.invitationsView = new InvitationListView({el: pageSelector, model: fitness.invitations});
+                        var footerView = new FooterView({el: footerSelector});
+                    }
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                }
                 if (!fitness.invitations) {
                     $.mobile.showPageLoadingMsg();
                     fitness.getInvitations(fitness.user.get('username'), false, function(success, data) {
@@ -235,31 +234,33 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showInvitation: function(invitationID) {
             var that = this;
-            if (!success) {
-                that.showLogin();
-                return;
-            }
-            var pageSelector = '#invitation';
-            var footerSelector = pageSelector + ' .footer';
-            function createAndShowView() {
-                that.invitationView = new InvitationView({el: "#invitation", model: fitness.invitationLookup[invitationID]});
-                var footerView = new FooterView({el: footerSelector});
-                $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-            }
             this.ensureLogin(function(success) {
-                if (!fitness.invitations) {
-                    $.mobile.showPageLoadingMsg();
-                    fitness.getInvitations(fitness.user.get('username'), true, function(success) {
-                        if (!success) {
-                            fitness.showMessage('Failed to load invitations');
-                            return;
-                        }
+                    if (!success) {
+                    that.showLogin();
+                    return;
+                }
+                var pageSelector = '#invitation';
+                var footerSelector = pageSelector + ' .footer';
+                function createAndShowView() {
+                    that.invitationView = new InvitationView({el: "#invitation", model: fitness.invitationLookup[invitationID]});
+                    var footerView = new FooterView({el: footerSelector});
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                }
+                this.ensureLogin(function(success) {
+                    if (!fitness.invitations) {
+                        $.mobile.showPageLoadingMsg();
+                        fitness.getInvitations(fitness.user.get('username'), true, function(success) {
+                            if (!success) {
+                                fitness.showMessage('Failed to load invitations');
+                                return;
+                            }
+                            createAndShowView();
+                        });
+                    }
+                    else {
                         createAndShowView();
-                    });
-                }
-                else {
-                    createAndShowView();
-                }
+                    }
+                });
             });
         },
 
@@ -272,16 +273,12 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     return;
                 }
                 if (!that.profileView) {
-                    that.createChallengeView = new CreateChallengeView( { el: "#create" } );
-                    var footerView = new FooterView( { el: "#create .footer" } );
-                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
-
-//                    that.profileView = new ProfileView( { el: "#profile", model: fitness.user } );
-//                    var footerView = new FooterView( { el: "#profile .footer"});
+                    that.profileView = new ProfileView( { el: "#profile", model: fitness.user } );
+                    var footerView = new FooterView( { el: "#profile .footer"});
+                    $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
                 }
                 else {
                     $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-                    $.mobile.showPageLoadingMsg();
                 }
             });
         },
