@@ -13,10 +13,7 @@ define("views/ProfileView", [ "jquery", "backbone", "mustache", "fitness", "cust
 
         render: function() {
             var template = $('#profile_template');
-            var dto = {};
-            if (fitness.isLoggedIn()) {
-                dto = fitness.user.toJSON();
-            }
+            var dto = this.model.toJSON();
             var html = Mustache.to_html(template.html(), dto);
 
             var header = $('#header_template');

@@ -3,8 +3,6 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
 
 
     var CreateChallengeView = Backbone.View.extend({
-        el: '#create',
-
         initialize: function() {
             this.render();
         },
@@ -20,6 +18,19 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
             this.$el.append(header.html()).append(template.html());
             this.$el.trigger('create');
             return this;
+
+
+//            var template = $('#profile_template');
+//            var dto = fitness.user.toJSON();
+//            var html = Mustache.to_html(template.html(), dto);
+//
+//            var header = $('#header_template');
+//            this.$el.empty();
+//            this.$el.append(header.html()).append(html);
+//            //this.$el.append(header.html());
+//            this.$el.trigger('create');
+//            return this;
+
         },
 
 

@@ -144,6 +144,10 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
             }
             this.ensureLogin(function(success) {
+                if (!success) {
+                    that.showLogin();
+                    return;
+                }
                 if (!fitness.challenges) {
                     $.mobile.showPageLoadingMsg();
                     fitness.getUserChallenges(fitness.user.get('username'), true, function(success, data) {
@@ -163,6 +167,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showChallenge: function(challengeID) {
             var that = this;
+            if (!success) {
+                that.showLogin();
+                return;
+            }
+
             var pageSelector = '#challenge';
             var footerSelector = pageSelector + ' .footer';
             function setView() {
@@ -191,6 +200,11 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showInvitationList: function() {
             var that = this;
+            if (!success) {
+                that.showLogin();
+                return;
+            }
+
             var pageSelector = '#invitation_list';
             var footerSelector = pageSelector + ' .footer';
 
@@ -221,6 +235,10 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
 
         showInvitation: function(invitationID) {
             var that = this;
+            if (!success) {
+                that.showLogin();
+                return;
+            }
             var pageSelector = '#invitation';
             var footerSelector = pageSelector + ' .footer';
             function createAndShowView() {
@@ -249,12 +267,22 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
         showProfile: function() {
             var that = this;
             this.ensureLogin(function(success) {
-                if (!that.profileView) {
-                    that.profileView = new ProfileView( { el: "#profile" } );
-                    var footerView = new FooterView( { el: "#profile .footer"});
+                if (!success) {
+                    that.showLogin();
+                    return;
                 }
-                $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
-                $.mobile.showPageLoadingMsg();
+                if (!that.profileView) {
+                    that.createChallengeView = new CreateChallengeView( { el: "#create" } );
+                    var footerView = new FooterView( { el: "#create .footer" } );
+                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
+
+//                    that.profileView = new ProfileView( { el: "#profile", model: fitness.user } );
+//                    var footerView = new FooterView( { el: "#profile .footer"});
+                }
+                else {
+                    $.mobile.changePage( "#profile" , { reverse: false, changeHash: true } );
+                    $.mobile.showPageLoadingMsg();
+                }
             });
         },
 
@@ -297,7 +325,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     that.showLogin();
                     return;
                 }
-                function createAndshowView() {
+                function createAndShowView() {
                     that.createChallengeView = new CreateChallengeView( { el: "#create" } );
                     var footerView = new FooterView( { el: "#create .footer" } );
                     $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
@@ -306,10 +334,12 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     $.mobile.showPageLoadingMsg();
                     if (!fitness.friends) {
                         fitness.getStackmobFriends(fitness.user.get('friends'), function(success, data) {
-                            createAndshowView();
+                            createAndShowView();
                         });
                     }
-                    createAndshowView();
+                    else {
+                        createAndShowView();
+                    }
                 }
                 else {
                     $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
