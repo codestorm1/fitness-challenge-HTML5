@@ -246,21 +246,19 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     var footerView = new FooterView({el: footerSelector});
                     $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 }
-                this.ensureLogin(function(success) {
-                    if (!fitness.invitations) {
-                        $.mobile.showPageLoadingMsg();
-                        fitness.getInvitations(fitness.user.get('username'), true, function(success) {
-                            if (!success) {
-                                fitness.showMessage('Failed to load invitations');
-                                return;
-                            }
-                            createAndShowView();
-                        });
-                    }
-                    else {
+                if (!fitness.invitations) {
+                    $.mobile.showPageLoadingMsg();
+                    fitness.getInvitations(fitness.user.get('username'), true, function(success) {
+                        if (!success) {
+                            fitness.showMessage('Failed to load invitations');
+                            return;
+                        }
                         createAndShowView();
-                    }
-                });
+                    });
+                }
+                else {
+                    createAndShowView();
+                }
             });
         },
 

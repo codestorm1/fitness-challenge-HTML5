@@ -181,9 +181,9 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                 success: function(model) {
                     var tempUser = model;
                     that.challenges = tempUser.get('challenges');
-                    if (!that.challenges) {
-                        that.showMessage('Could not retrieve your user data');
-                        callback(false, response);
+                    if (typeof that.challenges !== "object") {
+                        that.showMessage('Could not retrieve your challenges');
+                        callback(false, model);
                         return;
                     }
                     callback(true, model);
