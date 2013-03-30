@@ -17,14 +17,10 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness" ], f
                 "description" : "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString(),
                 "leaders" : this.model.get('leaders')
             };
-//            var Leader = StackMob.Model.extend({ schemaName: 'leader' });
-//            var Leaders = StackMob.Collection.extend({ model: Leader });
-//            var leaders = new Leaders();
             var html = Mustache.to_html(template.html(), dto);
             this.$el.empty();
             this.$el.append(header.html()).append(html);
-            $('#challenge[data-role="listview"]').listview().listview('refresh');
-            //this.$el.trigger('create');
+            this.$el.trigger('refresh');
             return this;
         }
     });

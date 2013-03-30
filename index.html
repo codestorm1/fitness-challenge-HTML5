@@ -159,7 +159,7 @@
         <ul data-role="listview" data-inset="true">
             {{#challenges}}
             <li>
-                <a href="#challenge/{{ challengeID }}">
+                <a href="#challenge_{{ challengeID }}">
                     <span>{{ description }}</span>
                     <span class="ui-li-count">{{ count }}</span>
                 </a>
@@ -173,6 +173,10 @@
         </ul>
     </div>
     <div class="footer"></div>
+</script>
+
+<script id="challenge_wrapper_template" type="text/template">
+    <div id="{{ challenge_id }}" data-role="page" data-title="Challenge Detail" data-add-back-btn="true"></div>
 </script>
 
 <script id="challenge_template" type="text/template">

@@ -1,27 +1,23 @@
-define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeClient", "models/ChallengeModel",
+define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "customCodeClient", "models/ChallengeModel",
     "views/FooterView", "views/HomeView", "views/FriendsView", "views/LoginView", "views/RegisterView", "views/ProfileView", "views/AuthView",
     "views/CreateChallengeView", "views/ChallengeListView", "views/ChallengeView", "views/InvitationView", "views/InvitationListView", "jquerymobile" ],
-    function( $, Backbone, fitness, customCode, ChallengeModel,
+    function( $, Backbone, Mustache, fitness, customCode, ChallengeModel,
               FooterView, HomeView, FriendsView, LoginView, RegisterView, ProfileView, AuthView,
               CreateChallengeView, ChallengeListView, ChallengeView, InvitationView, InvitationListView, $__jqm ) {
 
        // "use strict";
     // Extends Backbone.Router
     var FitnessRouter = Backbone.Router.extend( {
-
-
         // The Router constructor
         initialize: function() {
-
 //            $('#header').html(new HeaderView().render().el);
-
 //            this.invitationViews = [];
-            this.loginView = new LoginView( { el: "#login" } );
-            this.registerView = new RegisterView( { el: "#register"} );
+            this.loginView = new LoginView({el: "#login"});
+            this.registerView = new RegisterView({el: "#register"});
+            this.challengeViewLookup = {};
 
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
-
         },
 
         // Backbone.js Routes
@@ -30,7 +26,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
             "home": "showHome",
             "login" : "showLogin",
             "challenge_list" : "showChallengeList",
-            "challenge/:challenge_id" : "showChallenge",
+            "challenge_:challenge_id" : "showChallenge",
             "invitation_list" : "showInvitationList",
             "invitation/:invitation_id" : "showInvitation",
             "create" : "showCreate",
@@ -172,12 +168,16 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                     that.showLogin();
                     return;
                 }
-                var pageSelector = '#challenge';
+                var pageSelector = '#' + challengeID;
                 var footerSelector = pageSelector + ' .footer';
                 function setView() {
-                    if (!that.challengeView) {
-                        that.challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
+                    if (!that.challengeViewLookup[challengeID]) {
+                        var template = $('#challenge_wrapper_template');
+                        var html = Mustache.to_html(template.html(), {'challenge_id' : challengeID});
+                        $(html).insertAfter('#challenge_list');
+                        var challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
                         var footerView = new FooterView({el: footerSelector});
+                        that.challengeViewLookup[challengeID] = challengeView;
                     }
                     $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 };
@@ -187,12 +187,42 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 else {
                     $.mobile.showPageLoadingMsg();
                     fitness.getChallenge(challengeID, function(success, data) {
+                        $.mobile.hidePageLoadingMsg();
                         if (!success) {
                             fitness.showMessage('Failed to get challenge');
                             return;
                         }
                         setView();
                     });
+                }
+            });
+        },
+
+        showCreate: function() {
+            var that = this;
+            this.ensureLogin(function(success) {
+                if (!success) {
+                    that.showLogin();
+                    return;
+                }
+                function createAndShowView() {
+                    that.createChallengeView = new CreateChallengeView( { el: "#create" } );
+                    var footerView = new FooterView( { el: "#create .footer" } );
+                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
+                }
+                if (!that.createChallengeView) {
+                    $.mobile.showPageLoadingMsg();
+                    if (!fitness.friends) {
+                        fitness.getStackmobFriends(fitness.user.get('friends'), function(success, data) {
+                            createAndShowView();
+                        });
+                    }
+                    else {
+                        createAndShowView();
+                    }
+                }
+                else {
+                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
                 }
             });
         },
@@ -208,6 +238,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 var pageSelector = '#invitation_list';
                 var footerSelector = pageSelector + ' .footer';
 
+                // todo fix this logic, is broken!
                 function createAndShowView() {
                     if (!that.invitationsView) {
                         that.invitationsView = new InvitationListView({el: pageSelector, model: fitness.invitations});
@@ -309,35 +340,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "fitness", "customCodeCl
                 else {
                     $.mobile.changePage( "#auth" , { reverse: false, changeHash: true } );
                     $.mobile.showPageLoadingMsg();
-                }
-            });
-        },
-
-        showCreate: function() {
-            var that = this;
-            this.ensureLogin(function(success) {
-                if (!success) {
-                    that.showLogin();
-                    return;
-                }
-                function createAndShowView() {
-                    that.createChallengeView = new CreateChallengeView( { el: "#create" } );
-                    var footerView = new FooterView( { el: "#create .footer" } );
-                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
-                }
-                if (!that.createChallengeView) {
-                    $.mobile.showPageLoadingMsg();
-                    if (!fitness.friends) {
-                        fitness.getStackmobFriends(fitness.user.get('friends'), function(success, data) {
-                            createAndShowView();
-                        });
-                    }
-                    else {
-                        createAndShowView();
-                    }
-                }
-                else {
-                    $.mobile.changePage( "#create" , { reverse: false, changeHash: true } );
                 }
             });
         },

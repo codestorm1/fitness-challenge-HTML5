@@ -10,7 +10,8 @@ require.config( {
         "underscore": "libs/underscore-1.4.1-min",
         //"underscore": "libs/lodash",
         "jquery": "libs/jquery-1.8.2.min",
-        "jquerymobile": "libs/jquery.mobile-1.3.0.min",
+        //"jquerymobile": "libs/jquery.mobile-1.3.0.min",
+        "jquerymobile": "libs/jquery.mobile-1.3.0",
         "backbone": "libs/backbone-0.9.2-min",
         "stackmob" : "libs/stackmob-js-0.8.0-min",
         "mustache": "libs/mustache"

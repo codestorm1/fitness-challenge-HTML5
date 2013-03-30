@@ -347,7 +347,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                 var errorCount = 0;
                 for (var i = 0; i < len; i++) {
                     function makeCallbackIfDone() {
-                        if (i = len) {
+                        if (i === len -1) {
                             var success = len === successCount;
                             callback(success, successCount + ' invitations sent, ' + errorCount + ' failed.');
                         }
@@ -365,14 +365,14 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                     invitation.create({
                         success: function(model) {
                             successCount++;
-                            makeCallbackIfDone();
                             console.debug('Invitation to ' + friendID + ' sent.');
+                            makeCallbackIfDone();
                         },
                         error: function(model, response) {
                             errorCount++;
                             console.debug(response);
-                            makeCallbackIfDone();
                             console.debug('Invitation to ' + friendID + ' failed.');
+                            makeCallbackIfDone();
                         }
                     });
                 }

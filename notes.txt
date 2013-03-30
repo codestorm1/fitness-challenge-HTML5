@@ -11,7 +11,8 @@ challenge view: showing same challenge every time
 update challenge progress
 update activities
 cron job?
-accept/decline - error?
+accept/decline invitation - error?
+return from fitbit auth - cant read login info?
 
 auto update collections when changed:
 invitations
@@ -20,3 +21,4 @@ challenges
 add back button
 
 use stackmob login system
+fix ensure login to handle redirect to login and back to destination
