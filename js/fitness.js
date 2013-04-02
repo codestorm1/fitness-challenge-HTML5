@@ -1,10 +1,10 @@
 define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __SI, customCode) {
     //"use strict";
     return {
-        parseDate : function(dateStr) {
+        parseUTCDate : function(dateStr) {
             var parts = dateStr.match(/(\d+)/g);
             // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-            return new Date(parts[0], parts[1]-1, parts[2]); // months are 0-based
+            return Date.UTC(parts[0], parts[1]-1, parts[2]); // months are 0-based
         },
 
         showMessage : function(message) {
@@ -274,7 +274,8 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                     var leaderData =  {
                             "leader_id" : leaderID,
                             "user" : stackmobUserID,
-                            "challenge" : challengeID
+                            "challenge" : challengeID,
+                            "is_active" : true
                         };
                     var challengeType = model.get('value_type');
                     switch (challengeType) {
@@ -379,8 +380,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             }
         },
 
-
-//            router : new FitnessRouter(),
+//      router : new FitnessRouter(),
 
         init : function() {
             var that = this;

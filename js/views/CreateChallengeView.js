@@ -42,12 +42,13 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
             var startDateStr = $('#start_date').val();
             var endDateStr = $('#end_date').val();
 
+
             if (!startDateStr || !endDateStr) {
                 fitness.showMessage('Please enter a start and end date')
             }
 
-            var startDate = fitness.parseDate(startDateStr);
-            var endDate = fitness.parseDate(endDateStr);
+            var startDate = fitness.parseUTCDate(startDateStr);
+            var endDate = fitness.parseUTCDate(endDateStr);
 
             var challengeID = fitness.user.get('username') + '_' + challengeType + '_' + startDateStr + '_' + endDateStr;
 
@@ -55,10 +56,11 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
             var challenge = new Challenge( {
                 "challenge_id" : challengeID,
                 "challengetype" : challengeType,
-                "startdate" : startDate.getTime(),
-                "enddate" : endDate.getTime(),
+                "startdate" : startDate,
+                "enddate" : endDate,
                 "challengecreator" : fitness.user.get('username'),
-                "value_type" : "int"
+                "value_type" : "int",
+                "is_active" : true
 //                "users" : [fitness.user.get('username')]
                 });
             $.mobile.loading("show");
