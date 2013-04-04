@@ -209,7 +209,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                return;
 //            }
             var that = this;
-//            var updatedFully = true;
+            var updatedFully = true;
             that.getInvitations(username, true, callback);
 //                    if (data.models.length > 0) {
 //                        for (var i = 0; i < data.models.length; i++) {
@@ -241,19 +241,19 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                            });
 //                        }
 //                    }
-//                    customCode.updateActivities(username, function(success, data) {
-//                        if (!success) {
-//                            that.showMessage('Failed to get fitbit activities');
-//                            updatedFully = false;
-//                        }
-//                        else {
-//                            //that.showMessage("updated activities");
-//                        }
-//                        if (updatedFully) {
-//                            sessionStorage.setItem('fitbitUpdated', 'true');
-//                        }
-//                        callback(updatedFully, data);
-//                    });
+                    customCode.updateActivities(username, function(success, data) {
+                        if (!success) {
+                            that.showMessage('Failed to get fitbit activities');
+                            updatedFully = false;
+                        }
+                        else {
+                            //that.showMessage("updated activities");
+                        }
+                        if (updatedFully) {
+                            sessionStorage.setItem('fitbitUpdated', 'true');
+                        }
+                        callback(updatedFully, data);
+                    });
 //                });
 //            });
         },
