@@ -21,7 +21,8 @@
         "jquerymobile": "libs/jquery.mobile-1.3.0.min",
         "backbone": "libs/backbone-0.9.2-min",
         "stackmob" : "libs/stackmob-js-0.8.0-min",
-        "mustache": "libs/mustache"
+        "mustache": "libs/mustache",
+        "moment" : "libs/moment.min"
 
     }
 

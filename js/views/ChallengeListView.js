@@ -1,5 +1,5 @@
-define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "fitness", "customCodeClient"],
-    function( $, Backbone, Mustache, fitness, customCode) {
+define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "moment", "fitness", "customCodeClient"],
+    function( $, Backbone, Mustache, moment, fitness, customCode) {
 
 
         var ChallengeListView = Backbone.View.extend({
@@ -16,7 +16,8 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "fitness",
                     //var description = challenge.get('challengetype');
                     var startDate = new Date(challenge.startdate);
                     var endDate = new Date(challenge.enddate);
-                    var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
+
+                    var description = fitness.formatDateRangeDescription(startDate, endDate);
                     var count = challenge.leaders.length;
                     var challengeDTO = { "challengeID" : challenge.challenge_id,
                                          "description" : description,

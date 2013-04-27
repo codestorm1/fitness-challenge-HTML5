@@ -8,7 +8,7 @@ define("customCodeClient", ["jquery"], function($) {
         var day = date.getDate();
         var month = date.getMonth() + 1; //Months are zero based
         var year = date.getFullYear();
-        var dateStr = month + "/" + day  + "/" + year;
+        var dateStr = year + "-" + month + "-" + day;
         return dateStr;
     },
 
@@ -236,6 +236,23 @@ define("customCodeClient", ["jquery"], function($) {
 
                     if (typeof callback === "function") {
                         callback(true, friends);
+                    }
+                },
+
+                error: function(response) {
+                    if (typeof callback === "function") {
+                        callback(false, response);
+                    }
+                }
+            });
+        },
+
+        subscribeToFitbit : function(username, callback) {
+            var that = this;
+            StackMob.customcode('add_fitbit_subscription', {"stackmob_user_id" : username}, 'GET', {
+                success: function(jsonResult) {
+                    if (typeof callback === "function") {
+                        callback(true, jsonResult);
                     }
                 },
 

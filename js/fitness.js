@@ -7,6 +7,19 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             return Date.UTC(parts[0], parts[1]-1, parts[2]); // months are 0-based
         },
 
+        formatDateRangeDescription : function(startDate, endDate) {
+            //var minutesOff = startDate.getTimezoneOffset();
+            startDate = new Date(startDate.getUTCFullYear(), startDate.getUTCMonth(), startDate.getUTCDate());
+            endDate = new Date(endDate.getUTCFullYear(), endDate.getUTCMonth(), endDate.getUTCDate());
+            var momentStart = moment(startDate);
+            var momentEnd = moment(endDate);
+            var days = (endDate.getTime() - startDate.getTime()) / (1000*60*60*24) + 1;
+            var dayText = (days == 1) ? ' day' : ' days';
+            var description = 'Total steps ' + momentStart.calendar() + ' to ' + momentEnd.calendar() + ' (' + days + dayText + ')';
+            description = description.replace(/at 12:00 AM/g, "");
+            return description;
+        },
+
         showMessage : function(message) {
             alert(message);
         },
@@ -211,6 +224,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             var that = this;
             var updatedFully = true;
             that.getInvitations(username, true, callback);
+            customCode.subscribeToFitbit(username, null);
 //                    if (data.models.length > 0) {
 //                        for (var i = 0; i < data.models.length; i++) {
 //                            var model = data.models[i];
@@ -241,19 +255,19 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //                            });
 //                        }
 //                    }
-                    customCode.updateActivities(username, function(success, data) {
-                        if (!success) {
-                            that.showMessage('Failed to get fitbit activities');
-                            updatedFully = false;
-                        }
-                        else {
-                            //that.showMessage("updated activities");
-                        }
-                        if (updatedFully) {
-                            sessionStorage.setItem('fitbitUpdated', 'true');
-                        }
-                        callback(updatedFully, data);
-                    });
+//                    customCode.updateActivities(username, function(success, data) {
+//                        if (!success) {
+//                            that.showMessage('Failed to get fitbit activities');
+//                            updatedFully = false;
+//                        }
+//                        else {
+//                            //that.showMessage("updated activities");
+//                        }
+//                        if (updatedFully) {
+//                            sessionStorage.setItem('fitbitUpdated', 'true');
+//                        }
+//                        callback(updatedFully, data);
+//                    });
 //                });
 //            });
         },

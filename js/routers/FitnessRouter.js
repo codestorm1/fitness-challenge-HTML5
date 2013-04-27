@@ -172,14 +172,19 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 var footerSelector = pageSelector + ' .footer';
                 function setView() {
                     if (!that.challengeViewLookup[challengeID]) {
-                        var template = $('#challenge_wrapper_template');
-                        var html = Mustache.to_html(template.html(), {'challenge_id' : challengeID});
-                        $(html).insertAfter('#challenge_list');
-                        var challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
-                        var footerView = new FooterView({el: footerSelector});
-                        that.challengeViewLookup[challengeID] = challengeView;
+                        fitness.updateIfStale(fitness.user.get('username'), function(success, data) {
+                            var template = $('#challenge_wrapper_template');
+                            var html = Mustache.to_html(template.html(), {'challenge_id' : challengeID});
+                            $(html).insertAfter('#challenge_list');
+                            var challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
+                            var footerView = new FooterView({el: footerSelector});
+                            that.challengeViewLookup[challengeID] = challengeView;
+                            $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                        });
                     }
-                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                    else {
+                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
+                    }
                 };
                 if (fitness.challengeLookup && fitness.challengeLookup[challengeID]) {
                     setView();

@@ -5,20 +5,44 @@ What causes the header to not get jquery styles?
     2- $.mobilechangepage was called before view was created (callback didn't finish)
 
 
-todo:
+done:
 challenge view: showing same challenge every time
                 show leaderboard
 update challenge progress
 update activities
-cron job?
+
+use fitbit subscription for updates!
+subscribe to fitbit from js
+
+done-ish:
+use momentJS for date displays
+
+todo:
+
+complete challenge, declare winner
+
+mark activity rows as final
+
+longpoll or check for updates to leaderboards
+
+switch from one-to-many relationship to querying
+
 accept/decline invitation - error?
 return from fitbit auth - cant read login info?
 
-auto update collections when changed:
+auto update collection views when changed:
+and use backbone collections for:
 invitations
 challenges
 
 add back button
 
 use stackmob login system
-fix ensure login to handle redirect to login and back to destination
+change ensure login to handle redirect to login and back to destination
+
+add commas to steps count
+
+
+
+
+

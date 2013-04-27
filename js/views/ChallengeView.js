@@ -12,9 +12,10 @@ define("views/ChallengeView", [ "jquery", "backbone", "mustache", "fitness" ], f
 
             var startDate = new Date(this.model.get('startdate'));
             var endDate = new Date(this.model.get('enddate'));
+            var description = fitness.formatDateRangeDescription(startDate, endDate);
 
             var dto = { "challengeID" : this.model.get('challenge_id'),
-                "description" : "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString(),
+                "description" : description,
                 "leaders" : this.model.get('leaders')
             };
             var html = Mustache.to_html(template.html(), dto);
