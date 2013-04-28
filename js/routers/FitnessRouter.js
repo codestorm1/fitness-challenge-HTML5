@@ -15,7 +15,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
             this.loginView = new LoginView({el: "#login"});
             this.registerView = new RegisterView({el: "#register"});
             this.challengeViewLookup = {};
-
             // Tells Backbone to start watching for hashchange events
             Backbone.history.start();
         },
@@ -48,9 +47,13 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
             }
             $.mobile.showPageLoadingMsg();
             fitness.loginWithID(username, function(success) {
-                $.mobile.hidePageLoadingMsg();
-                callback(success);
-                return;
+                fitness.updateIfStale(username, function(success, data) {
+                    $.mobile.hidePageLoadingMsg();
+                    if (!success) {
+                        alert('failed to load your data');
+                    }
+                    callback(success);
+                });
             });
         },
 
@@ -112,7 +115,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                     return;
                 }
                 var username = fitness.user.get('username');
-                fitness.updateIfStale(username, function(success, data) {
+//                fitness.updateIfStale(username, function(success, data) {
                     if (fitness.user && fitness.user.get('accesstoken')) {
                         that.homeView = new HomeView( { el: "#home"} );
                         var footerView = new FooterView( { el: "#home .footer"} );
@@ -124,7 +127,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                     else {
                         that.showAuth();
                     }
-                });
+//                });
             });
         },
 
@@ -146,7 +149,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 }
                 if (!fitness.challenges) {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getUserChallenges(fitness.user.get('username'), true, function(success, data) {
+                    fitness.getUserChallenges(fitness.user.get('username'), false, function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to get challenges');
                             return;
@@ -205,6 +208,10 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
 
         showCreate: function() {
             var that = this;
+
+            function fetchChallenges(callback) {
+
+            }
             this.ensureLogin(function(success) {
                 if (!success) {
                     that.showLogin();
@@ -253,7 +260,6 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 }
                 if (!fitness.invitations) {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getInvitations(fitness.user.get('username'), false, function(success, data) {
                     fitness.getChallengeInvites(fitness.user.get('username'), function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to load invitations');
@@ -285,7 +291,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 }
                 if (!fitness.invitations) {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getInvitations(fitness.user.get('username'), true, function(success) {
+                    fitness.getChallengeInvites(fitness.user.get('username'), function(success) {
                         if (!success) {
                             fitness.showMessage('Failed to load invitations');
                             return;
