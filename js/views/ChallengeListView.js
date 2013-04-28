@@ -5,21 +5,29 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "moment", 
         var ChallengeListView = Backbone.View.extend({
 
             initialize: function() {
+                var that = this;
                 this.render();
+                this.model.on("add", function(model) {
+                    //alert('add method called')
+                    that.render();
+                });
+                this.model.on("remove", function(model) {
+                    that.render();
+                });
             },
 
             render: function() {
                 var header = $('#header_template');
                 var template = $('#challenge_list_template');
                 var challenges = [];
-                _.each(this.model, function(challenge) {
+                _.each(this.model.models, function(challenge) {
                     //var description = challenge.get('challengetype');
-                    var startDate = new Date(challenge.startdate);
-                    var endDate = new Date(challenge.enddate);
+                    var startDate = new Date(challenge.get('startdate'));
+                    var endDate = new Date(challenge.get('enddate'));
 
                     var description = fitness.formatDateRangeDescription(startDate, endDate);
-                    var count = challenge.leaders.length;
-                    var challengeDTO = { "challengeID" : challenge.challenge_id,
+                    var count = challenge.get('leaders').length;
+                    var challengeDTO = { "challengeID" : challenge.get('challenge_id'),
                                          "description" : description,
                                          "count" : count};
                     challenges.push(challengeDTO);
@@ -28,10 +36,9 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "moment", 
                 var html = Mustache.to_html(template.html(), dto);
                 this.$el.empty();
                 this.$el.append(header.html()).append(html);
-                this.$el.trigger('refresh');
-
-                //this.$el.trigger('create');
-                //$('#challenge_list[data-role="listview"]').listview().listview('refresh');
+                this.$el.page();
+                this.$el.trigger('pagecreate');
+                $('#the_list').listview().listview('refresh');
                 return this;
             }
         });

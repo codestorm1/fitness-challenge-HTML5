@@ -76,7 +76,7 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
                         fitness.showMessage('Challenge created!');
                         fitness.inviteFriendsToChallenge(challengeID, function(success, data) {
                             fitness.showMessage('Finished inviting friends: ' + data);
-                        })
+                        });
                     });
                 },
                 error: function(model, response) {

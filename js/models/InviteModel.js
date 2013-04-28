@@ -1,16 +1,12 @@
-// Challenge Model
-// ==============
-
-// Includes file dependencies
-define([ "jquery", "underscore", "stackmob", "stackmobInit" ], function( $, _, StackMob, stackmobInit ) {
+define("models/InviteModel", [ "jquery", "underscore", "stackmob", "stackmobInit"], function( $, _, StackMob, stackmobInit) {
 
     // The ChallengeModel constructor
 
-    var ChallengeModel = StackMob.Model.extend(
-        { schemaName: 'challenge'}
+    var InviteModel = StackMob.Model.extend(
+        { schemaName: 'invitation'}
     );
 
     // Returns the ChallengeModel class
-    return ChallengeModel;
+    return InviteModel;
 
 } );

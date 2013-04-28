@@ -1,3 +1,4 @@
+//define("customCodeClient", ["jquery", "collections/UsersCollection"], function($, Users) {
 define("customCodeClient", ["jquery"], function($) {
     // private methods
     var that = this;
@@ -415,75 +416,7 @@ define("customCodeClient", ["jquery"], function($) {
                     }
                 });
             }
-        },
-
-        getChallengeInvites : function(username, callback) {
-            if (typeof callback !== "function") {
-                throw 'callback is required';
-            }
-            var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
-            var Invitations = StackMob.Collection.extend({ model: Invitation });
-            var invitations = new Invitations();
-            var q = new StackMob.Collection.Query();
-            q.equals('inviteduser', username);
-            q.equals('responded', false);
-            q.setExpand(3);
-            invitations.query(q, {
-                success: function(model) {
-                    var len = model.models.length;
-                    console.debug('invitation response: ' + JSON.stringify(model.toJSON()));
-                    if (len === 0) {
-                        callback(true, model);
-                        return;
-                    }
-
-
-                    // TODO: move this into a separate call?
-//                    for (var i = 0; i < len; i++) {
-//                        var invite = model.models[i];
-//                        var Challenge = StackMob.Model.extend({ schemaName: 'challenge', "challenge_id" : invite.challenge_id });
-//                        var challenge = new Challenge();
-//                        challenge.fetch( {
-//                            success: function(model) {
-//                                callback(true, model);
-//                            },
-//                            error: function(model, response) {
-//                                console.debug(response);
-//                                callback(true, response);
-//                            }
-//                        });
-//                    }
-                    callback(true, model);
-                },
-                error: function(model, response) {
-                    that.showMessage('query failed trying to get user ' + response);
-                    console.debug(response);
-                    callback(false, response);
-                }
-            });
         }
-
-//        getUserChallenges : function(username, callback) {
-//            if (typeof callback !== "function") {
-//                throw 'callback is required';
-//            }
-//            var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
-//            var Challenges = StackMob.Collection.extend({ model: Challenge });
-//            var challenges = new Challenges();
-//            var q = new StackMob.Collection.Query();
-//            q.mustBeOneOf('users', username);
-//            q.setExpand(1);
-//            challenges.query(q, {
-//                success: function(model) {
-//                    console.debug('challenges response: ' + JSON.stringify(model.toJSON()));
-//                    callback(true, model);
-//                },
-//                error: function(response) {
-//                    console.debug(response);
-//                    callback(false, response);
-//                }
-//            });
-//        }
     }
 });
 

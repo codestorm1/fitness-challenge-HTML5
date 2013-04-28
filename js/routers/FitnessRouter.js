@@ -254,6 +254,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 if (!fitness.invitations) {
                     $.mobile.showPageLoadingMsg();
                     fitness.getInvitations(fitness.user.get('username'), false, function(success, data) {
+                    fitness.getChallengeInvites(fitness.user.get('username'), function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to load invitations');
                             return;

@@ -18,7 +18,15 @@ define("views/InvitationListView", [ "jquery", "backbone", "mustache", "fitness"
         var InvitationListView = Backbone.View.extend({
 
             initialize: function() {
+                var that = this;
                 this.render();
+                this.model.on("add", function(model) {
+                    that.render();
+                });
+                this.model.on("remove", function(model) {
+                    //alert('remove invite method called');
+                    that.render();
+                });
             },
 
             render: function() {
@@ -49,9 +57,9 @@ define("views/InvitationListView", [ "jquery", "backbone", "mustache", "fitness"
                 var html = Mustache.to_html(template.html(), dto);
                 this.$el.empty();
                 this.$el.append(header.html()).append(html);
-                //this.$el.trigger('create');
-                this.$el.trigger('refresh');
-                //$('#invitation_list[data-role="listview"]').listview();
+                this.$el.page();
+                this.$el.trigger('pagecreate');
+                $('#invitation_list ul[role="listview"]').listview().listview('refresh');
                 return this;
             }
         });

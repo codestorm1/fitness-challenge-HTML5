@@ -9,9 +9,10 @@ require.config( {
         "json2": "libs/json2-min",
         "underscore": "libs/underscore-1.4.1-min",
         //"underscore": "libs/lodash",
-        "jquery": "libs/jquery-1.8.2.min",
+        //"jquery": "libs/jquery-1.9.1",
+        "jquery": "libs/jquery-1.9.1.min",
         //"jquerymobile": "libs/jquery.mobile-1.3.0.min",
-        "jquerymobile": "libs/jquery.mobile-1.3.0",
+        "jquerymobile": "libs/jquery.mobile-1.3.1",
         "backbone": "libs/backbone-0.9.2-min",
         "stackmob" : "libs/stackmob-js-0.8.0-min",
         "mustache": "libs/mustache",
@@ -46,20 +47,20 @@ require(["jquery"], function($) {
         window.console.log = function() {};
     }
     // Set up the "mobileinit" handler before requiring jQuery Mobile's module
-    $(document).live("mobileinit", function() {
+    $(document).on("mobileinit", function() {
         //$.mobile.ajaxEnabled = false; // ???
         $.mobile.linkBindingEnabled = false;
         $.mobile.hashListeningEnabled = false;
         $.mobile.pushStateEnabled = false;
         $.mobile.defaultPageTransition = 'fade';
 
-        $('ul[data-role="listview"] a').live('click', function (event, ui) {
+        $('ul[data-role="listview"] a').on('click', function (event, ui) {
             $(event.currentTarget).addClass('ui-btn-active');
         });
-        $('div[data-role="page"]').live('pageshow', function (event, ui) {
+        $('div[data-role="page"]').on('pageshow', function (event, ui) {
             $.mobile.hidePageLoadingMsg();
         });
-        $('.back_button, .home_button').live('click', function(event, ui) {
+        $('.back_button, .home_button').on('click', function(event, ui) {
             $.mobile.showPageLoadingMsg();
         });
     });

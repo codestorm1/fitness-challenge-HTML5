@@ -1,4 +1,9 @@
-define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __SI, customCode) {
+define("fitness", ["jquery", "stackmobinit", "customCodeClient",
+    "collections/InvitesCollection" //,"collections/ChallengesCollection", "collections/LeadersCollection", "collections/UsersCollection"
+],
+    function($, __SI, customCode,
+        InvitesCollection //, Challenges, Leaders, Users
+        ) {
     //"use strict";
     return {
         parseUTCDate : function(dateStr) {
@@ -61,6 +66,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                 callback(false);
                 return;
             }
+
             var sm_user = new StackMob.User({ username: username });
             sm_user.fetch({
                 success: function(model) {
@@ -126,27 +132,56 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             });
         },
 
-        getInvitations : function(username, allowCaching, callback) {
-            var that = this;
-            if (allowCaching && this.invitations) {
-                callback(true, this.invitations);
-                return;
+        getChallengeInvites : function(username, callback) {
+            if (typeof callback !== "function") {
+                throw 'callback is required';
             }
-            customCode.getChallengeInvites(username, function(success, data) {
-                if (!success) {
+            var that = this;
+            var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
+            var Invitations = StackMob.Collection.extend({ model: Invitation });
+            //var invitations = new InvitesCollection();
+            var invitations = new Invitations();
+            var q = new StackMob.Collection.Query();
+            q.equals('inviteduser', username);
+            q.equals('responded', false);
+            q.setExpand(3);
+            invitations.query(q, {
+                success: function(model) {
+                    that.invitations = model;
+                    that.invitationLookup = {};
+                    _.each(model.models, function(invitation) {
+                        that.invitationLookup[invitation.get('invitation_id')] = invitation;
+                    });
+                    callback(true, model);
+                },
+                error: function(model, response) {
                     that.showMessage('Failed to check for challenge invites');
-                    callback(false, data);
-                    return;
+                    console.debug(response);
+                    callback(false, response);
                 }
-                that.invitations = data;
-                that.invitationLookup = {};
-                _.each(data.models, function(invitation) {
-                    that.invitationLookup[invitation.get('invitation_id')] = invitation;
-                });
-                callback(true, data);
             });
         },
 
+//        getInvitations : function(username, allowCaching, callback) {
+//            var that = this;
+//            if (allowCaching && this.invitations) {
+//                callback(true, this.invitations);
+//                return;
+//            }
+//            customCode.getChallengeInvites(username, function(success, data) {
+//                if (!success) {
+//                    that.showMessage('Failed to check for challenge invites');
+//                    callback(false, data);
+//                    return;
+//                }
+//                that.invitations = data;
+//                that.invitationLookup = {};
+//                _.each(data.models, function(invitation) {
+//                    that.invitationLookup[invitation.get('invitation_id')] = invitation;
+//                });
+//                callback(true, data);
+//            });
+//        },
 
         getChallenge : function(challengeID, callback) {
             var that = this;
@@ -180,32 +215,59 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
             if (typeof callback !== "function") {
                 throw 'callback is required';
             }
-            if (allowCaching && this.challenges) {
-                callback(true, this.challenges);
-                return;
-            }
+//            if (allowCaching && this.challenges) {
+//                callback(true, this.challenges);
+//                return;
+//            }
             if (!username) {
                 callback(false);
                 return;
             }
+            var Leader = StackMob.Model.extend({ schemaName: 'leader' });
+            var Leaders = StackMob.Collection.extend({ model: Leader });
+            var leaders = new Leaders();
 
-            var sm_user = new StackMob.User({ username: username });
-            sm_user.fetchExpanded(1, {
-                success: function(model) {
-                    var tempUser = model;
-                    that.challenges = tempUser.get('challenges');
-                    if (typeof that.challenges !== "object") {
-                        that.showMessage('Could not retrieve your challenges');
-                        callback(false, model);
-                        return;
-                    }
-                    callback(true, model);
+            var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
+            var Challenges = StackMob.Collection.extend({ model: Challenge });
+
+
+            var leadersQuery = new StackMob.Collection.Query();
+            leadersQuery.equals('user', username);
+            leadersQuery.setExpand(1);
+            leaders.query(leadersQuery, {
+                success: function(leaders) {
+                    //that.leaders = leaders;
+                    var challenges = new Challenges();
+
+                    leaders.each(function(leader) {
+                        challenges.add(leader.get('challenge'))
+                    });
+                    that.challenges = challenges;
+                    callback(true, challenges);
                 },
-                error: function(data, response) {
-                    that.showMessage('Could not retrieve your user data');
+                error: function(leaders, response) {
+                    console.debug('failed to get fitness leaders');
                     callback(false, response);
                 }
             });
+
+//            var sm_user = new StackMob.User({ username: username });
+//            sm_user.fetchExpanded(1, {
+//                success: function(model) {
+//                    var tempUser = model;
+//                    that.challenges = tempUser.get('challenges');
+//                    if (typeof that.challenges !== "object") {
+//                        that.showMessage('Could not retrieve your challenges');
+//                        callback(false, model);
+//                        return;
+//                    }
+//                    callback(true, model);
+//                },
+//                error: function(data, response) {
+//                    that.showMessage('Could not retrieve your user data');
+//                    callback(false, response);
+//                }
+//            });
         },
 
         updateIfStale : function(username, callback) {
@@ -223,8 +285,18 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
 //            }
             var that = this;
             var updatedFully = true;
-            that.getInvitations(username, true, callback);
+            that.getChallengeInvites(username, function() {});
             customCode.subscribeToFitbit(username, null);
+            if (!that.challenges) {
+                $.mobile.showPageLoadingMsg();
+                that.getUserChallenges(username, false, function(success) {
+                    if (!success) {
+                        fitness.showMessage('Failed to get challenges');
+                        return;
+                    }
+                });
+            }
+            callback(updatedFully, {});
 //                    if (data.models.length > 0) {
 //                        for (var i = 0; i < data.models.length; i++) {
 //                            var model = data.models[i];
@@ -313,6 +385,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient"], function($, __
                             leaders.push(leaderID);
                             challenge.save({"leaders" : leaders}, {
                                 success: function(model) {
+                                    that.challenges.add(model);
                                     var challengeList = that.user.get('challenges');
                                     challengeList = challengeList || [];
                                     if ($.inArray(challengeID, challengeList) == -1) {

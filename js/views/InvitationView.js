@@ -54,6 +54,11 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                 return this;
             },
 
+            removeInvitation : function(invitation) {
+                fitness.invitations.remove(invitation);
+                delete fitness.invitationLookup[invitation.invitation_id];
+            },
+
             saveModelChangePage : function(changes) {
                 var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
                 var invitation = new Invitation({ invitation_id: this.model.get('invitation_id')});
@@ -83,11 +88,12 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                         fitness.showMessage('Failed to accept challenge, please try again');
                         return;
                     }
+                    var username = that.model.get('inviteduser').username;
+                    var changes = {'accepted': true, 'responded' : true};
+                    that.model.set(changes);
+                    that.saveModelChangePage(changes);
+                    that.removeInvitation(that.model);
                 });
-                var username = this.model.get('inviteduser').username;
-                var changes = {'accepted': true, 'responded' : true};
-                that.model.set(changes);
-                that.saveModelChangePage(changes);
             },
 
             declineInvitation : function(e) {
@@ -95,6 +101,7 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                 var changes = {'accepted': false, 'responded' : true};
                 this.model.set(changes);
                 this.saveModelChangePage(changes);
+                that.removeInvitation(this.model);
             }
 
         });

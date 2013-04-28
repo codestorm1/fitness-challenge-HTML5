@@ -4,6 +4,10 @@ What causes the header to not get jquery styles?
     1- jquery mobile still trying to handle paging
     2- $.mobilechangepage was called before view was created (callback didn't finish)
 
+This fixed a page:
+                this.$el.page();
+                this.$el.trigger('pagecreate');
+                $('#the_list').listview().listview('refresh');
 
 done:
 challenge view: showing same challenge every time
@@ -14,33 +18,36 @@ update activities
 use fitbit subscription for updates!
 subscribe to fitbit from js
 
-done-ish:
-use momentJS for date displays
-
-todo:
-
-complete challenge, declare winner
-
-mark activity rows as final
-
-longpoll or check for updates to leaderboards
-
-switch from one-to-many relationship to querying
-
-accept/decline invitation - error?
-return from fitbit auth - cant read login info?
-
 auto update collection views when changed:
 and use backbone collections for:
 invitations
 challenges
 
+fixes? - accept/decline invitation - error?
+
+
+done-ish:
+use momentJS for date displays
+
+todo minimum viable product:
+
+complete challenge, declare winner
+
+mark activity rows as final
+
+switch from one-to-many relationship to querying
+
+return from fitbit auth - cant read login info?
+
 add back button
 
+todo v.next:
 use stackmob login system
 change ensure login to handle redirect to login and back to destination
 
 add commas to steps count
+
+longpoll or check for updates to leaderboards
 
 
 

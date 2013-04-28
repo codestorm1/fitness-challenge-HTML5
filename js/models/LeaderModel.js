@@ -1,4 +1,5 @@
-define("models/LeaderModel", [ "stackmob", "stackmobinit"], function(StackMob, stackmobinit ) {
+define("models/LeaderModel", [ "stackmob", "stackmobinit"],
+    function(StackMob, stackmobinit ) {
 
     // The ChallengeModel constructor
 
