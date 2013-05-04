@@ -162,27 +162,6 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             });
         },
 
-//        getInvitations : function(username, allowCaching, callback) {
-//            var that = this;
-//            if (allowCaching && this.invitations) {
-//                callback(true, this.invitations);
-//                return;
-//            }
-//            customCode.getChallengeInvites(username, function(success, data) {
-//                if (!success) {
-//                    that.showMessage('Failed to check for challenge invites');
-//                    callback(false, data);
-//                    return;
-//                }
-//                that.invitations = data;
-//                that.invitationLookup = {};
-//                _.each(data.models, function(invitation) {
-//                    that.invitationLookup[invitation.get('invitation_id')] = invitation;
-//                });
-//                callback(true, data);
-//            });
-//        },
-
         getChallenge : function(challengeID, callback) {
             var that = this;
             if (typeof callback !== "function") {
@@ -198,7 +177,6 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             challenge.fetchExpanded(2, {
                 success: function(model) {
                     console.debug(JSON.stringify(model.toJSON()));
-                    that.challengeLookup = that.challengeLookup || {};
                     that.challengeLookup[model.get('challenge_id')] = model;
                     callback(true, model);
                 },
@@ -227,9 +205,9 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             var Leaders = StackMob.Collection.extend({ model: Leader });
             var leaders = new Leaders();
 
+
             var Challenge = StackMob.Model.extend({ schemaName: 'challenge' });
             var Challenges = StackMob.Collection.extend({ model: Challenge });
-
 
             var leadersQuery = new StackMob.Collection.Query();
             leadersQuery.equals('user', username);
@@ -237,13 +215,39 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             leaders.query(leadersQuery, {
                 success: function(leaders) {
                     //that.leaders = leaders;
-                    var challenges = new Challenges();
+                    //var challenges = new Challenges();
 
+                    function compare(b, a) {
+                        if (a.enddate < b.enddate)
+                            return -1;
+                        if (a.enddate > b.enddate)
+                            return 1;
+                        return 0;
+                    }
+                    var challenge_list = [];
                     leaders.each(function(leader) {
-                        challenges.add(leader.get('challenge'))
+                        var challenge = leader.get('challenge');
+                        challenge_list.push(challenge);
                     });
-                    that.challenges = challenges;
-                    callback(true, challenges);
+                    challenge_list = challenge_list.sort(compare);
+                    that.challenges = new Challenges();
+                    that.challenges.reset(challenge_list);
+                    callback(true, that.challenges);
+
+                    that.challenges.each(function(challenge) {
+                        var q = new StackMob.Collection.Query();
+                        q.equals('challenge', challenge.get('challenge_id'));
+                        leaders.count(q, {
+                            success: function(count) {
+                                challenge.set('leader_count', count);
+//                                console.debug(count);
+                            },
+                            error: function(count, response) {
+                                challenge.set('leader_count', 0);
+                                console.debug(response);
+                            }
+                        });
+                    });
                 },
                 error: function(leaders, response) {
                     console.debug('failed to get fitness leaders');
@@ -270,6 +274,29 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
 //            });
         },
 
+        decorateChallengeWithLeaders: function (challengeID, callback) {
+
+            var Leader = StackMob.Model.extend({ schemaName: 'leader' });
+            var Leaders = StackMob.Collection.extend({ model: Leader });
+            var leaders = new Leaders();
+
+            var leadersQuery = new StackMob.Collection.Query();
+            leadersQuery.equals('challenge', challengeID);
+            leadersQuery.orderAsc('int_value');
+            leadersQuery.setExpand(1); // to get the users
+            leaders.query(leadersQuery, {
+                success: function(leaders) {
+                    callback(true, leaders);
+                },
+                error: function(leaders, response) {
+                    console.debug('failed to get fitness leaders');
+                    callback(false, response);
+                }
+            });
+
+
+        },
+
         updateIfStale : function(username, callback) {
             if (typeof callback !== "function") {
                 throw 'callback is required';
@@ -285,6 +312,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
 //            }
             var that = this;
             var updatedFully = true;
+            that.challengeLookup = that.challengeLookup || {};
             that.getChallengeInvites(username, function() {});
             customCode.subscribeToFitbit(username, null);
             if (!that.challenges) {
@@ -381,34 +409,23 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
                         success: function(model) {
                             var leaderID = model.get('leader_id');
                             console.debug('leader object is saved, leader_id: ' + leaderID);
-                            var leaders = challenge.get('leaders') || [];
-                            leaders.push(leaderID);
-                            challenge.save({"leaders" : leaders}, {
-                                success: function(model) {
-                                    that.challenges.add(model);
-                                    var challengeList = that.user.get('challenges');
-                                    challengeList = challengeList || [];
-                                    if ($.inArray(challengeID, challengeList) == -1) {
-                                        challengeList.push(challengeID);
-                                        that.user.save({'challenges' : challengeList}, {
-                                            success: function(model) {
-                                                callback(true, model);
-                                            },
-                                            error: function(model, response) {
-                                                console.debug("Failed to update challenge");
-                                                leader.delete();
-                                                callback(false, response);
-                                            }
-                                        });
-                                    }
-                                },
-                                error: function(model, response) {
-                                    console.debug("Failed to update challenge with new leader entry");
-                                    leader.delete();
-                                    console.debug(response);
-                                    callback(false, response);
-                                }
-                            });
+                            callback(true, model);
+
+//                            var leaders = challenge.get('leaders') || [];
+//                            leaders.push(leaderID);
+//                            challenge.save({"leaders" : leaders}, { // TODO: really just need to store a count
+//                                // other option would be count the leaders for each challenge when fetching model
+//                                success: function(model) {
+//                                    that.challenges.add(model);
+//                                    callback(true, model);
+//                                },
+//                                error: function(model, response) {
+//                                    console.debug("Failed to update challenge with new leader entry");
+//                                    leader.destroy();
+//                                    console.debug(response);
+//                                    callback(false, response);
+//                                }
+//                            });
                         },
                         error: function(model, response) {
                             console.debug(response);

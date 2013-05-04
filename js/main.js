@@ -7,10 +7,10 @@ require.config( {
 
         // Core Libraries
         "json2": "libs/json2-min",
-        "underscore": "libs/underscore-1.4.1-min",
+        "underscore": "libs/underscore",
         //"underscore": "libs/lodash",
         //"jquery": "libs/jquery-1.9.1",
-        "jquery": "libs/jquery-1.9.1.min",
+        "jquery": "libs/jquery-1.9.1",
         //"jquerymobile": "libs/jquery.mobile-1.3.0.min",
         "jquerymobile": "libs/jquery.mobile-1.3.1",
         "backbone": "libs/backbone-0.9.2-min",

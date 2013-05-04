@@ -15,7 +15,7 @@
 //        "stackmob": "./libs/stackmob-js-0.8.0-min",
 //        "mustache": "./libs/mustache",
         "json2": "libs/json2-min",
-        "underscore": "libs/underscore-1.4.1-min",
+        "underscore": "libs/underscore-min",
         //"underscore": "libs/lodash",
         "jquery": "libs/jquery-1.8.2.min",
         "jquerymobile": "libs/jquery.mobile-1.3.0.min",

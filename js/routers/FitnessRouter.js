@@ -173,34 +173,63 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 }
                 var pageSelector = '#' + challengeID;
                 var footerSelector = pageSelector + ' .footer';
+                function ensureLeaders(challenge, callback) {
+                    var leaders = challenge.get('leaders');
+                    if (leaders) {
+                        callback(true);
+                        return;
+                    }
+                    fitness.decorateChallengeWithLeaders(challengeID, function(success, model) {
+                        if (!success) {
+                            console.warn('failed to get leaderboard for challenge');
+                        }
+                        else {
+                            var leaders = [];
+                            _.each(model.models, function(leader) { // convert from stackmob models to simple objects
+                                leaders.push(leader.attributes);
+                            });
+                            challenge.set('leaders', leaders);
+                        }
+                        callback(success, model);
+                    });
+                }
+
                 function setView() {
                     if (!that.challengeViewLookup[challengeID]) {
-                        fitness.updateIfStale(fitness.user.get('username'), function(success, data) {
-                            var template = $('#challenge_wrapper_template');
-                            var html = Mustache.to_html(template.html(), {'challenge_id' : challengeID});
-                            $(html).insertAfter('#challenge_list');
-                            var challengeView = new ChallengeView({el: pageSelector, model: fitness.challengeLookup[challengeID]});
-                            var footerView = new FooterView({el: footerSelector});
-                            that.challengeViewLookup[challengeID] = challengeView;
-                            $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                        });
+                        var challenge = fitness.challengeLookup[challengeID];
+                        var template = $('#challenge_wrapper_template');
+
+                        var html = Mustache.to_html(template.html().trim(), {'challenge_id' : challengeID});
+                        $(html).insertAfter('#challenge_list');
+                        var challengeView = new ChallengeView({el: pageSelector, model: challenge});
+                        var footerView = new FooterView({el: footerSelector});
+                        that.challengeViewLookup[challengeID] = challengeView;
                     }
-                    else {
-                        $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
-                    }
+                    $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 };
-                if (fitness.challengeLookup && fitness.challengeLookup[challengeID]) {
-                    setView();
+                var challenge = fitness.challengeLookup[challengeID];
+                if (challenge) {
+                    ensureLeaders(challenge, function (success, model) {
+                        if (!success) {
+                            console.warn('could not ensure leaders');
+                        }
+                        setView();
+                    });
                 }
                 else {
                     $.mobile.showPageLoadingMsg();
-                    fitness.getChallenge(challengeID, function(success, data) {
+                    fitness.getChallenge(challengeID, function(success, model) {
                         $.mobile.hidePageLoadingMsg();
                         if (!success) {
                             fitness.showMessage('Failed to get challenge');
                             return;
                         }
-                        setView();
+                        ensureLeaders(model, function (success, leaders) {
+                            if (!success) {
+                                console.warn('could not ensure leaders');
+                            }
+                            setView();
+                        });
                     });
                 }
             });

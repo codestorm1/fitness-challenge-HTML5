@@ -23,8 +23,11 @@ and use backbone collections for:
 invitations
 challenges
 
-fixes? - accept/decline invitation - error?
+switch from one-to-many relationship to querying
 
+fixed? - accept/decline invitation - error?
+
+challenge created without invites?  no popup?
 
 done-ish:
 use momentJS for date displays
@@ -35,11 +38,15 @@ complete challenge, declare winner
 
 mark activity rows as final
 
-switch from one-to-many relationship to querying
+update any past activity days that are missing and needed for a challenge
+cron job - create any missing invites for a challenge
 
 return from fitbit auth - cant read login info?
 
 add back button
+add refresh button
+
+
 
 todo v.next:
 use stackmob login system

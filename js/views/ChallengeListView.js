@@ -6,13 +6,26 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "moment", 
 
             initialize: function() {
                 var that = this;
-                this.render();
+                //_.bindAll(this, "update");
                 this.model.on("add", function(model) {
                     //alert('add method called')
                     that.render();
                 });
                 this.model.on("remove", function(model) {
                     that.render();
+                });
+                this.model.on('change:leader_count', function(model) {
+                    that.updateCount();
+                });
+                this.render();
+            },
+
+            updateCount: function() { // todo: all challenges are update each time any challenge data changes, optimize that
+                _.each(this.model.models, function(challenge) {
+
+                    var url = "#challenge_" + challenge.get('challenge_id');
+                    var sel = 'a[href$="' + url + '"] span.ui-li-count';
+                    $(sel).text(challenge.get('leader_count'));
                 });
             },
 
@@ -26,10 +39,10 @@ define("views/ChallengeListView", [ "jquery", "backbone", "mustache", "moment", 
                     var endDate = new Date(challenge.get('enddate'));
 
                     var description = fitness.formatDateRangeDescription(startDate, endDate);
-                    var count = challenge.get('leaders').length;
+                    //var count = challenge.get('leaders').length;
                     var challengeDTO = { "challengeID" : challenge.get('challenge_id'),
                                          "description" : description,
-                                         "count" : count};
+                                         "count" : challenge.get('leader_count')};
                     challenges.push(challengeDTO);
                 });
                 var dto = {"challenges" : challenges};

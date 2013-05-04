@@ -69,8 +69,8 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
                     $.mobile.loading("hide");
                     fitness.joinUserToChallenge(fitness.user.get('username'), challengeID, function(success, leaderModel) {
                         if (!success) {
-                            fitness.showMessage('Failed to create challenge, please try again');
-                            challenge.delete();
+                            fitness.showMessage('Failed to join user to challenge, please try again');
+                            challenge.destroy();
                             return;
                         }
                         fitness.showMessage('Challenge created!');
