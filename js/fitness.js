@@ -5,6 +5,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
         InvitesCollection //, Challenges, Leaders, Users
         ) {
     //"use strict";
+
     return {
         parseUTCDate : function(dateStr) {
             var parts = dateStr.match(/(\d+)/g);
@@ -144,15 +145,41 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             var q = new StackMob.Collection.Query();
             q.equals('inviteduser', username);
             q.equals('responded', false);
-            q.setExpand(3);
+            q.setExpand(2); // invite -> challenge (used to be 3 to get leaders, need to query to get the count now)
             invitations.query(q, {
                 success: function(model) {
                     that.invitations = model;
                     that.invitationLookup = {};
+                    var numInvites = model.models.length;
+                    var loopCount = 0;
                     _.each(model.models, function(invitation) {
-                        that.invitationLookup[invitation.get('invitation_id')] = invitation;
+                        var challenge = invitation.get('challenge');
+                        var q = new StackMob.Collection.Query();
+                        q.equals('challenge', challenge.challenge_id);
+                        var Leader = StackMob.Model.extend({ schemaName: 'leader' });
+                        var Leaders = StackMob.Collection.extend({ model: Leader });
+                        var leaders = new Leaders();
+
+                        leaders.count(q, {
+                            success: function(count) {
+                                loopCount++;
+                                invitation.set('leader_count', count);
+                                that.invitationLookup[invitation.get('invitation_id')] = invitation;
+                                console.debug('invitation ID: ' + invitation.get('invitation_id') + ' has leader count: ' + count);
+                                if (loopCount === numInvites) { // todo: make the invitations a backbone collection that listens for changes, so this won't be necessary
+                                    callback(true, model);
+                                }
+
+                            },
+                            error: function(count, response) {
+                                console.debug('failed to get leader count for invitation ID: ' + invitation.get('invitation_id'));
+                                invitation.set('leader_count', 0);
+                                console.debug(response);
+                                callback(false, response);
+                            }
+                        });
+
                     });
-                    callback(true, model);
                 },
                 error: function(model, response) {
                     that.showMessage('Failed to check for challenge invites');
@@ -274,27 +301,30 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
 //            });
         },
 
-        decorateChallengeWithLeaders: function (challengeID, callback) {
+        decorateChallengeWithLeaders: function (challenge, callback) {
 
             var Leader = StackMob.Model.extend({ schemaName: 'leader' });
             var Leaders = StackMob.Collection.extend({ model: Leader });
             var leaders = new Leaders();
 
             var leadersQuery = new StackMob.Collection.Query();
-            leadersQuery.equals('challenge', challengeID);
+            leadersQuery.equals('challenge', challenge.get('challenge_id'));
             leadersQuery.orderAsc('int_value');
             leadersQuery.setExpand(1); // to get the users
             leaders.query(leadersQuery, {
-                success: function(leaders) {
-                    callback(true, leaders);
+                success: function(leaderModels) {
+                    var leaders = [];
+                    _.each(leaderModels.models, function(leader) { // convert from stackmob models to simple objects
+                        leaders.push(leader.attributes);
+                    });
+                    challenge.set('leaders', leaders);
+                    callback(true, challenge);
                 },
                 error: function(leaders, response) {
                     console.debug('failed to get fitness leaders');
                     callback(false, response);
                 }
             });
-
-
         },
 
         updateIfStale : function(username, callback) {
@@ -389,7 +419,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
                             "leader_id" : leaderID,
                             "user" : stackmobUserID,
                             "challenge" : challengeID,
-                            "is_active" : true
+                            "is_final" : false
                         };
                     var challengeType = model.get('value_type');
                     switch (challengeType) {
@@ -483,6 +513,7 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
                 }
             }
         },
+
 
 //      router : new FitnessRouter(),
 

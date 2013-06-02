@@ -179,18 +179,12 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                         callback(true);
                         return;
                     }
-                    fitness.decorateChallengeWithLeaders(challengeID, function(success, model) {
+                    fitness.decorateChallengeWithLeaders(challenge, function(success, challengeModel) {
                         if (!success) {
                             console.warn('failed to get leaderboard for challenge');
+                            return;
                         }
-                        else {
-                            var leaders = [];
-                            _.each(model.models, function(leader) { // convert from stackmob models to simple objects
-                                leaders.push(leader.attributes);
-                            });
-                            challenge.set('leaders', leaders);
-                        }
-                        callback(success, model);
+                        callback(success, challengeModel);
                     });
                 }
 

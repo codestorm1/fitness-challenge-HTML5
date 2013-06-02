@@ -60,7 +60,7 @@ define("views/CreateChallengeView", [ "jquery", "backbone", "mustache", "fitness
                 "enddate" : endDate,
                 "challengecreator" : fitness.user.get('username'),
                 "value_type" : "int",
-                "is_active" : true
+                "is_final" : false
 //                "users" : [fitness.user.get('username')]
                 });
             $.mobile.loading("show");

@@ -34,9 +34,11 @@ use momentJS for date displays
 
 todo minimum viable product:
 
-complete challenge, declare winner
-
 mark activity rows as final
+complete challenge, declare winner
+notify users
+
+get actvities after creating a challenge or after joining
 
 update any past activity days that are missing and needed for a challenge
 cron job - create any missing invites for a challenge
@@ -45,7 +47,6 @@ return from fitbit auth - cant read login info?
 
 add back button
 add refresh button
-
 
 
 todo v.next:

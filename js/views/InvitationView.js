@@ -39,11 +39,10 @@ define("views/InvitationView", [ "jquery", "backbone", "mustache", "fitness", "c
                 var startDate = new Date(challenge.startdate);
                 var endDate = new Date(challenge.enddate);
                 var description = "Total steps from " + startDate.toLocaleDateString() + ' to ' + endDate.toLocaleDateString();
-                var count = challenge.leaders.length;
                 var invitationDTO = {
                     "invitation_id" : this.model.get('invitation_id'),
                     "description" : description,
-                    "count" : count
+                    "count" : this.model.get('leader_count')
                 };
 
                 var html = Mustache.to_html(template.html(), invitationDTO);
