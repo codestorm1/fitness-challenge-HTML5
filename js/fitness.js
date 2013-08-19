@@ -134,10 +134,11 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
         },
 
         getChallengeInvites : function(username, callback) {
+            var that = this;
+            that.log('in fitness.getChallengeInvites');
             if (typeof callback !== "function") {
                 throw 'callback is required';
             }
-            var that = this;
             var Invitation = StackMob.Model.extend({ schemaName: 'invitation' });
             var Invitations = StackMob.Collection.extend({ model: Invitation });
             //var invitations = new InvitesCollection();
@@ -146,14 +147,26 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             q.equals('inviteduser', username);
             q.equals('responded', false);
             q.setExpand(2); // invite -> challenge (used to be 3 to get leaders, need to query to get the count now)
+            that.log('querying invites');
             invitations.query(q, {
                 success: function(model) {
+
+                    that.log('query succeeded');
                     that.invitations = model;
                     that.invitationLookup = {};
                     var numInvites = model.models.length;
                     var loopCount = 0;
+                    if (model.models.length == 0) {
+                        that.log('models length 0, no invitations?');
+                        callback(true);
+                        return;
+                    }
+                    that.log(model.models.length + ' invitations fetched');
                     _.each(model.models, function(invitation) {
                         var challenge = invitation.get('challenge');
+                        if (!challenge) {
+                            that.showMessage('missing challenge for invitation');
+                        }
                         var q = new StackMob.Collection.Query();
                         q.equals('challenge', challenge.challenge_id);
                         var Leader = StackMob.Model.extend({ schemaName: 'leader' });
@@ -348,13 +361,18 @@ define("fitness", ["jquery", "stackmobinit", "customCodeClient",
             if (!that.challenges) {
                 $.mobile.showPageLoadingMsg();
                 that.getUserChallenges(username, false, function(success) {
+                    $.mobile.hidePageLoadingMsg();
                     if (!success) {
                         fitness.showMessage('Failed to get challenges');
                         return;
                     }
+                    callback(updatedFully, {});
                 });
             }
-            callback(updatedFully, {});
+            else {
+                callback(updatedFully, {});
+            }
+
 //                    if (data.models.length > 0) {
 //                        for (var i = 0; i < data.models.length; i++) {
 //                            var model = data.models[i];

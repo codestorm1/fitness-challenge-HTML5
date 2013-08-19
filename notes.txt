@@ -1,5 +1,23 @@
 fitness challenge:
 
+how to build web app:
+cd ~/projects/fitnessChallenge/requirejs_build
+bash build_minified_and_copy.bash
+or
+bash copy_uncompressed.bash
+
+how to run locally:
+cd ~/projects/fitnessChallenge/web
+python2.7 stackmobserver.py
+
+stackmob/github deployment:
+webapp deployment: https://github.com/codestorm1/fitness-challenge-HTML5
+
+github source control:
+web: https://github.com/codestorm1/fitness-challenge-webapp-build
+custom code: https://github.com/codestorm1/fitness-challenge-custom-code
+requireJS build scripts: https://github.com/codestorm1/build-scripts
+
 What causes the header to not get jquery styles?
     1- jquery mobile still trying to handle paging
     2- $.mobilechangepage was called before view was created (callback didn't finish)
@@ -38,12 +56,12 @@ mark activity rows as final
 complete challenge, declare winner
 notify users
 
-get actvities after creating a challenge or after joining
+get activities after creating a challenge or after joining
 
 update any past activity days that are missing and needed for a challenge
 cron job - create any missing invites for a challenge
 
-return from fitbit auth - cant read login info?
+bug - return from fitbit auth - cant read login info?
 
 add back button
 add refresh button
@@ -58,6 +76,9 @@ add commas to steps count
 longpoll or check for updates to leaderboards
 
 
+bugs:
+login failed with invalid email password, then later failed with same credentials
 
+{"error":"could not initialize fitbit client agent"}
 
 

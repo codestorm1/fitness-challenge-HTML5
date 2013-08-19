@@ -41,6 +41,9 @@ define("views/InvitationListView", [ "jquery", "backbone", "mustache", "fitness"
                 var invitations = [];
                 _.each(this.model.models, function(invitation) {
                     var challenge = invitation.get('challenge');
+                    if (!challenge) {
+                        fitness.showMessage('missing challenge for invitation');
+                    }
                     //var description = challenge.get('challengetype');
                     var startDate = new Date(challenge.startdate);
                     var endDate = new Date(challenge.enddate);

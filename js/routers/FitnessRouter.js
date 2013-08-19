@@ -36,22 +36,29 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
         },
 
         ensureLogin: function(callback) {
+            fitness.log('ensuring user is logged in');
             if (fitness.isLoggedIn()) {
                 callback(true);
+                fitness.log('user is logged in');
                 return;
             }
             var username = localStorage.getItem('username');
             if (!username) {
+                fitness.log('user is not logged in');
                 callback(false);
                 return;
             }
             $.mobile.showPageLoadingMsg();
+            fitness.log('logging in with ID');
             fitness.loginWithID(username, function(success) {
+                fitness.log('login attempt complete: ' + success);
+                fitness.log('updating if stale');
                 fitness.updateIfStale(username, function(success, data) {
                     $.mobile.hidePageLoadingMsg();
                     if (!success) {
                         alert('failed to load your data');
                     }
+                    fitness.log('update complete, calling callback');
                     callback(success);
                 });
             });
@@ -264,6 +271,7 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
 
         showInvitationList: function() {
             var that = this;
+            fitness.log('in show invitation list');
             this.ensureLogin(function(success) {
                     if (!success) {
                     that.showLogin();
@@ -273,25 +281,30 @@ define("routers/FitnessRouter", [ "jquery", "backbone", "mustache", "fitness", "
                 var pageSelector = '#invitation_list';
                 var footerSelector = pageSelector + ' .footer';
 
-                // todo fix this logic, is broken!
+                // todo fix this logic, is broken?
                 function createAndShowView() {
+                    fitness.log('create and show invitations');
                     if (!that.invitationsView) {
+                        fitness.log('creating invitations view');
                         that.invitationsView = new InvitationListView({el: pageSelector, model: fitness.invitations});
                         var footerView = new FooterView({el: footerSelector});
                     }
                     $.mobile.changePage(pageSelector, {reverse: false, changeHash: true});
                 }
                 if (!fitness.invitations) {
+                    fitness.log('no invitations loaded, fetching invites');
                     $.mobile.showPageLoadingMsg();
                     fitness.getChallengeInvites(fitness.user.get('username'), function(success, data) {
                         if (!success) {
                             fitness.showMessage('Failed to load invitations');
                             return;
                         }
+                        fitness.log('fetched invitations');
                         createAndShowView();
                     });
                 }
                 else {
+                    fitness.log('invitations already loaded');
                     $(pageSelector + ' ul[data-role="listview"] a').removeClass('ui-btn-active');
                     createAndShowView();
                 }
